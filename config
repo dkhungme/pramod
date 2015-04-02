@@ -1,0 +1,8 @@
+data_path: "data/data"
+tmp_data_path: "data"
+key_path: "data/key"
+num_records: 2000000
+record_size: 120
+mixnet_rounds: 2
+num_records_per_block: 100000
+nthreads: 4

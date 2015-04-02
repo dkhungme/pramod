@@ -1,0 +1,12 @@
+package sober; 
+
+message Config{
+	required string data_path = 1; 
+	required int32 num_records = 2; 
+	required int32 record_size = 3; 
+	required int32 mixnet_rounds = 4; 
+	required int32 num_records_per_block = 5;
+	required string key_path = 6;  
+	required string tmp_data_path = 7; //store data between mixing rounds. 
+	required int32 nthreads = 8; //number of threads, assuming it divides number of mixer
+}
