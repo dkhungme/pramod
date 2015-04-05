@@ -49,7 +49,6 @@ string Encryptor::Decrypt(byte *input, int size) {
 		AuthenticatedDecryptionFilter authen_dec(decryption_,
 				new StringSink(decrypt));
 
-
 		authen_dec.ChannelPut(DEFAULT_CHANNEL, input + IV_SIZE,
 				size - (IV_SIZE));
 		authen_dec.ChannelMessageEnd(DEFAULT_CHANNEL);

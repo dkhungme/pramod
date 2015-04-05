@@ -18,7 +18,14 @@ DECLARE_string(config_file); /*< path to the file to read Config object */
 
 using namespace google::protobuf::io;
 using google::protobuf::TextFormat;
+
 namespace sober{
+
+double Now() {
+        timespec tp;
+        clock_gettime(CLOCK_MONOTONIC, &tp);
+        return tp.tv_sec + 1e-9 * tp.tv_nsec;
+}
 
 GlobalParams* GlobalParams::Get(){
 	static GlobalParams *gp = new GlobalParams();
@@ -38,9 +45,11 @@ GlobalParams::GlobalParams(){
 	tmp_data_path_ = config.tmp_data_path();
 	num_records_ = config.num_records();
 	record_size_ = config.record_size();
+	key_size_ = config.key_size();
 	num_records_per_block_ = config.num_records_per_block();
 	num_rounds_ = config.mixnet_rounds();
 	nthreads_ = config.nthreads();
+	merge_factor_ = config.merge_factor();
 }
 }
 

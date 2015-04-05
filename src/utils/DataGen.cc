@@ -28,12 +28,6 @@ using namespace std;
 
 DECLARE_string(config_file);
 
-double Now() {
-        timespec tp;
-        clock_gettime(CLOCK_MONOTONIC, &tp);
-        return tp.tv_sec + 1e-9 * tp.tv_nsec;
-}
-
 namespace sober{
 void DataGen::Generate() {
 	GlobalParams *params = GlobalParams::Get();

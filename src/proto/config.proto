@@ -9,4 +9,7 @@ message Config{
 	required string key_path = 6;  
 	required string tmp_data_path = 7; //store data between mixing rounds. 
 	required int32 nthreads = 8; //number of threads, assuming it divides number of mixer
+	required int32 merge_factor = 9; //k in k-way merge
+	
+	required int32 key_size = 10; 
 }

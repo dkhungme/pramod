@@ -19,8 +19,6 @@ using std::string;
  *  Encryption key is store at the key_path
  */
 
-double Now();
-
 namespace sober{
 
 class DataGen{
