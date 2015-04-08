@@ -35,10 +35,14 @@ TEST_MIX_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_MIX_SRC:%.cc=%.o))
 TEST_SORT_SRC = test/Sorter.cc
 TEST_SORT_OBJ = build/test/Sorter.o
 
+TEST_GOODRICH_SRC = test/Goodrich.cc
+TEST_GOODRICH_OBJ = build/test/Goodrich.o
+
 #datagen
 DATA_GEN_EXE = $(BUILD_DIR)/test/datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
 SORT_EXE = $(BUILD_DIR)/test/sorter
+GOODRICH_EXE = $(BUILD_DIR)/test/goodrich
 
 CXX = g++
 CPPFLAGS =  -O3 -Wall -pthread -fPIC -std=c++11 -MMD $(INCLUDE_DIRS)
@@ -48,7 +52,7 @@ PROTOFLAGS = --cpp_out
 
 ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ)
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ)
 
 .DEFAULT_GOAL = compile
 
@@ -57,6 +61,8 @@ test_gen: $(DATA_GEN_EXE)
 test_mix: $(MIXER_EXE)
 
 test_sort: $(SORT_EXE)
+
+test_goodrich: $(GOODRICH_EXE)
 
 compile: $(ALLOBJS) 
 
@@ -81,6 +87,9 @@ $(MIXER_EXE): $(ALLOBJS) $(TEST_MIX_OBJ)
 
 $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+$(GOODRICH_EXE): $(ALLOBJS) $(TEST_GOODRICH_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -rf $(PROTO_CC)

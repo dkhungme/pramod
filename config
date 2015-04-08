@@ -1,10 +1,10 @@
 data_path: "data/data"
 tmp_data_path: "data"
 key_path: "data/key"
-num_records: 4000000
+num_records: 400000
 record_size: 100
 mixnet_rounds: 4
-num_records_per_block: 200000
+num_records_per_block: 20000
 nthreads: 2
 key_size: 10
 merge_factor: 2
