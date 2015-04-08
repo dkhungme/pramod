@@ -21,7 +21,7 @@ private:
 	int M, k, m;
 
 
-	int item_size;
+	int plain_item_size, cipher_item_size;
 
 	long IOread ;
 	long IOwrite;
@@ -53,7 +53,7 @@ private:
 
 
 public:
-	Goodrich(Encryptor encryptor_object, int record_size, int memory_capacity);
+	Goodrich(Encryptor encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
 
 
 	void Sort(char *input, char *output);

@@ -16,12 +16,14 @@ static int cmpfunc (const void * a, const void * b ) {
 
 	return strcmp(pa,pb);
 }
-Goodrich::Goodrich(Encryptor encryptor_object, int record_size, int memory_capacity){
+Goodrich::Goodrich(Encryptor encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
 	this->encryptor = encryptor_object;
 	this->M = memory_capacity;
 	this->k = 8;
 	this->m = 8;
-	this->item_size = record_size;
+	this->cipher_item_size = cipher_record_size;
+	this->plain_item_size = plain_record_size;
+	//Note this part
 	this->IOwrite =0;
 	this->IOread = 0;
 	this->ignore = -1;
@@ -41,7 +43,7 @@ int Goodrich::count_element(char *filename){
 	struct stat st;
 	stat(filename, &st);
 	int size = st.st_size;
-	int count = size / (sizeof(char)*item_size);
+	int count = size / (sizeof(char)*cipher_item_size);
 
 	return count;
 }
@@ -75,8 +77,8 @@ int Goodrich::externalSort(FILE *source, long source_offset, long problem_size, 
 		for (i=0; i<k+1; i++){
 			externalSort(source, list_source_offset[i], list_problem_size[i], fp[merge_depth][sort_depth+1],
 					merge_depth, sort_depth+1, subproblems_offset[i]);
-			s = subproblems_offset[i][0]/item_size;
-			e = subproblems_offset[i][1]/item_size;
+			s = subproblems_offset[i][0]/cipher_item_size;
+			e = subproblems_offset[i][1]/cipher_item_size;
 
 		}
 
@@ -113,19 +115,19 @@ int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, 
 	char **array;
 	array = static_cast<char**>(malloc(array_size * sizeof(char*)));
 	for(i = 0; i < array_size; i++) {
-		array[i] = (char *) malloc(item_size);
+		array[i] = (char *) malloc(plain_item_size);
 	}
 	char *temp;
-	temp = (char *) malloc(item_size);
+	temp = (char *) malloc(cipher_item_size);
 
 	fseek(source, source_offset, SEEK_SET);
 	i = 0;
 	while (i<problem_size){
 
-		if (fread (temp,1, item_size,source)==(item_size)){
+		if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 			IOread++;
 			if (strcmp(temp, "\n")!=0){
-				array[i] = encryptor.Decrypt(temp, item_size);
+				array[i] = encryptor.Decrypt(temp, cipher_item_size);
 				//strcpy(array[i], temp);
 
 			}
@@ -139,9 +141,9 @@ int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, 
 	dest_offset[0] = ftell(dest);
 
 	for(i = 0; i<array_size; i++){
-		encryptor.Encrypt(array[i], item_size)
+		encryptor.Encrypt(array[i], plain_item_size)
 		//fwrite(array[i] , 1 , item_size , dest );
-		fwrite(encryptor.Encrypt(array[i], item_size) , 1 , item_size , dest );
+		fwrite(encryptor.Encrypt(array[i], plain_item_size) , 1 , cipher_item_size , dest );
 
 
 		IOwrite++;
@@ -175,11 +177,11 @@ int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_siz
 	char **array;
 	array = static_cast<char**>(malloc(problem_size * sizeof(char*)));
 	for(i = 0; i < problem_size; i++) {
-		array[i] = (char *) malloc(item_size);
+		array[i] = (char *) malloc(plain_item_size);
 	}
 
 	char *temp;
-	temp = (char *) malloc(item_size);
+	temp = (char *) malloc(cipher_item_size);
 
 
 	for (i=0; i<k+1; i++){
@@ -189,10 +191,10 @@ int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_siz
 
 		while (ftell(source) < source_offset[i][1]){
 
-			fread (temp,1, item_size,source);
+			fread (temp,1, cipher_item_size,source);
 			if (temp!=NULL && strcmp(temp, "\n")!=0){
 				//strcpy(array[j], temp);
-				array[j] = encryptor.Decrypt(temp, item_size);
+				array[j] = encryptor.Decrypt(temp, cipher_item_size);
 				j++;
 			}
 		}
@@ -205,7 +207,7 @@ int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_siz
 	for(i = 0; i<problem_size; i++){
 
 		//fwrite(array[i] , 1 , item_size , dest );
-		fwrite(encryptor.Encrypt(array[i], item_size) , 1 , item_size , dest );
+		fwrite(encryptor.Encrypt(array[i], plain_item_size) , 1 , cipher_item_size , dest );
 		IOwrite++;
 	}
 	fseek(dest, 0, SEEK_END);
@@ -259,8 +261,8 @@ int Goodrich::externalMerge(FILE *source, long **source_offset, long problem_siz
 					merge_depth+1, sort_depth, Merged_subproblems_offset[i]);
 
 			int s, e;
-			s = Merged_subproblems_offset[i][0]/item_size;
-			e =  Merged_subproblems_offset[i][1]/item_size;
+			s = Merged_subproblems_offset[i][0]/cipher_item_size;
+			e =  Merged_subproblems_offset[i][1]/cipher_item_size;
 
 
 		}
@@ -284,36 +286,36 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 	int i, j, p, q;
 	char *special_value;
 
-	special_value  = (char *) malloc(item_size);
-	for (i = 0; i < item_size; ++i) {
+	special_value  = (char *) malloc(plain_item_size);
+	for (i = 0; i < plain_item_size; ++i) {
 		special_value[i] = 'Z';
 	}
 
-	special_value[item_size] = 0;
+	special_value[plain_item_size] = 0;
 
 	for (i=0; i<m+1; i++){
 		consumed_item[i] = 0;
 	}
 	char *temp;
-	temp = (char *) malloc(item_size);
+	temp = (char *) malloc(cipher_item_size);
 	char **array;
 	array = static_cast<char**>(malloc( 2*(m+1)*(k+1)*sizeof(char*)));
 	for(i = 0; i < 2*(k+1)*(m+1); i++) {
-		array[i] = (char *) malloc(item_size);
+		array[i] = (char *) malloc(plain_item_size);
 	}
 	p = 0;
 	int consumed = 0;
 
 	for (i=0; i<m+1; i++){
-		fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*item_size, SEEK_SET);
+		fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 		j = 0;
 		while (j<2*(k+1) && ftell(source) < Merged_subproblems_offset[i][1]){
 
-			fread (temp,1, item_size,source);
+			fread (temp,1, cipher_item_size,source);
 			consumed_item[i]++;
 			if (strcmp(temp, "\n")!=0){
 				//strcpy(array[p], temp);
-				array[p] = encryptor.Decrypt(temp, item_size);
+				array[p] = encryptor.Decrypt(temp, cipher_item_size);
 				IOread++;
 				p++;
 				j++;
@@ -331,7 +333,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 		if (strcmp(array[q],special_value)!=0){
 
 			//fwrite(array[q] , 1 , item_size , dest );
-			fwrite(encryptor.Encrypt(array[q], item_size) , 1 , item_size , dest );
+			fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
 			strcpy(array[q],special_value);
 			IOwrite++;
 		}
@@ -345,17 +347,17 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 		p = 0;
 		for (i=0; i<m+1; i++){
 
-			fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*item_size, SEEK_SET);
+			fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 			j = 0;
 			while (j<k+1 && ftell(source) < Merged_subproblems_offset[i][1]){
 
-				fread (temp,1, item_size,source);
+				fread (temp,1, cipher_item_size,source);
 
 				consumed_item[i]++;
 				if (strcmp(temp, "\n")!=0){
 
 					//strcpy(array[p], temp);
-					array[p] = encryptor.Decrypt(temp, item_size);
+					array[p] = encryptor.Decrypt(temp, cipher_item_size);
 
 					IOread++;
 					p++;
@@ -374,7 +376,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 			if (strcmp(array[q],special_value)!=0){
 
 				//fwrite(array[q] , 1 , item_size , dest );
-				fwrite(encryptor.Encrypt(array[q], item_size) , 1 , item_size , dest );
+				fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
 				strcpy(array[q],special_value);
 
 			}
@@ -386,7 +388,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 		if (strcmp(array[q],special_value)!=0){
 
 			//fwrite(array[q] , 1 , item_size , dest );
-			fwrite(encryptor.Encrypt(array[q], item_size) , 1 , item_size , dest );
+			fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
 		}
 		else {
 
@@ -414,7 +416,7 @@ int Goodrich::create_Sorted_Subproblem(long source_offset, long problem_size, lo
 	int sub_problem_size;
 	sub_problem_size = problem_size / k;
 	for (i = 0; i<k; i++){
-		list_source_offset[i] = i * sub_problem_size * item_size+ source_offset;
+		list_source_offset[i] = i * sub_problem_size * cipher_item_size+ source_offset;
 		list_problem_size[i] = sub_problem_size;
 	}
 	if ((problem_size % k) == 0 ){
@@ -422,7 +424,7 @@ int Goodrich::create_Sorted_Subproblem(long source_offset, long problem_size, lo
 		list_problem_size[i] = 0;
 	}
 	else{
-		list_source_offset[k] = k * sub_problem_size * item_size+ source_offset;;
+		list_source_offset[k] = k * sub_problem_size * cipher_item_size+ source_offset;;
 		list_problem_size[i] = problem_size % k;
 	}
 
@@ -438,24 +440,24 @@ int Goodrich::create_Merged_Subproblems(FILE *source, long **source_offset, long
 
 	int i, j;
 	char *line;
-	line = (char *) malloc(item_size);
+	line = (char *) malloc(cipher_item_size);
 	char *temp;
-	temp = (char *) malloc(item_size);
+	temp = (char *) malloc(cipher_item_size);
 
-	int jump = m * item_size;
+	int jump = m * cipher_item_size;
 	for (i = 0; i<m+1; i++){
 		for (j = 0; j<k+1; j++){
 
 
-			long p = source_offset[j][0] + i * item_size;
+			long p = source_offset[j][0] + i * cipher_item_size;
 			fseek(source, p, SEEK_SET);
 			fseek(dest, 0, SEEK_END);
 			subproblems_offset[i][j][0] = ftell(dest);
 			while(ftell(source)<source_offset[j][1]){
-				fread (temp,1, item_size,source);
+				fread (temp,1, cipher_item_size,source);
 				if (strcmp(temp, "\n")!=0){
 
-					fwrite(temp , 1 ,item_size , dest );
+					fwrite(temp , 1 ,cipher_item_size , dest );
 					fseek(source, jump, SEEK_CUR);
 				}
 
@@ -466,8 +468,8 @@ int Goodrich::create_Merged_Subproblems(FILE *source, long **source_offset, long
 		}
 
 		int s, e;
-		s = subproblems_offset[i][0][0]/item_size;
-		e = subproblems_offset[i][k][1]/item_size;
+		s = subproblems_offset[i][0][0]/cipher_item_size;
+		e = subproblems_offset[i][k][1]/cipher_item_size;
 
 		Merge_subproblem_size[i] = e - s;
 
@@ -481,14 +483,14 @@ int Goodrich::create_Merged_Subproblems(FILE *source, long **source_offset, long
 
 
 
-void Goodrich::Sort(char *input, char *output, int record_size){
+void Goodrich::Sort(char *input, char *output){
 
 	int depth, i, j;
 
 	FILE *source;
 	source = fopen(input, "r+");
 	int problem_size;
-	item_size = record_size;
+
 	problem_size = count_element(input);
 	depth = 1+ log((double) (problem_size / M)) / log((double)k);
 	max_depth = depth;
