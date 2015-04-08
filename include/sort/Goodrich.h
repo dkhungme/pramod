@@ -8,6 +8,7 @@
 #ifndef GOODRICH_H_
 #define GOODRICH_H_
 
+#include "encrypt/Encryptor.h"
 /**
  * Header for the Goodrich's oblivious sort algorithm.
  *
@@ -17,7 +18,6 @@
 namespace sober{
 class Goodrich{
 private:
-
 	int M, k, m;
 
 
@@ -37,7 +37,7 @@ private:
 	int max_depth;
 	char ***filename;
 	char ***merged_filename;
-	Encryptor encryptor;
+	Encryptor* encryptor;
 
 
 	int file_size(char *filename);
@@ -53,7 +53,7 @@ private:
 
 
 public:
-	Goodrich(Encryptor encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
+	Goodrich(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
 
 
 	void Sort(char *input, char *output);
