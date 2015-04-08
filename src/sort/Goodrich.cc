@@ -509,8 +509,8 @@ void Goodrich::Sort(char *input, char *output){
 		merged_filename[i] = static_cast<char**>(malloc (sizeof (char *) * (depth +1)));
 		M_fp[i] = static_cast<FILE**>(malloc (sizeof (FILE *) * (depth +1)));
 		for (j = 0; j<depth + 1; j++){
-			merged_filename[i][j] = static_cast<char*>(malloc (sizeof (char)*66));
-			filename[i][j] = static_cast<char*>(malloc (sizeof (char)*66));
+			merged_filename[i][j] = static_cast<char*>(malloc (sizeof (char)*256));
+			filename[i][j] = static_cast<char*>(malloc (sizeof (char)*256));
 		}
 	}
 
