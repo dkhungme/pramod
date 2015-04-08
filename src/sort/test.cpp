@@ -29,7 +29,7 @@ class Goodrich_Sort
 {
 
 	int M = 1500, k = 8, m = 8;
-	int z = 0;
+
 
 	int item_size = 132;
 
@@ -421,7 +421,7 @@ public:
 
 
 
-		z++;
+
 
 		free(array);
 		free(temp);
@@ -549,7 +549,7 @@ public:
 
 		for (j = 0 ; j<depth+1; j++){
 			for(i=1; i<depth+1; i++){
-				sprintf(filename[i][j], "x_%s", filename[i-1][j]);
+				sprintf(filename[i][j], "%s_temp", filename[i-1][j]);
 			}
 		}
 
@@ -563,7 +563,7 @@ public:
 
 		for (j = 0 ; j<depth+1; j++){
 			for(i=0; i<depth+1; i++){
-				sprintf(merged_filename[i][j], "M_%s", filename[i][j]);
+				sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
 
 
 			}
@@ -649,6 +649,6 @@ int main() {
 //	File_Generation FG;
 //	FG.generate("file", 211211, 132);
 	Goodrich_Sort GS;
-	GS.Sort("file", "r", 132);
+	GS.Sort("file", "folder/r", 132);
 
 }
