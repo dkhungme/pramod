@@ -18,6 +18,12 @@
 using namespace std;
 
 
+//sudo apt-get install crypto++-dev
+// protocol buffer download
+//glog
+//gflags
+
+
 static int cmpfunc (const void * a, const void * b ) {
 	const char *pa = *(const char**)a;
 	const char *pb = *(const char**)b;

@@ -10,11 +10,17 @@
 #include "encrypt/Encryptor.h"
 #include "sort/Goodrich.h"
 #include "utils/GlobalParams.h"
+#include "sort/Sorter.h"
+#include <iostream>
+using namespace std; 
+using namespace sober; 
+DEFINE_string(config_file,"config","Where to read the config");
+
 /**
  * Testing Goodrich's sorting algorithm.
  */
 
-int main(int argc, int argv) {
+int main(int argc, char **argv) {
 	gflags::ParseCommandLineFlags(&argc, &argv, true);
 	google::InitGoogleLogging(argv[0]);
 	FLAGS_logtostderr = 1;
@@ -23,23 +29,24 @@ int main(int argc, int argv) {
 
 	//Prepare input + output
 	char input_file[256];
-	sprintf(input_file, "%s_0", params->data_path());
+	sprintf(input_file, "%s_0", params->data_path().c_str());
 	char final_output[256];
 	sprintf(final_output, "%s/data_goodrich_sorted.final",
 			params->tmp_data_path().c_str());
 	int ciphertext_size = params->record_size()+GCM_TAG_SIZE+IV_SIZE;
 
 
+	LOG(INFO)<< "Sorting " << input_file; 
 	//Encryption
 	double start = Now();
-	Goodrich goodrich;
-	Encryptor encryptor;
-	goodrich.Sort(string(input_file), string(final_output), params->num_records(), ciphertext_size, encryptor);
-	cout << "Finish Goodrich sort in .. " << (Now() - start) << endl;
+	Encryptor encryptor; 
+	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),10000);
+	goodrich.Sort(input_file, final_output);
+	LOG(INFO)<< "Finish Goodrich sort in .. " << (Now() - start);
 
 	//Validation
 	Sorter sorter;
-	cout << "  Order? " << sorter.Validate(final_output) << endl;
+	LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
 
 	return 0;
 }

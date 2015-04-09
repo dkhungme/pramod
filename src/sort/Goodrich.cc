@@ -7,6 +7,7 @@
 #include <sys/resource.h>
 #include <time.h>
 #include <iostream>
+#include "sort/Goodrich.h"
 using namespace std;
 
 namespace sober{
@@ -16,7 +17,7 @@ static int cmpfunc (const void * a, const void * b ) {
 
 	return strcmp(pa,pb);
 }
-Goodrich::Goodrich(Encryptor encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
+Goodrich::Goodrich(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
 	this->encryptor = encryptor_object;
 	this->M = memory_capacity;
 	this->k = 8;
@@ -127,7 +128,7 @@ int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, 
 		if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 			IOread++;
 			if (strcmp(temp, "\n")!=0){
-				array[i] = encryptor.Decrypt(temp, cipher_item_size);
+				array[i] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
 				//strcpy(array[i], temp);
 
 			}
@@ -141,9 +142,8 @@ int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, 
 	dest_offset[0] = ftell(dest);
 
 	for(i = 0; i<array_size; i++){
-		//encryptor.Encrypt(array[i], plain_item_size)
 		//fwrite(array[i] , 1 , item_size , dest );
-		fwrite(encryptor.Encrypt(array[i], plain_item_size) , 1 , cipher_item_size , dest );
+		fwrite((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
 
 
 		IOwrite++;
@@ -194,7 +194,7 @@ int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_siz
 			fread (temp,1, cipher_item_size,source);
 			if (temp!=NULL && strcmp(temp, "\n")!=0){
 				//strcpy(array[j], temp);
-				array[j] = encryptor.Decrypt(temp, cipher_item_size);
+				array[j] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
 				j++;
 			}
 		}
@@ -207,7 +207,7 @@ int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_siz
 	for(i = 0; i<problem_size; i++){
 
 		//fwrite(array[i] , 1 , item_size , dest );
-		fwrite(encryptor.Encrypt(array[i], plain_item_size) , 1 , cipher_item_size , dest );
+		fwrite((char*)((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 		IOwrite++;
 	}
 	fseek(dest, 0, SEEK_END);
@@ -315,7 +315,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 			consumed_item[i]++;
 			if (strcmp(temp, "\n")!=0){
 				//strcpy(array[p], temp);
-				array[p] = encryptor.Decrypt(temp, cipher_item_size);
+				array[p] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
 				IOread++;
 				p++;
 				j++;
@@ -333,7 +333,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 		if (strcmp(array[q],special_value)!=0){
 
 			//fwrite(array[q] , 1 , item_size , dest );
-			fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
+			fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 			strcpy(array[q],special_value);
 			IOwrite++;
 		}
@@ -357,7 +357,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 				if (strcmp(temp, "\n")!=0){
 
 					//strcpy(array[p], temp);
-					array[p] = encryptor.Decrypt(temp, cipher_item_size);
+					array[p] = (char*)(encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str();
 
 					IOread++;
 					p++;
@@ -376,7 +376,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 			if (strcmp(array[q],special_value)!=0){
 
 				//fwrite(array[q] , 1 , item_size , dest );
-				fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
+				fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 				strcpy(array[q],special_value);
 
 			}
@@ -388,7 +388,7 @@ int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE 
 		if (strcmp(array[q],special_value)!=0){
 
 			//fwrite(array[q] , 1 , item_size , dest );
-			fwrite(encryptor.Encrypt(array[q], plain_item_size) , 1 , cipher_item_size , dest );
+			fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 		}
 		else {
 
@@ -508,8 +508,8 @@ void Goodrich::Sort(char *input, char *output){
 		merged_filename[i] = static_cast<char**>(malloc (sizeof (char *) * (depth +1)));
 		M_fp[i] = static_cast<FILE**>(malloc (sizeof (FILE *) * (depth +1)));
 		for (j = 0; j<depth + 1; j++){
-			merged_filename[i][j] = static_cast<char*>(malloc (sizeof (char)*66));
-			filename[i][j] = static_cast<char*>(malloc (sizeof (char)*66));
+			merged_filename[i][j] = static_cast<char*>(malloc (sizeof (char)*256));
+			filename[i][j] = static_cast<char*>(malloc (sizeof (char)*256));
 		}
 	}
 
@@ -520,7 +520,7 @@ void Goodrich::Sort(char *input, char *output){
 
 	for (j = 0 ; j<depth+1; j++){
 		for(i=1; i<depth+1; i++){
-			sprintf(filename[i][j], "x_%s", filename[i-1][j]);
+			sprintf(filename[i][j], "%s_t", filename[i-1][j]);
 		}
 	}
 
@@ -534,7 +534,7 @@ void Goodrich::Sort(char *input, char *output){
 
 	for (j = 0 ; j<depth+1; j++){
 		for(i=0; i<depth+1; i++){
-			sprintf(merged_filename[i][j], "M_%s", filename[i][j]);
+			sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
 
 
 		}
