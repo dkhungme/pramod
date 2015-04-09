@@ -142,7 +142,6 @@ int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, 
 	dest_offset[0] = ftell(dest);
 
 	for(i = 0; i<array_size; i++){
-		//encryptor->Encrypt(array[i], plain_item_size)
 		//fwrite(array[i] , 1 , item_size , dest );
 		fwrite((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
 
