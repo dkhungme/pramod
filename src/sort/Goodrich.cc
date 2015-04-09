@@ -124,8 +124,8 @@ namespace sober{
 		fseek(source, source_offset, SEEK_SET);
 		i = 0;
 		while (i<problem_size){
-			fread (temp,1, cipher_item_size,source);
-			if (strlen(temp)==(cipher_item_size)){
+
+			if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 				IOread++;
 				if (strcmp(temp, "\n")!=0){
 					array[i] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
@@ -165,7 +165,6 @@ namespace sober{
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
-		printf("\nInternalmerge ");
 
 
 		int i = 0;
@@ -192,8 +191,7 @@ namespace sober{
 
 			while (ftell(source) < source_offset[i][1]){
 
-				fread (temp,1, cipher_item_size,source);
-				if (strlen(temp)==cipher_item_size){
+				if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 				//strcpy(array[j], temp);
 					array[j] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
 					j++;
@@ -205,17 +203,15 @@ namespace sober{
 		qsort(array, problem_size, sizeof(char *), cmpfunc);
 		fseek(dest, 0, SEEK_END);
 		dest_offset[0] = ftell(dest);
-		printf("%ld\t", dest_offset[0] );
 		for(i = 0; i<problem_size; i++){
 
 		//fwrite(array[i] , 1 , item_size , dest );
-			//fwrite((char*)((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 			fwrite((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+			//fwrite((char*)((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 			IOwrite++;
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-		printf("%ld\t", dest_offset[1] );
 
 		free(temp);
 		free(array);
@@ -269,6 +265,7 @@ namespace sober{
 				e =  Merged_subproblems_offset[i][1]/cipher_item_size;
 
 
+
 			}
 
 			slidingMerge(fp[merge_depth+1][sort_depth], Merged_subproblems_offset, fp[merge_depth][sort_depth],merge_depth, sort_depth , dest_offset);
@@ -281,14 +278,15 @@ namespace sober{
 
 
 	int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
-
+		printf("Sliding Merge\n");
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
-		printf("\nSlidingmerge: begin");
+
 		int consumed_item[m+1];
 		int i, j, p, q;
-		char *special_value;
+		char *special_value, *cptext;
+		cptext =(char *) malloc(cipher_item_size);
 
 		special_value  = (char *) malloc(plain_item_size);
 		for (i = 0; i < plain_item_size; ++i) {
@@ -310,19 +308,17 @@ namespace sober{
 		p = 0;
 		int consumed = 0;
 
-		//printf("Slidingmerge: read FIRST 2km elements\n");
-
+		printf(" - Sliding Merge: reading first 2km items\n");
 		for (i=0; i<m+1; i++){
 			fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 			j = 0;
 			while (j<2*(k+1) && ftell(source) < Merged_subproblems_offset[i][1]){
 
-				fread (temp,1, cipher_item_size,source);
+			//fread (temp,1, cipher_item_size,source);
 
-				if (strlen(temp)==(cipher_item_size)){
+				if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 					consumed_item[i]++;
 				//strcpy(array[p], temp);
-
 					array[p] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
 					IOread++;
 					p++;
@@ -336,93 +332,83 @@ namespace sober{
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[0] = ftell(dest);
-		printf("%ld\t", dest_offset[0]);
-
-		//printf("Slidingmerge: merge FIRST 2km elements\n");
 		qsort(array,p, sizeof(char *), cmpfunc);
+		printf(" - Sliding Merge: write first km items\n");
 		for (q = 0; q<(k+1)*(m+1); q++){
 			if (strcmp(array[q],special_value)!=0){
-				
 
 			//fwrite(array[q] , 1 , item_size , dest );
-				//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 				fwrite((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+				//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
 				strcpy(array[q],special_value);
 				IOwrite++;
 			}
 		}
-
-		//printf("Slidingmerge: finish write 1 km elements\n");
-
-		
-		if(dest == NULL){
-			printf("NULLL\n");
-		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-		printf("%ld\t", dest_offset[1]);
+
+
 
 		while (consumed<m+1){
+			printf(" - Sliding Merge: working on next km items\n");
 
 			consumed = 0;
 			p = 0;
-
-			//printf("Slidingmerge: read NEXT km elements\n");
 			for (i=0; i<m+1; i++){
-
-
 
 				fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 				j = 0;
+				printf("\nAbout to go in while loop -   %ld-   %ld\n",ftell(source), Merged_subproblems_offset[i][1]);
+
+
 				while (j<k+1 && ftell(source) < Merged_subproblems_offset[i][1]){
-					//printf("%d - %d\n", i, j);
 
-					fread (temp,1, cipher_item_size,source);
+				//fread (temp,1, cipher_item_size,source);
 
-					if(strlen(temp)==cipher_item_size){
+
+					if (fread (temp,1, cipher_item_size,source)==cipher_item_size){
 						consumed_item[i]++;
 
-						//printf("decrypting and putting to array - %d... length of temp: %d\n", p, strlen(temp));
-
 					//strcpy(array[p], temp);
-
+						printf("about to decrypt - %d \n", p);
 						array[p] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
-
-						//printf("%s\n", array[p]);
+						//array[p] = (char*)(encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str();
+						printf("done with decrypt\n");
 						IOread++;
 						p++;
 						j++;
-						//printf("Done with putting to array\n");
-						
 					}
-
+					printf("%d -", p);
 
 				}
+				printf("Exit while loop\n");
 				if (ftell(source) >= Merged_subproblems_offset[i][1]){
 					consumed++;
 				}
-
 			}
+			printf("\n");
+			printf(" - Sliding Merge: read next km items\n");
 
 
 			qsort(array,2*(k+1)*(m+1), sizeof(char *), cmpfunc);
-			//printf("\nSlidingmerge: write NEXT km elements\n");
 			for (q = 0; q<(k+1)*(m+1); q++){
 				if (strcmp(array[q],special_value)!=0){
 
 				//fwrite(array[q] , 1 , item_size , dest );
 					//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
-					fwrite((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+					printf("about to encrypt\n");
+					cptext = (char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str());
+					printf("finish encrypting\n");
+					fwrite(cptext , 1 , cipher_item_size , dest );
+					printf("finish write to array\n");
 					strcpy(array[q],special_value);
 
 				}
 			}
-
-			//printf("CONSUMED: %d\n", consumed);
+			printf(" - Sliding Merge: write next km items\n");
 
 		}
 
-		//printf("Slidingmerge: write remaining elements\n");
 		for (q = 0; q<2*(k+1)*(m+1); q++){
 			if (strcmp(array[q],special_value)!=0){
 
@@ -436,15 +422,14 @@ namespace sober{
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-		printf("%ld\t", dest_offset[1]);
-		//printf("Slidingmerge: exiting\n");
 
 
 
 
 
-		free(array);
+		//free(array);
 		free(temp);
+		printf("Exit Sliding Merge\n");
 
 		return 0;
 
@@ -496,8 +481,8 @@ namespace sober{
 				fseek(dest, 0, SEEK_END);
 				subproblems_offset[i][j][0] = ftell(dest);
 				while(ftell(source)<source_offset[j][1]){
-					fread (temp,1, cipher_item_size,source);
-					if (strlen(temp) ==cipher_item_size){
+				//fread (temp,1, cipher_item_size,source);
+					if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 
 						fwrite(temp , 1 ,cipher_item_size , dest );
 						fseek(source, jump, SEEK_CUR);
@@ -607,33 +592,11 @@ namespace sober{
 		strcpy(filename[0][0] , "aaa");
 		for (j = depth ; j>-1; j--){
 			for(i=0; i<depth+1; i++){
-				//unlink(filename[i][j]);
-				//unlink(merged_filename[i][j]);
+				unlink(filename[i][j]);
+				unlink(merged_filename[i][j]);
 			}
 		}
 
-
-		// printf("-------------------------------------\n");
-		// FILE *source;
-		// source = fopen(input, "rb");
-
-		// char *temp;
-		// temp = (char *) malloc(cipher_item_size);
-
-		// char *t;
-		// t = (char *) malloc(plain_item_size);
-
-		// fread(temp, 1, cipher_item_size, source);
-		// printf("cipher:    \n%s\n", temp);
-		// printf("SIZE OF CIPHER %d\n", strlen(temp) );
-
-		// t = (char * )((encryptor->Decrypt((byte *) temp, cipher_item_size)).c_str());
-		// printf("plain\n%s\n", t);
-
-		// printf("SIZE OF plain %d\n", strlen(t) );
-
-
-		// printf("-------------------------------------\n");
 
 
 
