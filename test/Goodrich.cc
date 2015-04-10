@@ -40,13 +40,13 @@ int main(int argc, char **argv) {
 	//Encryption
 	double start = Now();
 	Encryptor encryptor; 
-	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),10000);
+	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),1000);
 	goodrich.Sort(input_file, final_output);
 	LOG(INFO)<< "Finish Goodrich sort in .. " << (Now() - start);
 
 	//Validation
-	Sorter sorter;
-	LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
+	// Sorter sorter;
+	// LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
 
 	return 0;
 }
