@@ -9,7 +9,6 @@
 #include <iostream>
 #include "sort/Goodrich.h"
 using namespace std;
-
 namespace sober{
 	static int cmpfunc (const void * a, const void * b ) {
 		const char *pa = *(const char**)a;
