@@ -15,7 +15,7 @@
 using namespace std; 
 using namespace sober; 
 DEFINE_string(config_file,"config","Where to read the config");
-DEFINE_int32(msize,100,"Size of M"); 
+DEFINE_int32(msize,1000,"Size of M"); 
 /**
  * Testing Goodrich's sorting algorithm.
  */
@@ -41,14 +41,14 @@ int main(int argc, char **argv) {
 	double start = Now();
 	Encryptor encryptor; 
 
-	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),1000);
+	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),100000);
 
 	goodrich.Sort(input_file, final_output);
 	LOG(INFO)<< "Finish Goodrich sort in .. " << (Now() - start);
 
 	//Validation
-	// Sorter sorter;
-	// LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
+	Sorter sorter;
+	LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
 
 	return 0;
 }

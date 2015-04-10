@@ -24,7 +24,6 @@ namespace sober{
 		this->m = 8;
 		this->cipher_item_size = cipher_record_size;
 		this->plain_item_size = plain_record_size;
-	//Note this part
 		this->IOwrite =0;
 		this->IOread = 0;
 		this->ignore = -1;
@@ -36,7 +35,6 @@ namespace sober{
 		struct stat st;
 		stat(filename, &st);
 		int size = st.st_size;
-
 		return size;
 	}
 
@@ -45,21 +43,13 @@ namespace sober{
 		stat(filename, &st);
 		int size = st.st_size;
 		int count = size / (sizeof(char)*cipher_item_size);
-
 		return count;
 	}
 	int Goodrich::externalSort(FILE *source, long source_offset, long problem_size, FILE *dest,  int merge_depth, int sort_depth, long *dest_offset){
-
 		int s,e;
-
-
-
-
 		int i = 0;
-
 		if(problem_size < M){
 			return internalSort(source, source_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
-
 		}
 		else{
 			long *list_source_offset, *list_problem_size;
@@ -69,12 +59,8 @@ namespace sober{
 			long **subproblems_offset;
 			subproblems_offset = static_cast<long**>(malloc ((k+1)*sizeof(long *)));
 			for (i=0; i<k+1; i++){
-
-
 				subproblems_offset[i] = static_cast<long*>(malloc(sizeof(long)*2));
 			}
-
-
 			for (i=0; i<k+1; i++){
 				externalSort(source, list_source_offset[i], list_problem_size[i], fp[merge_depth][sort_depth+1],
 					merge_depth, sort_depth+1, subproblems_offset[i]);
@@ -82,44 +68,23 @@ namespace sober{
 				e = subproblems_offset[i][1]/cipher_item_size;
 
 			}
-
-
-
 			externalMerge(fp[merge_depth][sort_depth+1], subproblems_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
-
-
-
 			free(list_source_offset);
 			free(list_problem_size);
 			free(subproblems_offset);
-
-
 			return 0;
-
 		}
-
-
-
 	}
 
-
 	int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
-
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
-
-
-
 		int array_size = problem_size;
 		int i = 0;
-		char **array;
-		array = static_cast<char**>(malloc(array_size * sizeof(char*)));
-		for(i = 0; i < array_size; i++) {
-			array[i] = (char *) malloc(plain_item_size);
-		}
-		char *temp;
-		temp = (char *) malloc(cipher_item_size);
+		string String[problem_size];
+		byte *temp;
+		temp = (byte *) malloc(cipher_item_size);
 
 		fseek(source, source_offset, SEEK_SET);
 		i = 0;
@@ -127,63 +92,41 @@ namespace sober{
 
 			if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 				IOread++;
-				if (strcmp(temp, "\n")!=0){
-					array[i] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
-				//strcpy(array[i], temp);
 
-				}
+				String[i] = encryptor->Decrypt(temp, cipher_item_size);
+				
 			}
 			i++;
 		}
-
-		qsort(array, array_size, sizeof(char *), cmpfunc);
+		qsort(String, array_size, sizeof(string), cmpfunc);
 
 		fseek(dest, 0, SEEK_END);
 		dest_offset[0] = ftell(dest);
 
 		for(i = 0; i<array_size; i++){
-		//fwrite(array[i] , 1 , item_size , dest );
-			fwrite((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
-
-
+			fwrite((encryptor->Encrypt((byte*)String[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
 			IOwrite++;
 
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-
-
 		free(temp);
-		free(array);
-
 		return 0;
-
-
 	}
 
 	int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_size, int merge_depth, int sort_depth,FILE *dest, long *dest_offset){
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
-
-
 		int i = 0;
 		int j = 0;
 		int count = 0;
 		int sub_problem_size = problem_size / k;
 		int last_sub_problem_size = problem_size % k;
-
-
-		char **array;
-		array = static_cast<char**>(malloc(problem_size * sizeof(char*)));
-		for(i = 0; i < problem_size; i++) {
-			array[i] = (char *) malloc(plain_item_size);
-		}
-
-		char *temp;
-		temp = (char *) malloc(cipher_item_size);
-
-
+		string String[problem_size];
+		byte *temp;
+		temp = (byte *) malloc(cipher_item_size);
+		j = 0;
 		for (i=0; i<k+1; i++){
 
 			count = 0;
@@ -192,37 +135,28 @@ namespace sober{
 			while (ftell(source) < source_offset[i][1]){
 
 				if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
-				//strcpy(array[j], temp);
-					array[j] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
+
+
+					String[j] = encryptor->Decrypt(temp, cipher_item_size);
 					j++;
 				}
 			}
 
 		}
-
-		qsort(array, problem_size, sizeof(char *), cmpfunc);
+		qsort(String, problem_size, sizeof(string), cmpfunc);
 		fseek(dest, 0, SEEK_END);
 		dest_offset[0] = ftell(dest);
 		for(i = 0; i<problem_size; i++){
-
-		//fwrite(array[i] , 1 , item_size , dest );
-			fwrite((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
-			//fwrite((char*)((encryptor->Encrypt((byte*)array[i], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
+			fwrite((encryptor->Encrypt((byte*)String[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
 			IOwrite++;
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-
 		free(temp);
-		free(array);
-
-
 		return 0;
 	}
 
-
 	int Goodrich::externalMerge(FILE *source, long **source_offset, long problem_size, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
-
 		int i = 0, j=0;
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
@@ -231,10 +165,8 @@ namespace sober{
 			return internalMerge(source,  source_offset, problem_size,merge_depth,sort_depth, dest, dest_offset);
 		}
 		else {
-
 			long ***subproblems_offset;
 			long *Merge_subproblem_size;
-
 			subproblems_offset = static_cast<long***>(malloc((m+1)* sizeof(long **)));
 			Merge_subproblem_size =  static_cast<long*>(malloc((m+1)* sizeof(long **)));
 			for (i =0; i<m+1; i++){
@@ -243,17 +175,12 @@ namespace sober{
 					subproblems_offset[i][j] = static_cast<long*>(malloc(2* sizeof(long)));
 				}
 			}
-
 			create_Merged_Subproblems(source, source_offset, Merge_subproblem_size, M_fp[merge_depth+1][sort_depth+1], subproblems_offset);
-
-
-
 			long **Merged_subproblems_offset;
 			Merged_subproblems_offset = static_cast<long**>(malloc((m+1)*sizeof(long *)));
 			for (i=0; i<m+1; i++){
 				Merged_subproblems_offset[i] = static_cast<long*>(malloc (2*sizeof(long)));
 			}
-
 
 			for (i = 0; i < m+1; i++) {
 
@@ -263,30 +190,22 @@ namespace sober{
 				int s, e;
 				s = Merged_subproblems_offset[i][0]/cipher_item_size;
 				e =  Merged_subproblems_offset[i][1]/cipher_item_size;
-
-
-
 			}
-
 			slidingMerge(fp[merge_depth+1][sort_depth], Merged_subproblems_offset, fp[merge_depth][sort_depth],merge_depth, sort_depth , dest_offset);
-
 			free(subproblems_offset);
 			free(Merged_subproblems_offset);
 			return 0;
 		}
 	}
 
-
 	int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
-		printf("Sliding Merge\n");
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
-
 		int consumed_item[m+1];
 		int i, j, p, q;
-		char *special_value, *cptext;
-		cptext =(char *) malloc(cipher_item_size);
+		char *special_value;
+		string cptext;
 
 		special_value  = (char *) malloc(plain_item_size);
 		for (i = 0; i < plain_item_size; ++i) {
@@ -298,28 +217,23 @@ namespace sober{
 		for (i=0; i<m+1; i++){
 			consumed_item[i] = 0;
 		}
-		char *temp;
-		temp = (char *) malloc(cipher_item_size);
-		char **array;
-		array = static_cast<char**>(malloc( 2*(m+1)*(k+1)*sizeof(char*)));
-		for(i = 0; i < 2*(k+1)*(m+1); i++) {
-			array[i] = (char *) malloc(plain_item_size);
-		}
+		byte *temp;
+		temp = (byte *) malloc(cipher_item_size);
+		
+		string String[2*(m+1)*(k+1)];
 		p = 0;
 		int consumed = 0;
-
-		printf(" - Sliding Merge: reading first 2km items\n");
 		for (i=0; i<m+1; i++){
 			fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 			j = 0;
 			while (j<2*(k+1) && ftell(source) < Merged_subproblems_offset[i][1]){
 
-			//fread (temp,1, cipher_item_size,source);
+
 
 				if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
 					consumed_item[i]++;
-				//strcpy(array[p], temp);
-					array[p] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
+
+					String[p] = encryptor->Decrypt(temp, cipher_item_size);
 					IOread++;
 					p++;
 					j++;
@@ -332,109 +246,67 @@ namespace sober{
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[0] = ftell(dest);
-		qsort(array,p, sizeof(char *), cmpfunc);
-		printf(" - Sliding Merge: write first km items\n");
-		for (q = 0; q<(k+1)*(m+1); q++){
-			if (strcmp(array[q],special_value)!=0){
+		qsort(String, p, sizeof(string), cmpfunc);
 
-			//fwrite(array[q] , 1 , item_size , dest );
-				fwrite((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
-				//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
-				strcpy(array[q],special_value);
+		for (q = 0; q<(k+1)*(m+1); q++){
+			if (String[q]!=special_value){
+
+
+				fwrite((encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+				String[q]=special_value;
 				IOwrite++;
 			}
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-
-
-
 		while (consumed<m+1){
-			printf(" - Sliding Merge: working on next km items\n");
-
 			consumed = 0;
 			p = 0;
 			for (i=0; i<m+1; i++){
 
 				fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 				j = 0;
-				printf("\nAbout to go in while loop -   %ld-   %ld\n",ftell(source), Merged_subproblems_offset[i][1]);
-
-
 				while (j<k+1 && ftell(source) < Merged_subproblems_offset[i][1]){
-
-				//fread (temp,1, cipher_item_size,source);
-
-
 					if (fread (temp,1, cipher_item_size,source)==cipher_item_size){
-						consumed_item[i]++;
-
-					//strcpy(array[p], temp);
-						printf("about to decrypt - %d \n", p);
-						array[p] = (char*)((encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str());
-						//array[p] = (char*)(encryptor->Decrypt((byte*)temp, cipher_item_size)).c_str();
-						printf("done with decrypt\n");
+						consumed_item[i]++;		
+						String[p] = encryptor->Decrypt(temp, cipher_item_size);
 						IOread++;
 						p++;
 						j++;
 					}
-					printf("%d -", p);
-
 				}
-				printf("Exit while loop\n");
+
 				if (ftell(source) >= Merged_subproblems_offset[i][1]){
 					consumed++;
 				}
 			}
-			printf("\n");
-			printf(" - Sliding Merge: read next km items\n");
-
-
-			qsort(array,2*(k+1)*(m+1), sizeof(char *), cmpfunc);
+			qsort(String,2*(k+1)*(m+1), sizeof(string), cmpfunc);
 			for (q = 0; q<(k+1)*(m+1); q++){
-				if (strcmp(array[q],special_value)!=0){
+				
+				if (String[q]!=special_value){
 
-				//fwrite(array[q] , 1 , item_size , dest );
-					//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
-					printf("about to encrypt\n");
-					cptext = (char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str());
-					printf("finish encrypting\n");
-					fwrite(cptext , 1 , cipher_item_size , dest );
-					printf("finish write to array\n");
-					strcpy(array[q],special_value);
+					cptext = encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size);
+					
+					fwrite(cptext.c_str() , 1 , cipher_item_size , dest );
+					
+					String[q]=special_value;
 
 				}
 			}
-			printf(" - Sliding Merge: write next km items\n");
-
 		}
-
 		for (q = 0; q<2*(k+1)*(m+1); q++){
-			if (strcmp(array[q],special_value)!=0){
-
-			//fwrite(array[q] , 1 , item_size , dest );
-				//fwrite((char*)((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str()) , 1 , cipher_item_size , dest );
-				fwrite((encryptor->Encrypt((byte*)array[q], plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+			if (String[q]!=special_value){
+				cptext = encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size);
+				fwrite(cptext.c_str() , 1 , cipher_item_size , dest );
+				
 			}
 			else {
-
 			}
 		}
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
-
-
-
-
-
-		//free(array);
 		free(temp);
-		printf("Exit Sliding Merge\n");
-
 		return 0;
-
-
-
 	}
 
 	int Goodrich::create_Sorted_Subproblem(long source_offset, long problem_size, long *list_source_offset, long *list_problem_size){
@@ -458,18 +330,16 @@ namespace sober{
 	}
 
 	int Goodrich::create_Merged_Subproblems(FILE *source, long **source_offset, long *Merge_subproblem_size, FILE *dest, long ***subproblems_offset){
-	//source_offset[i][0]: start offset of sorted array i
-	//source_offset[i][1]: end offset of sorted array i
 
 		if (dest==NULL){
 			printf("create Merge Subproblem null\n");
 		}
-
+		
 		int i, j;
 		char *line;
-		line = (char *) malloc(cipher_item_size);
-		char *temp;
-		temp = (char *) malloc(cipher_item_size);
+		line = (char *) malloc(plain_item_size);
+		byte *temp;
+		temp = (byte *) malloc(cipher_item_size);
 
 		int jump = m * cipher_item_size;
 		for (i = 0; i<m+1; i++){
@@ -481,50 +351,38 @@ namespace sober{
 				fseek(dest, 0, SEEK_END);
 				subproblems_offset[i][j][0] = ftell(dest);
 				while(ftell(source)<source_offset[j][1]){
-				//fread (temp,1, cipher_item_size,source);
-					if (fread (temp,1, cipher_item_size,source)==(cipher_item_size)){
-
-						fwrite(temp , 1 ,cipher_item_size , dest );
-						fseek(source, jump, SEEK_CUR);
-					}
-
+					fread (temp,1, cipher_item_size,source);
+					fwrite(temp , 1 , cipher_item_size , dest );				
+					fseek(source, jump, SEEK_CUR);
 				}
 				fseek(dest, 0, SEEK_END);
 				subproblems_offset[i][j][1] = ftell(dest);
 
 			}
-
 			int s, e;
 			s = subproblems_offset[i][0][0]/cipher_item_size;
 			e = subproblems_offset[i][k][1]/cipher_item_size;
-
 			Merge_subproblem_size[i] = e - s;
-
 		}
-
 		free(line);
 		free(temp);
-
 		return(0);
 	}
-
-
 
 	void Goodrich::Sort(char *input, char *output){
 
 		int depth, i, j;
-
 		FILE *source;
 		source = fopen(input, "rb+");
 		int problem_size;
-
+		//check number of item in input file
 		problem_size = count_element(input);
+		//calculate recurrent depth
 		depth = 1+ log((double) (problem_size / M)) / log((double)k);
 		max_depth = depth;
 		printf("%d\n", depth);
 
-
-
+		//prepare temporary files
 		fp = static_cast<FILE***>(malloc (sizeof (FILE **)*(depth+1)));
 		M_fp = static_cast<FILE***>(malloc (sizeof (FILE **)*(depth+1)));
 		filename = static_cast<char***>(malloc (sizeof (char **) * (depth +1)));
@@ -539,7 +397,6 @@ namespace sober{
 				filename[i][j] = static_cast<char*>(malloc (sizeof (char)*256));
 			}
 		}
-
 		strcpy(filename[0][0], output);
 		for (i=1; i<depth+1; i++){
 			sprintf(filename[0][i], "%s_x", filename[0][i-1]);
@@ -548,39 +405,24 @@ namespace sober{
 		for (j = 0 ; j<depth+1; j++){
 			for(i=1; i<depth+1; i++){
 				sprintf(filename[i][j], "%s_t", filename[i-1][j]);
+				sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
 			}
 		}
-
-
 		for (j = depth ; j>-1; j--){
 			for(i=0; i<depth+1; i++){
 				unlink(filename[i][j]);
 				fp[i][j] = fopen(filename[i][j], "ab+");
-			}
-		}
-
-		for (j = 0 ; j<depth+1; j++){
-			for(i=0; i<depth+1; i++){
-				sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
-
-
-			}
-		}
-		for (j = depth ; j>-1; j--){
-			for(i=0; i<depth+1; i++){
 				unlink(merged_filename[i][j]);
 				M_fp[i][j] = fopen(merged_filename[i][j], "ab+");
 			}
 		}
 
-
-	// printf("Finish initializing\n");
+		// perform sorting
 		long *dest_offset;
 		dest_offset = static_cast<long*>(malloc (2 * sizeof(long)));
 		externalSort(source, 0, problem_size, fp[0][0], 0, 0,dest_offset);
 
-
-
+		//close files
 		for (j = depth ; j>-1; j--){
 			for(i=0; i<depth+1; i++){
 				fclose(fp[i][j]);
@@ -589,6 +431,8 @@ namespace sober{
 
 		printf("HEY, IT'S DONE\n");
 		printf("sorted to R with %d items\n", count_element(output));
+		
+		//remove temp files
 		strcpy(filename[0][0] , "aaa");
 		for (j = depth ; j>-1; j--){
 			for(i=0; i<depth+1; i++){
@@ -597,13 +441,6 @@ namespace sober{
 			}
 		}
 
-
-
-
-
 	}
-
-
-
 
 }
