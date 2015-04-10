@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	double start = Now();
 	Encryptor encryptor; 
 
-	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),100000);
+	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),10000);
 
 	goodrich.Sort(input_file, final_output);
 	LOG(INFO)<< "Finish Goodrich sort in .. " << (Now() - start);

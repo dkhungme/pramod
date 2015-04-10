@@ -405,6 +405,11 @@ namespace sober{
 		for (j = 0 ; j<depth+1; j++){
 			for(i=1; i<depth+1; i++){
 				sprintf(filename[i][j], "%s_t", filename[i-1][j]);
+				//sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
+			}
+		}
+		for (j = 0 ; j<depth+1; j++){
+			for(i=0; i<depth+1; i++){
 				sprintf(merged_filename[i][j], "%s_M", filename[i][j]);
 			}
 		}
