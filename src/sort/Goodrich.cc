@@ -17,6 +17,10 @@ namespace sober{
 
 		return strcmp(pa,pb);
 	}
+
+	int internalSort_count = 0;
+	int internalMerge_count = 0;
+	int slidingMerge_count = 0;
 	Goodrich::Goodrich(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
 		this->encryptor = encryptor_object;
 		this->M = memory_capacity;
@@ -80,6 +84,7 @@ namespace sober{
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
+		internalSort_count++;
 		int array_size = problem_size;
 		int i = 0;
 		string String[problem_size];
@@ -118,6 +123,7 @@ namespace sober{
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
+		internalMerge_count++;
 		int i = 0;
 		int j = 0;
 		int count = 0;
@@ -202,6 +208,7 @@ namespace sober{
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
+		slidingMerge_count++;
 		int consumed_item[m+1];
 		int i, j, p, q;
 		char *special_value;
@@ -435,8 +442,10 @@ namespace sober{
 		}
 
 		printf("HEY, IT'S DONE\n");
-		printf("sorted to R with %d items\n", count_element(output));
 		
+		printf("sorted to R with %d items\n", count_element(output));
+		printf("-internal Sort invoked %d times\n-internal Merge invoked %d times\n-sliding Merge invoked %d times\n",
+		 internalSort_count, internalMerge_count, slidingMerge_count);
 		//remove temp files
 		strcpy(filename[0][0] , "aaa");
 		for (j = depth ; j>-1; j--){
