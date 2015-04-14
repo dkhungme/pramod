@@ -30,7 +30,9 @@ byte* Mixer::Mix(byte** input, int size){
 	int nrecords = size/ciphertext_record_size_;
 
 	//mix the index
-	int index[nrecords];
+	//int index[nrecords];
+	int *index = (int*)malloc(nrecords*sizeof(int)); 
+	
 	for (int i=0; i<nrecords; i++) index[i] = i;
 
 
@@ -43,10 +45,11 @@ byte* Mixer::Mix(byte** input, int size){
 		index[j]=tmp;
 	}
 
-
+	
 	//create new array
 	byte *output = (byte*)malloc(size*sizeof(byte));
-
+	assert(output);
+	
 	string newcipher;
 	for (int i=0; i<nrecords; i++){
 		newcipher = encryptor_.ReEncrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
@@ -55,6 +58,7 @@ byte* Mixer::Mix(byte** input, int size){
 
 	//delete original input at the end
 	free(*input);
+	free(index); 
 	return output;
 }
 

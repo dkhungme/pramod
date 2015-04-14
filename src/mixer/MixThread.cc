@@ -47,12 +47,14 @@ void MixThread::StartMixing(Mixnet *mixnet, int round){
 		io_start = Now();
 		byte *pulled_data = (byte*) malloc(
 				ciphertext_block_size_ * sizeof(byte));
+		assert(pulled_data); 
 		mixers_[i-start_idx_]->GetData(input_descriptors, nmixers, 0, pulled_data);
 		io_end = Now();
 		io_total += (io_end-io_start);
 		mix_start = Now();
 		byte *mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
 				ciphertext_block_size_);
+		assert(mixed_data); 
 		mix_end = Now();
 		mix_total += (mix_end-mix_start);
 		//write to file
