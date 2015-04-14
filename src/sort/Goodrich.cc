@@ -40,26 +40,33 @@ namespace sober{
 	int Goodrich::count_element(char *filename){
 		struct stat st;
 		stat(filename, &st);
-		int size = st.st_size;
-		int count = size / (sizeof(char)*cipher_item_size);
+		long long size = st.st_size;
+		long long count = size / (sizeof(char)*cipher_item_size);
+
 		return count;
 	}
-	int Goodrich::externalSort(FILE *source, long source_offset, long problem_size, FILE *dest,  int merge_depth, int sort_depth, long *dest_offset){
+	int Goodrich::externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset){
 		int s,e;
 		int i = 0;
 		if(problem_size < M){
 			return internalSort(source, source_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
 		}
 		else{
-			long *list_source_offset, *list_problem_size;
-			list_source_offset = static_cast<long*>(malloc((k+1) * sizeof(long)));
-			list_problem_size = static_cast<long*>(malloc((k+1) * sizeof(long)));
+			long long *list_source_offset, *list_problem_size;
+			list_source_offset = static_cast<long long*>(malloc((k+1) * sizeof(long long)));
+			list_problem_size = static_cast<long long*>(malloc((k+1) * sizeof(long long)));
 			create_Sorted_Subproblem(source_offset, problem_size, list_source_offset, list_problem_size);
-			long **subproblems_offset;
-			subproblems_offset = static_cast<long**>(malloc ((k+1)*sizeof(long *)));
+			long long **subproblems_offset;
+			subproblems_offset = static_cast<long long**>(malloc ((k+1)*sizeof(long long *)));
 			for (i=0; i<k+1; i++){
-				subproblems_offset[i] = static_cast<long*>(malloc(sizeof(long)*2));
+				subproblems_offset[i] = static_cast<long long*>(malloc(sizeof(long long)*2));
 			}
+
+			fclose(fp[merge_depth][sort_depth+1]);
+			unlink(filename[merge_depth][sort_depth+1]);
+			fp[merge_depth][sort_depth+1] = fopen(filename[merge_depth][sort_depth+1], "w+");
+
+
 			for (i=0; i<k+1; i++){
 				externalSort(source, list_source_offset[i], list_problem_size[i], fp[merge_depth][sort_depth+1],
 					merge_depth, sort_depth+1, subproblems_offset[i]);
@@ -68,6 +75,11 @@ namespace sober{
 
 			}
 			externalMerge(fp[merge_depth][sort_depth+1], subproblems_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
+
+			fclose(fp[merge_depth][sort_depth+1]);
+			unlink(filename[merge_depth][sort_depth+1]);
+			fp[merge_depth][sort_depth+1] = fopen(filename[merge_depth][sort_depth+1], "w+");
+
 			free(list_source_offset);
 			free(list_problem_size);
 			free(subproblems_offset);
@@ -75,13 +87,13 @@ namespace sober{
 		}
 	}
 
-	int Goodrich::internalSort(FILE *source, long source_offset, long problem_size, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
+	int Goodrich::internalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset){
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
 		int array_size = problem_size;
 		int i = 0;
-		string String[problem_size];
+		string* String = new string[problem_size];
 		byte *temp;
 		temp = (byte *) malloc(cipher_item_size);
 
@@ -110,10 +122,11 @@ namespace sober{
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
 		free(temp);
+		delete[] String;
 		return 0;
 	}
 
-	int Goodrich::internalMerge(FILE *source, long **source_offset, long problem_size, int merge_depth, int sort_depth,FILE *dest, long *dest_offset){
+	int Goodrich::internalMerge(FILE *source, long long **source_offset, long long problem_size, int merge_depth, int sort_depth,FILE *dest, long long *dest_offset){
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
@@ -122,7 +135,7 @@ namespace sober{
 		int count = 0;
 		int sub_problem_size = problem_size / k;
 		int last_sub_problem_size = problem_size % k;
-		string String[problem_size];
+		string* String = new string[problem_size];
 		byte *temp;
 		temp = (byte *) malloc(cipher_item_size);
 		j = 0;
@@ -152,10 +165,11 @@ namespace sober{
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
 		free(temp);
+		delete[] String;
 		return 0;
 	}
 
-	int Goodrich::externalMerge(FILE *source, long **source_offset, long problem_size, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
+	int Goodrich::externalMerge(FILE *source, long long **source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset){
 		int i = 0, j=0;
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
@@ -164,21 +178,25 @@ namespace sober{
 			return internalMerge(source,  source_offset, problem_size,merge_depth,sort_depth, dest, dest_offset);
 		}
 		else {
-			long ***subproblems_offset;
-			long *Merge_subproblem_size;
-			subproblems_offset = static_cast<long***>(malloc((m+1)* sizeof(long **)));
-			Merge_subproblem_size =  static_cast<long*>(malloc((m+1)* sizeof(long **)));
+			long long ***subproblems_offset;
+			long long *Merge_subproblem_size;
+			subproblems_offset = static_cast<long long***>(malloc((m+1)* sizeof(long long **)));
+			Merge_subproblem_size =  static_cast<long long*>(malloc((m+1)* sizeof(long long **)));
 			for (i =0; i<m+1; i++){
-				subproblems_offset[i] = static_cast<long**>(malloc((k+1)* sizeof(long *)));
+				subproblems_offset[i] = static_cast<long long**>(malloc((k+1)* sizeof(long long *)));
 				for (j = 0; j<k+1; j++){
-					subproblems_offset[i][j] = static_cast<long*>(malloc(2* sizeof(long)));
+					subproblems_offset[i][j] = static_cast<long long*>(malloc(2* sizeof(long long)));
 				}
 			}
+			fclose(M_fp[merge_depth+1][sort_depth+1]);
+			unlink(merged_filename[merge_depth+1][sort_depth+1]);
+			M_fp[merge_depth+1][sort_depth+1] = fopen(merged_filename[merge_depth+1][sort_depth+1], "w+");
+
 			create_Merged_Subproblems(source, source_offset, Merge_subproblem_size, M_fp[merge_depth+1][sort_depth+1], subproblems_offset);
-			long **Merged_subproblems_offset;
-			Merged_subproblems_offset = static_cast<long**>(malloc((m+1)*sizeof(long *)));
+			long long **Merged_subproblems_offset;
+			Merged_subproblems_offset = static_cast<long long**>(malloc((m+1)*sizeof(long long *)));
 			for (i=0; i<m+1; i++){
-				Merged_subproblems_offset[i] = static_cast<long*>(malloc (2*sizeof(long)));
+				Merged_subproblems_offset[i] = static_cast<long long*>(malloc (2*sizeof(long long)));
 			}
 
 			for (i = 0; i < m+1; i++) {
@@ -191,13 +209,22 @@ namespace sober{
 				e =  Merged_subproblems_offset[i][1]/cipher_item_size;
 			}
 			slidingMerge(fp[merge_depth+1][sort_depth], Merged_subproblems_offset, fp[merge_depth][sort_depth],merge_depth, sort_depth , dest_offset);
+
+			fclose(M_fp[merge_depth+1][sort_depth+1]);
+			unlink(merged_filename[merge_depth+1][sort_depth+1]);
+			M_fp[merge_depth+1][sort_depth+1] = fopen(merged_filename[merge_depth+1][sort_depth+1], "w+");
+
+			fclose(fp[merge_depth+1][sort_depth]);
+			unlink(filename[merge_depth+1][sort_depth]);
+			fp[merge_depth+1][sort_depth] = fopen(filename[merge_depth+1][sort_depth], "w+");
+
 			free(subproblems_offset);
 			free(Merged_subproblems_offset);
 			return 0;
 		}
 	}
 
-	int Goodrich::slidingMerge(FILE *source, long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long *dest_offset){
+	int Goodrich::slidingMerge(FILE *source, long long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset){
 		if (dest == NULL){
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
@@ -219,7 +246,7 @@ namespace sober{
 		byte *temp;
 		temp = (byte *) malloc(cipher_item_size);
 		
-		string String[2*(m+1)*(k+1)];
+		string* String = new string[2*(m+1)*(k+1)];
 		p = 0;
 		int consumed = 0;
 		for (i=0; i<m+1; i++){
@@ -305,10 +332,11 @@ namespace sober{
 		fseek(dest, 0, SEEK_END);
 		dest_offset[1] = ftell(dest);
 		free(temp);
+		delete[] String;
 		return 0;
 	}
 
-	int Goodrich::create_Sorted_Subproblem(long source_offset, long problem_size, long *list_source_offset, long *list_problem_size){
+	int Goodrich::create_Sorted_Subproblem(long long source_offset, long long problem_size, long long *list_source_offset, long long *list_problem_size){
 
 		int i;
 		int sub_problem_size;
@@ -328,7 +356,7 @@ namespace sober{
 
 	}
 
-	int Goodrich::create_Merged_Subproblems(FILE *source, long **source_offset, long *Merge_subproblem_size, FILE *dest, long ***subproblems_offset){
+	int Goodrich::create_Merged_Subproblems(FILE *source, long long **source_offset, long long *Merge_subproblem_size, FILE *dest, long long ***subproblems_offset){
 
 		if (dest==NULL){
 			printf("create Merge Subproblem null\n");
@@ -345,7 +373,7 @@ namespace sober{
 			for (j = 0; j<k+1; j++){
 
 
-				long p = source_offset[j][0] + i * cipher_item_size;
+				long long p = source_offset[j][0] + i * cipher_item_size;
 				fseek(source, p, SEEK_SET);
 				fseek(dest, 0, SEEK_END);
 				subproblems_offset[i][j][0] = ftell(dest);
@@ -422,8 +450,8 @@ namespace sober{
 		}
 
 		// perform sorting
-		long *dest_offset;
-		dest_offset = static_cast<long*>(malloc (2 * sizeof(long)));
+		long long *dest_offset;
+		dest_offset = static_cast<long long*>(malloc (2 * sizeof(long long)));
 		externalSort(source, 0, problem_size, fp[0][0], 0, 0,dest_offset);
 
 		//close files
