@@ -1,0 +1,9 @@
+I0414 15:31:52.738736 32664 Goodrich.cc:39] Sorting data/data_0
+I0414 15:32:47.920486 32664 Goodrich.cc:47] Finish Goodrich sort in .. 55.1816
+I0414 15:32:50.403213 32664 Goodrich.cc:51]   Order? 1
+3
+HEY, IT'S DONE
+sorted to R with 1000000 items
+-internal Sort invoked 585 times
+-internal Merge invoked 1953 times
+-sliding Merge invoked 235 times

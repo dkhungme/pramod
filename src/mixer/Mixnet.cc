@@ -50,8 +50,8 @@ void Mixnet::StartMixing(){
 	vector<MixThread*> thread_objs;
 
 	//create MixThread objects
-	int mixers_per_thread = nmixers/params_->nthreads();
-	for (int i=0; i<params_->nthreads(); i++)
+	int mixers_per_thread = (nmixers<params_->nthreads()) ? 1: (nmixers/params_->nthreads()); 
+	for (int i=0; i<params_->nthreads() && i<nmixers; i++)
 		thread_objs.push_back(new MixThread(i*mixers_per_thread, (i+1)*mixers_per_thread));
 
 	double round_start, round_end;
@@ -67,16 +67,16 @@ void Mixnet::StartMixing(){
 		}
 
 		//start threads and wait for them to join
-		for (int i = 0; i < params_->nthreads(); i++) {
+		for (int i = 0; i < params_->nthreads() && i<nmixers; i++) {
 			mixer_threads.push_back(
 					thread(&MixThread::StartMixing, thread_objs[i], this,
 							round));
 		}
 
-		for (int i=0; i<params_->nthreads(); i++)
+		for (int i=0; i<params_->nthreads() && i<nmixers; i++)
 			mixer_threads[i].join();
 
-		for (int i=0; i<params_->nthreads(); i++)
+		for (int i=0; i<params_->nthreads() && i<nmixers; i++)
 			mixer_threads.pop_back();
 
 		for (int i = 0; i < nmixers; i++) {
@@ -94,7 +94,7 @@ void Mixnet::StartMixing(){
 		LOG(INFO) << "Mixing round " << round << " done in "<<(round_end-round_start);
 		round++;
 	}
-	for (int i=0; i<params_->nthreads(); i++)
+	for (int i=0; i<params_->nthreads() && i<nmixers; i++)
 			thread_objs.pop_back();
 
 	LOG(INFO) << "Done mixing ...";

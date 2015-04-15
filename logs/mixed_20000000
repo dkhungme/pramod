@@ -1,0 +1,23 @@
+Time = 60.6403
+Data generated.
+I0414 17:34:45.264467   754 MixThread.cc:72] IO time = 0.369109 mix time = 30.5643 over 1 mixers
+I0414 17:34:45.848948   755 MixThread.cc:72] IO time = 0.357361 mix time = 30.7351 over 1 mixers
+I0414 17:34:50.787930   756 MixThread.cc:72] IO time = 0.357705 mix time = 30.9077 over 1 mixers
+I0414 17:34:51.007827   757 MixThread.cc:72] IO time = 0.35909 mix time = 31.1482 over 1 mixers
+I0414 17:34:51.007911   751 Mixnet.cc:94] Mixing round 0 done in 37.1264
+I0414 17:35:22.262008   761 MixThread.cc:72] IO time = 0.333209 mix time = 30.5331 over 1 mixers
+I0414 17:35:24.563894   763 MixThread.cc:72] IO time = 0.373182 mix time = 32.3698 over 1 mixers
+I0414 17:35:29.232903   760 MixThread.cc:72] IO time = 0.376488 mix time = 32.9147 over 1 mixers
+I0414 17:35:29.828675   762 MixThread.cc:72] IO time = 0.338105 mix time = 33.2213 over 1 mixers
+I0414 17:35:30.112746   751 Mixnet.cc:94] Mixing round 1 done in 39.1048
+I0414 17:35:30.112783   751 Mixnet.cc:100] Done mixing ...
+Mixing successful. 
+I0414 17:36:17.246114   770 Sorter.cc:81] Finish block sorting ... in 45.6408
+I0414 17:36:18.171803   784 SortThread.cc:88] Merging file ... data/sorted_2
+I0414 17:36:18.171838   783 SortThread.cc:88] Merging file ... data/sorted_0
+I0414 17:36:18.172066   784 SortThread.cc:88] Merging file ... data/sorted_3
+I0414 17:36:18.198217   783 SortThread.cc:88] Merging file ... data/sorted_1
+I0414 17:37:17.995142   787 SortThread.cc:88] Merging file ... data/intermediate_0_0
+I0414 17:37:17.995190   787 SortThread.cc:88] Merging file ... data/intermediate_0_1
+Finish merge-sort in .. 215.91
+  Order? 1
