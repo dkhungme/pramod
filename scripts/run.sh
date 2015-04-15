@@ -1,11 +1,11 @@
 #!/bin/bash
-RECORDS=(10000 100000 1000000 10000000 20000000) 
+RECORDS=(100000 1000000 10000000 20000000) 
 DIR=`pwd`
 CONFIG=../config
 LOG_DIR=logs
 mkdir -p ../$LOG_DIR
 
-for (( i=0; i<5; i++ )); do
+for (( i=0; i<4; i++ )); do
 	cd $DIR
 	echo Sorting ${RECORDS[i]}
 	let BLOCK=${RECORDS[i]}/4
@@ -16,22 +16,24 @@ for (( i=0; i<5; i++ )); do
 	cd ../
 	rm -rf data/*
 	build/test/datagen
-	echo Goodrich, M = $BLOCK
+	echo Goodrich, M = 1000
 	sleep 1
+	COMMAND="build/test/goodrich --msize=1000 > $LOG_DIR/goodrich_N${RECORDS[i]}_M1000 2>&1"
+	eval $COMMAND
+
+	sleep 1
+        rm -rf data/*
+	build/test/datagen
+	echo Goodrich, M = 10000
+	COMMAND="build/test/goodrich --msize=10000 > $LOG_DIR/goodrich_N${RECORDS[i]}_M10000 2>&1"
+	eval $COMMAND
+
+	sleep 1
+	rm -rf data/*
+	build/test/datagen
+	#let BLOCK2=1000
 	COMMAND="build/test/goodrich --msize=$BLOCK > $LOG_DIR/goodrich_N${RECORDS[i]}_M$BLOCK 2>&1"
 	eval $COMMAND
-
-	sleep 1
-	let BLOCK1=10000
-	echo Goodrich, M = $BLOCK1
-	COMMAND="build/test/goodrich --msize=$BLOCK1 > $LOG_DIR/goodrich_N${RECORDS[i]}_M$BLOCK1 2>&1"
-	eval $COMMAND
-
-	#sleep 1
-	#let BLOCK2=1000
-	#echo Goodrich, M = $BLOCK2
-	#COMMAND="build/test/goodrich --msize=$BLOCK2 > $LOG_DIR/goodrich_N${RECORDS[i]}_M$BLOCK2 2>&1"
-	#eval $COMMAND
 
 
 	sleep 1
@@ -46,5 +48,7 @@ for (( i=0; i<5; i++ )); do
 	sleep 1
 	COMMAND="build/test/sorter 1>> $LOG_DIR/mixed_${RECORDS[i]} 2>&1"
 	eval $COMMAND
+
+	sleep 5
 done
 rm -rf tmp1

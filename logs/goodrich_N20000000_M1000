@@ -1,0 +1,9 @@
+I0414 16:17:26.201238   445 Goodrich.cc:39] Sorting data/data_0
+I0414 16:57:03.678957   445 Goodrich.cc:47] Finish Goodrich sort in .. 2377.48
+E0414 16:57:03.698704   445 Encryptor.cc:56] Error ... AES/GCM: ProcessData was called before setting key and IV
+5
+HEY, IT'S DONE
+sorted to R with 20000000 items
+-internal Sort invoked 37449 times
+-internal Merge invoked 236529 times
+-sliding Merge invoked 28981 times

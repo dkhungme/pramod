@@ -43,7 +43,7 @@ void Sorter::MergeSort(){
 	vector<string> merge_intermediates;
 
 	int nmixers = params_->num_mixer_nodes();
-	int nfiles_per_thread = nmixers / nthreads_;
+	int nfiles_per_thread = (nmixers < nthreads_) ? 1 : nmixers / nthreads_;
 	string inputs[nmixers], outputs[nmixers], merge_files[nmixers];
 
 	// Block sort individual files
@@ -64,7 +64,7 @@ void Sorter::MergeSort(){
 	}
 
 	// launch thread doing block sorting
-	for (int i = 0; i < nthreads_; i++) {
+	for (int i = 0; i < nthreads_ && i<nmixers; i++) {
 		thread_objs.push_back(new SortThread());
 		sort_threads.push_back(
 				thread(&SortThread::BlockSort, thread_objs[i],
@@ -73,12 +73,12 @@ void Sorter::MergeSort(){
 	}
 
 	//wait for them to join
-	for (int i=0; i<nthreads_; i++){
+	for (int i=0; i<nthreads_ && i<nmixers; i++){
 		sort_threads.front().join();
 		sort_threads.pop_front();
 	}
 
-	LOG(INFO) << "Finish block sorting ... in "<< (Now()-start);
+	LOG(INFO) << "Finish block sorting ... in "<< (Now()-start) << " nmixers = " <<nmixers << " nthreads = "<<nthreads_;
 	// Merge sorting. Use nthreads, and sync
 	int pass=0;
 	char tmp_output[256];

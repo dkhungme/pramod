@@ -53,7 +53,7 @@ string Encryptor::Decrypt(byte *input, int size) {
 				size - (IV_SIZE));
 		authen_dec.ChannelMessageEnd(DEFAULT_CHANNEL);
 	} catch (Exception e) {
-		LOG(ERROR) << "Error ... " << e.what();
+		LOG(ERROR) << "Error ... size = " << size << e.what();
 		exit(1);
 	}
 
