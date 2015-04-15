@@ -20,6 +20,7 @@ namespace sober{
 	int internalSort_count = 0;
 	int internalMerge_count = 0;
 	int slidingMerge_count = 0;
+	int fileopen_count = 0;
 	Goodrich::Goodrich(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
 		this->encryptor = encryptor_object;
 		this->M = memory_capacity;
@@ -69,6 +70,7 @@ namespace sober{
 			fclose(fp[merge_depth][sort_depth+1]);
 			unlink(filename[merge_depth][sort_depth+1]);
 			fp[merge_depth][sort_depth+1] = fopen(filename[merge_depth][sort_depth+1], "w+");
+			fileopen_count++;
 
 
 			for (i=0; i<k+1; i++){
@@ -83,6 +85,7 @@ namespace sober{
 			fclose(fp[merge_depth][sort_depth+1]);
 			unlink(filename[merge_depth][sort_depth+1]);
 			fp[merge_depth][sort_depth+1] = fopen(filename[merge_depth][sort_depth+1], "w+");
+			fileopen_count++;
 
 			free(list_source_offset);
 			free(list_problem_size);
@@ -197,6 +200,7 @@ namespace sober{
 			fclose(M_fp[merge_depth+1][sort_depth+1]);
 			unlink(merged_filename[merge_depth+1][sort_depth+1]);
 			M_fp[merge_depth+1][sort_depth+1] = fopen(merged_filename[merge_depth+1][sort_depth+1], "w+");
+			fileopen_count++;
 
 			create_Merged_Subproblems(source, source_offset, Merge_subproblem_size, M_fp[merge_depth+1][sort_depth+1], subproblems_offset);
 			long long **Merged_subproblems_offset;
@@ -219,10 +223,12 @@ namespace sober{
 			fclose(M_fp[merge_depth+1][sort_depth+1]);
 			unlink(merged_filename[merge_depth+1][sort_depth+1]);
 			M_fp[merge_depth+1][sort_depth+1] = fopen(merged_filename[merge_depth+1][sort_depth+1], "w+");
+			fileopen_count++;
 
 			fclose(fp[merge_depth+1][sort_depth]);
 			unlink(filename[merge_depth+1][sort_depth]);
 			fp[merge_depth+1][sort_depth] = fopen(filename[merge_depth+1][sort_depth], "w+");
+			fileopen_count++;
 
 			free(subproblems_offset);
 			free(Merged_subproblems_offset);
@@ -450,9 +456,11 @@ namespace sober{
 		for (j = depth ; j>-1; j--){
 			for(i=0; i<depth+1; i++){
 				unlink(filename[i][j]);
-				fp[i][j] = fopen(filename[i][j], "ab+");
+				fp[i][j] = fopen(filename[i][j], "w+");
+				fileopen_count++;
 				unlink(merged_filename[i][j]);
-				M_fp[i][j] = fopen(merged_filename[i][j], "ab+");
+				M_fp[i][j] = fopen(merged_filename[i][j], "w+");
+				fileopen_count++;
 			}
 		}
 
@@ -471,8 +479,8 @@ namespace sober{
 		printf("HEY, IT'S DONE\n");
 		
 		printf("sorted to R with %d items\n", count_element(output));
-		printf("-internal Sort invoked %d times\n-internal Merge invoked %d times\n-sliding Merge invoked %d times\n",
-		 internalSort_count, internalMerge_count, slidingMerge_count);
+		printf("-internal Sort invoked %d times\n-internal Merge invoked %d times\n-sliding Merge invoked %d times\n-file opened %d times\n",
+		 internalSort_count, internalMerge_count, slidingMerge_count, fileopen_count);
 		//remove temp files
 		strcpy(filename[0][0] , "aaa");
 		for (j = depth ; j>-1; j--){
