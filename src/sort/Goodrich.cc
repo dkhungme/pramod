@@ -42,7 +42,7 @@ namespace sober{
 		return size;
 	}
 
-	int Goodrich::count_element(char *filename){
+	long long Goodrich::count_element(char *filename){
 		struct stat st;
 		stat(filename, &st);
 		long long size = st.st_size;
@@ -51,7 +51,7 @@ namespace sober{
 		return count;
 	}
 	int Goodrich::externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset){
-		int s,e;
+		//int s,e;
 		int i = 0;
 		if(problem_size < M){
 			return internalSort(source, source_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
@@ -76,8 +76,8 @@ namespace sober{
 			for (i=0; i<k+1; i++){
 				externalSort(source, list_source_offset[i], list_problem_size[i], fp[merge_depth][sort_depth+1],
 					merge_depth, sort_depth+1, subproblems_offset[i]);
-				s = subproblems_offset[i][0]/cipher_item_size;
-				e = subproblems_offset[i][1]/cipher_item_size;
+				//s = subproblems_offset[i][0]/cipher_item_size;
+				//e = subproblems_offset[i][1]/cipher_item_size;
 
 			}
 			externalMerge(fp[merge_depth][sort_depth+1], subproblems_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
@@ -99,8 +99,8 @@ namespace sober{
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
 		internalSort_count++;
-		int array_size = problem_size;
-		int i = 0;
+		long array_size = problem_size;
+		long i = 0;
 		string* String = new string[problem_size];
 		byte *temp;
 		temp = (byte *) malloc(cipher_item_size);
@@ -142,8 +142,8 @@ namespace sober{
 		int i = 0;
 		int j = 0;
 		int count = 0;
-		int sub_problem_size = problem_size / k;
-		int last_sub_problem_size = problem_size % k;
+		//int sub_problem_size = problem_size / k;
+		//int last_sub_problem_size = problem_size % k;
 		string* String = new string[problem_size];
 		byte *temp;
 		temp = (byte *) malloc(cipher_item_size);
@@ -214,9 +214,9 @@ namespace sober{
 				externalMerge(M_fp[merge_depth+1][sort_depth+1], subproblems_offset[i], Merge_subproblem_size[i], fp[merge_depth+1][sort_depth],
 					merge_depth+1, sort_depth, Merged_subproblems_offset[i]);
 
-				int s, e;
-				s = Merged_subproblems_offset[i][0]/cipher_item_size;
-				e =  Merged_subproblems_offset[i][1]/cipher_item_size;
+				//int s, e;
+				//s = Merged_subproblems_offset[i][0]/cipher_item_size;
+				//e =  Merged_subproblems_offset[i][1]/cipher_item_size;
 			}
 			slidingMerge(fp[merge_depth+1][sort_depth], Merged_subproblems_offset, fp[merge_depth][sort_depth],merge_depth, sort_depth , dest_offset);
 
@@ -241,8 +241,8 @@ namespace sober{
 			printf("cannot open %s", filename[merge_depth][sort_depth]);
 		}
 		slidingMerge_count++;
-		int consumed_item[m+1];
-		int i, j, p, q;
+		long consumed_item[m+1];
+		long i, j, p, q;
 		char *special_value;
 		string cptext;
 
@@ -261,7 +261,7 @@ namespace sober{
 		
 		string* String = new string[2*(m+1)*(k+1)];
 		p = 0;
-		int consumed = 0;
+		long consumed = 0;
 		for (i=0; i<m+1; i++){
 			fseek(source, Merged_subproblems_offset[i][0] + consumed_item[i]*cipher_item_size, SEEK_SET);
 			j = 0;
@@ -352,7 +352,7 @@ namespace sober{
 	int Goodrich::create_Sorted_Subproblem(long long source_offset, long long problem_size, long long *list_source_offset, long long *list_problem_size){
 
 		int i;
-		int sub_problem_size;
+		long sub_problem_size;
 		sub_problem_size = problem_size / k;
 		for (i = 0; i<k; i++){
 			list_source_offset[i] = i * sub_problem_size * cipher_item_size+ source_offset;
@@ -399,7 +399,7 @@ namespace sober{
 				subproblems_offset[i][j][1] = ftell(dest);
 
 			}
-			int s, e;
+			long s, e;
 			s = subproblems_offset[i][0][0]/cipher_item_size;
 			e = subproblems_offset[i][k][1]/cipher_item_size;
 			Merge_subproblem_size[i] = e - s;

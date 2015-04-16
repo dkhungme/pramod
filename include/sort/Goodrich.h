@@ -41,7 +41,7 @@ private:
 
 
 	int file_size(char *filename);
-	int count_element(char *filename);
+	long long count_element(char *filename);
 	int externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset);
 	int internalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
 	int internalMerge(FILE *source, long long **source_offset, long long problem_size, int merge_depth, int sort_depth,FILE *dest, long long *dest_offset);
