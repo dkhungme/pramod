@@ -29,7 +29,7 @@ namespace sober{
  */
 class Node{
 public:
-	Node(string input_file);
+	Node(string input_file, Encryptor *encryptor);
 	~Node();
 
 	/**
@@ -58,7 +58,9 @@ public:
 private:
 	FILE *file_;
 	char *current_record_;
-	int current_pos_, record_size_;
+	char *current_plaintext_;
+	int current_pos_, record_size_, plaintext_size_;
+	Encryptor *encryptor_; 
 };
 
 class PriorityQueue{
@@ -94,6 +96,7 @@ private:
 	int max_size_;
 	int current_size_;
 	int ciphertext_size_;
+	int record_size_; 
 
 	vector<Node*> nodes_; /**< content only start from 1 */
 	Encryptor encryptor_;

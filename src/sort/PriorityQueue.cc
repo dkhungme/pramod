@@ -11,12 +11,19 @@
 #include <glog/logging.h>
 namespace sober{
 
-Node::Node(string input_file){
+Node::Node(string input_file, Encryptor *encryptor){
 	file_ = fopen(input_file.c_str(), "r");
 	current_pos_ = 0;
 	record_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
+	plaintext_size_ = GlobalParams::Get()->record_size(); 
+
 	current_record_ = (char*)malloc(record_size_*sizeof(char));
+	current_plaintext_ = (char*)malloc(plaintext_size_*sizeof(char)); 
+	encryptor_ = encryptor; 
+
 	fread(current_record_, 1, record_size_,file_);
+	string pt = encryptor_->Decrypt((byte*)current_record_, record_size_); 
+	memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
 }
 
 bool Node::IsEmpty(){
@@ -25,10 +32,12 @@ bool Node::IsEmpty(){
 
 void Node::Next(){
 	fread(current_record_, 1, record_size_,file_);
+	string pt = encryptor_->Decrypt((byte*)current_record_, record_size_); 
+	memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
 }
 
 char *Node::GetRecord(){
-	return current_record_;
+	return current_plaintext_;
 }
 
 
@@ -57,13 +66,15 @@ PriorityQueue::PriorityQueue(int size){
 	current_size_ = 0;
 	ciphertext_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
 	nodes_.push_back(NULL);
+	record_size_ = GlobalParams::Get()->record_size(); 
+
 }
 bool PriorityQueue::lessThan(Node *a, Node *b){
 	char *data_a = a->GetRecord();
 	char *data_b = b->GetRecord();
-	string pt_a = encryptor_.Decrypt((byte*)data_a, ciphertext_size_);
-	string pt_b = encryptor_.Decrypt((byte*)data_b, ciphertext_size_);
-	return strncmp(pt_a.c_str(), pt_b.c_str(), pt_a.length())<0;
+	//string pt_a = encryptor_.Decrypt((byte*)data_a, ciphertext_size_);
+	//string pt_b = encryptor_.Decrypt((byte*)data_b, ciphertext_size_);
+	return strncmp(data_a, data_b, record_size_)<0;
 }
 
 void PriorityQueue::upHeap(){
@@ -124,6 +135,7 @@ char * PriorityQueue::Next(){
 
 void PriorityQueue::DumpToFile(FILE *file){
 	nodes_[1]->DumpToFile(file);
+	delete nodes_[1]; 
 }
 
 void PriorityQueue::AdjustQueue(){
