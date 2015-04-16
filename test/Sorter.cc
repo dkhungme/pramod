@@ -30,6 +30,7 @@ int main(int argc, char **argv) {
 	double start = Now();
 	sorter.MergeSort();
 	cout << "Finish merge-sort in .. "<< (Now()-start) << endl;
+
 	char final_output[256];
 	sprintf(final_output, "%s/data_mixed_sorted.final",params->tmp_data_path().c_str());
 	cout << "  Order? "<<sorter.Validate(final_output)<<endl;

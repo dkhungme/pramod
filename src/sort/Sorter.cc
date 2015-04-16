@@ -86,13 +86,15 @@ void Sorter::MergeSort(){
 	while (sorted_file_names.size()>1){
 		int merge_file_idx=0;
 		//launch nthreads
+		LOG(INFO) << "Launching thread, sorted file name size = " << sorted_file_names.size(); 
 		for (int k = 0; k < nthreads_ && sorted_file_names.size() > 1; k++) {
 			int nstreams =
 					params_->merge_factor() < sorted_file_names.size() ?
 							params_->merge_factor() : sorted_file_names.size();
-			if (nstreams == sorted_file_names.size() && nstreams>2)
-				nstreams = 2;
+			//if (nstreams == sorted_file_names.size() && nstreams>2)
+			//	nstreams = 2;
 
+			LOG(INFO) << "Thread " <<k << " nstreams = "<<nstreams;
 			sprintf(tmp_output, "%s/intermediate_%d_%d",
 					params_->tmp_data_path().c_str(), pass,k);
 

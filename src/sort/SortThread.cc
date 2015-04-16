@@ -84,8 +84,8 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
 void SortThread::Merge(string *input_files, int nstreams, string output_file){
 	PriorityQueue merge_heap(params_->merge_factor());
 	for (int i=0; i<nstreams; i++){
-		merge_heap.Insert(new Node(input_files[i].c_str()));
-		LOG(INFO) << "Merging file ... "<<input_files[i];
+		merge_heap.Insert(new Node(input_files[i].c_str(), &encryptor_));
+		LOG(INFO) << "Merging file ... "<<input_files[i] << " to " << output_file;
 	}
 
 	FILE *file = fopen(output_file.c_str(), "w");
@@ -93,7 +93,10 @@ void SortThread::Merge(string *input_files, int nstreams, string output_file){
 
 	while (merge_heap.GetCurrentSize()>1){
 		char *data = merge_heap.Next();
-		fwrite(data, 1, this->encrypted_record_size_, file);
+		string cipher = encryptor_.Encrypt((byte*)data,
+					params_->record_size());
+
+		fwrite(cipher.c_str(), 1, this->encrypted_record_size_, file);
 		merge_heap.AdjustQueue();
 	}
 	//copy the rest to the file
