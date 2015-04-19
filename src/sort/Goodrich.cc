@@ -21,11 +21,13 @@ namespace sober{
 	int internalMerge_count = 0;
 	int slidingMerge_count = 0;
 	int fileopen_count = 0;
+	int encrypt = 0;
+	int decrypt = 0;
 	Goodrich::Goodrich(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity){
 		this->encryptor = encryptor_object;
 		this->M = memory_capacity;
-		this->k = 8;
-		this->m = 8;
+		this->k = 4;
+		this->m = 4;
 		this->cipher_item_size = cipher_record_size;
 		this->plain_item_size = plain_record_size;
 		this->IOwrite =0;
@@ -53,7 +55,7 @@ namespace sober{
 	int Goodrich::externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset){
 		int s,e;
 		int i = 0;
-		if(problem_size < M){
+		if(problem_size <= M){
 			return internalSort(source, source_offset, problem_size, dest, merge_depth, sort_depth, dest_offset);
 		}
 		else{
@@ -113,6 +115,7 @@ namespace sober{
 				IOread++;
 
 				String[i] = encryptor->Decrypt(temp, cipher_item_size);
+				decrypt++;
 				
 			}
 			i++;
@@ -124,6 +127,7 @@ namespace sober{
 
 		for(i = 0; i<array_size; i++){
 			fwrite((encryptor->Encrypt((byte*)String[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+			encrypt++;
 			IOwrite++;
 
 		}
@@ -159,6 +163,7 @@ namespace sober{
 
 
 					String[j] = encryptor->Decrypt(temp, cipher_item_size);
+					decrypt++;
 					j++;
 				}
 			}
@@ -169,6 +174,7 @@ namespace sober{
 		dest_offset[0] = ftell(dest);
 		for(i = 0; i<problem_size; i++){
 			fwrite((encryptor->Encrypt((byte*)String[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+			encrypt++;
 			IOwrite++;
 		}
 		fseek(dest, 0, SEEK_END);
@@ -273,6 +279,7 @@ namespace sober{
 					consumed_item[i]++;
 
 					String[p] = encryptor->Decrypt(temp, cipher_item_size);
+					decrypt++;
 					IOread++;
 					p++;
 					j++;
@@ -292,6 +299,7 @@ namespace sober{
 
 
 				fwrite((encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+				encrypt++;
 				String[q]=special_value;
 				IOwrite++;
 			}
@@ -309,6 +317,7 @@ namespace sober{
 					if (fread (temp,1, cipher_item_size,source)==cipher_item_size){
 						consumed_item[i]++;		
 						String[p] = encryptor->Decrypt(temp, cipher_item_size);
+						decrypt++;
 						IOread++;
 						p++;
 						j++;
@@ -325,6 +334,7 @@ namespace sober{
 				if (String[q]!=special_value){
 
 					cptext = encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size);
+					encrypt++;
 					
 					fwrite(cptext.c_str() , 1 , cipher_item_size , dest );
 					
@@ -336,6 +346,7 @@ namespace sober{
 		for (q = 0; q<2*(k+1)*(m+1); q++){
 			if (String[q]!=special_value){
 				cptext = encryptor->Encrypt((byte*)String[q].c_str(), plain_item_size);
+				encrypt++;
 				fwrite(cptext.c_str() , 1 , cipher_item_size , dest );
 				
 			}
@@ -409,18 +420,40 @@ namespace sober{
 		return(0);
 	}
 
+	bool double_is_int(double trouble) {
+		double absolute = abs( trouble );
+		return absolute == floor(absolute);
+	}
+
 	void Goodrich::Sort(char *input, char *output){
 
 		int depth, i, j;
+		double d_v;
 		FILE *source;
-		source = fopen(input, "rb+");
+		source = fopen(input, "r+");
 		int problem_size;
 		//check number of item in input file
 		problem_size = count_element(input);
 		//calculate recurrent depth
-		depth = 1+ log((double) (problem_size / M)) / log((double)k);
+		double num, denominator;
+		num = (double) problem_size / (double)M;
+		d_v = log(num) / log((double)k);
+		//printf("%.12f \n%.12f \n", num, d_v);
+		if (double_is_int(d_v)){
+			depth = (int) d_v;
+			printf("%d\n", depth);
+		}
+		else {
+			depth = 1 + d_v;
+			printf("%d\n", depth);
+
+		}
+
+
+
+
 		max_depth = depth;
-		printf("%d\n", depth);
+		depth = 1 + d_v;
 
 		//prepare temporary files
 		fp = static_cast<FILE***>(malloc (sizeof (FILE **)*(depth+1)));
@@ -480,7 +513,10 @@ namespace sober{
 		
 		printf("sorted to R with %d items\n", count_element(output));
 		printf("-internal Sort invoked %d times\n-internal Merge invoked %d times\n-sliding Merge invoked %d times\n-file opened %d times\n",
-		 internalSort_count, internalMerge_count, slidingMerge_count, fileopen_count);
+			internalSort_count, internalMerge_count, slidingMerge_count, fileopen_count);
+		printf("#encryption: %d \n#decryption: %d \n", encrypt, decrypt);
+
+
 		//remove temp files
 		strcpy(filename[0][0] , "aaa");
 		for (j = depth ; j>-1; j--){
