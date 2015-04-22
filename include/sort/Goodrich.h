@@ -52,11 +52,23 @@ private:
 
 
 
+	void consolidate(char *input, char *output, char *del);
+	void read_block_in(FILE *in, char *del, long last_index);
+	void write_block_out(FILE *out,  char *del, int index);
+	void one_step_compact(FILE *src, FILE* dest, int level, long *distance_label, long *distance_label2, char *candidate);
+
+
+
 public:
 	Goodrich(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
 
 
 	void Sort(char *input, char *output);
+
+//////////////////////////////////////////////////////////////////////////////////
+	void Gen_Sample_Data(char *input, char *output, long no_item, double ratio);
+	void gen_empty(char *s);
+	void do_compaction(char *input, char *candidate);
 
 
 
