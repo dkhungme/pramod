@@ -1,0 +1,25 @@
+Time = 5.90837
+Data generated.
+I0416 11:10:30.333681 18862 MixThread.cc:72] IO time = 0.0598873 mix time = 3.13209 over 1 mixers
+I0416 11:10:30.367590 18863 MixThread.cc:72] IO time = 0.0592034 mix time = 3.15701 over 1 mixers
+I0416 11:10:30.411438 18864 MixThread.cc:72] IO time = 0.0593772 mix time = 3.21027 over 1 mixers
+I0416 11:10:30.453029 18865 MixThread.cc:72] IO time = 0.0588051 mix time = 3.25411 over 1 mixers
+I0416 11:10:30.453116 18860 Mixnet.cc:94] Mixing round 0 done in 3.35706
+I0416 11:10:33.695835 18867 MixThread.cc:72] IO time = 0.0419114 mix time = 3.15738 over 1 mixers
+I0416 11:10:33.719259 18868 MixThread.cc:72] IO time = 0.0528566 mix time = 3.17163 over 1 mixers
+I0416 11:10:33.912111 18869 MixThread.cc:72] IO time = 0.0413038 mix time = 3.36552 over 1 mixers
+I0416 11:10:33.953300 18866 MixThread.cc:72] IO time = 0.0533263 mix time = 3.40543 over 1 mixers
+I0416 11:10:33.988206 18860 Mixnet.cc:94] Mixing round 1 done in 3.53507
+I0416 11:10:33.988240 18860 Mixnet.cc:100] Done mixing ...
+Mixing successful. 
+I0416 11:10:33.988250 18860 Mixnet.cc:36] encrypts: 4100349  decrypts: 4098705
+I0416 11:10:39.077841 18871 Sorter.cc:81] Finish block sorting ... in 4.05848 nmixers = 4 nthreads = 4
+I0416 11:10:39.078029 18871 Sorter.cc:89] Launching thread, sorted file name size = 4
+I0416 11:10:39.078035 18871 Sorter.cc:97] Thread 0 nstreams = 4
+I0416 11:10:39.078171 18878 SortThread.cc:88] Merging file ... /data/sober/sorted_0 to /data/sober/intermediate_0_0
+I0416 11:10:39.078205 18878 SortThread.cc:88] Merging file ... /data/sober/sorted_1 to /data/sober/intermediate_0_0
+I0416 11:10:39.078228 18878 SortThread.cc:88] Merging file ... /data/sober/sorted_2 to /data/sober/intermediate_0_0
+I0416 11:10:39.078249 18878 SortThread.cc:88] Merging file ... /data/sober/sorted_3 to /data/sober/intermediate_0_0
+Finish merge-sort in .. 15.6853
+I0416 11:10:50.704614 18871 Sorter.cc:33] encrypts: 4054713  decrypts: 4127814
+  Order? 1

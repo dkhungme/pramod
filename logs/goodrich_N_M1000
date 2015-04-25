@@ -1,2 +1,0 @@
-[libprotobuf ERROR google/protobuf/text_format.cc:245] Error parsing text-format sober.Config: 5:1: Expected integer.
-I0414 17:39:29.376361   800 Goodrich.cc:39] Sorting data/data_0
