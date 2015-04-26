@@ -23,6 +23,8 @@ Encryptor::Encryptor(){
 
 }
 
+long Encryptor::num_encrypts = 0; 
+long Encryptor::num_decrypts = 0; 
 string Encryptor::Encrypt(byte *input, int size){
 	//init IV
 	byte iv[IV_SIZE];
@@ -37,6 +39,9 @@ string Encryptor::Encrypt(byte *input, int size){
 	authen_enc.ChannelPut(DEFAULT_CHANNEL, input, size);
 	authen_enc.ChannelMessageEnd(DEFAULT_CHANNEL);
 	iv_string+=cipher;
+
+	Encryptor::num_encrypts++; 
+
 	return iv_string;
 }
 
@@ -57,6 +62,8 @@ string Encryptor::Decrypt(byte *input, int size) {
 		LOG(ERROR) << "Error ... size = " << size << e.what();
 		exit(1);
 	}
+
+	Encryptor::num_decrypts++; 
 
 	return decrypt;
 }

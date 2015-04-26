@@ -31,9 +31,13 @@ int main(int argc, char **argv) {
 	sorter.MergeSort();
 	cout << "Finish merge-sort in .. "<< (Now()-start) << endl;
 
+	LOG(INFO) << "Number of encryptions = " << Encryptor::num_encrypts; 
+	LOG(INFO) << "Number of decryptions = " << Encryptor::num_decrypts; 
+
 	char final_output[256];
 	sprintf(final_output, "%s/data_mixed_sorted.final",params->tmp_data_path().c_str());
 	cout << "  Order? "<<sorter.Validate(final_output)<<endl;
+	
 	return 0;
 }
 
