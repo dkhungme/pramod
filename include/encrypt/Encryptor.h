@@ -47,6 +47,8 @@ public:
 		 * Decrypt, then Encrypt
 		 */
 		string ReEncrypt(byte *input, int size);
+
+		static long num_encrypts, num_decrypts; 
 private:
 		GCM<AES>::Encryption encryption_;
 		GCM<AES>::Decryption decryption_;

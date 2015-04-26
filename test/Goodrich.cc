@@ -71,6 +71,8 @@
 	
 
  	LOG(INFO)<< "Finish in .. " << (Now() - start);
+	LOG(INFO) << "Number of encryptions = " << Encryptor::num_encrypts; 
+	LOG(INFO) << "Number of decryptions = " << Encryptor::num_decrypts; 
 
 	//Validation
 	//Sorter sorter;

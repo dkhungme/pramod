@@ -98,6 +98,9 @@ void Mixnet::StartMixing(){
 			thread_objs.pop_back();
 
 	LOG(INFO) << "Done mixing ...";
+	LOG(INFO) << "Number of encryptions = " << Encryptor::num_encrypts; 
+	LOG(INFO) << "Number of decryptions = " << Encryptor::num_decrypts; 
+
 }
 
 }
