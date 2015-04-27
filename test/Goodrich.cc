@@ -54,19 +54,19 @@
 
  	 goodrich.Sort(input_file, final_output);
 
- 	//int d = 1;
- 	//if (d == 0){
- 	//	goodrich.Gen_Sample_Data(input_file, "sample_file", 10000000, 0.5);
- 	//}
- 	//else{
+ 	// int d = 1;
+ 	// if (d == 0){
+ 	// 	goodrich.Gen_Sample_Data(input_file, "sample_file", 10000000, 0.5);
+ 	// }
+ 	// else{
 
- 	//	char *candidate;
- 	//	candidate =  (char *) malloc (params->record_size());
- 	//	goodrich.gen_empty(candidate);
+ 	// 	char *candidate;
+ 	// 	candidate =  (char *) malloc (params->record_size());
+ 	// 	goodrich.gen_empty(candidate);
 
 
- 	//	goodrich.do_compaction("sample_file", candidate);
- 	//}
+ 	// 	goodrich.do_compaction("sample_file", candidate);
+ 	// }
 
 	
 
