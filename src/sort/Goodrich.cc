@@ -30,7 +30,7 @@ namespace sober{
 
 	int empty_cell = 0;
 
-	int B = 11171;
+	int B = 511171;
 	int item_size = 132;
 	string* String_compact;
 	int consolidating_index = 0;
@@ -574,7 +574,7 @@ namespace sober{
 
 		s[plain_item_size] = 0;
 	}
-//fwrite((encryptor->Encrypt((byte*)String[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , dest );
+
 	void Goodrich::Gen_Sample_Data(char *input, char *output, long no_item, double ratio){
 		FILE *source, *dest;
 		source = fopen(input, "r+");
@@ -618,7 +618,7 @@ namespace sober{
 		cout<< fp_out <<endl;
 		long input_size = count_element(input);
 		no_cells = 1 + input_size/B;
-		printf("%ld\n", no_cells);
+		printf("no cells: %ld\n", no_cells);
 
 
 
@@ -638,8 +638,7 @@ namespace sober{
 		string decrypted_temp;
 
 		while(ftell(fp_in)<last_index){
-			//	cout<<"in while loop"<<endl;
-			//read_block_in(fp_in, del, last_index);
+
 
 			
 
@@ -652,17 +651,17 @@ namespace sober{
 						consolidating_index++;
 					}
 					else{
-					
+
 					}
 				}
 			}
 
 
-			//write_block_out(fp_out, del,distance_label_index);
+
 
 			if (consolidating_index >= B){
 				for (i=0; i<B; i++){
-				//fwrite(String_compact[i].c_str() , 1 , item_size , out);
+
 					fwrite((encryptor->Encrypt((byte*)String_compact[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , fp_out );
 				}
 				for (i = B; i <= consolidating_index; i++){
@@ -676,7 +675,7 @@ namespace sober{
 			else{
 				for (i=0; i<B; i++){
 					fwrite((encryptor->Encrypt((byte*)del, plain_item_size)).c_str() , 1 , cipher_item_size , fp_out );
-				//fwrite(del , 1 , item_size , out);
+
 				}
 				distance_label[distance_label_index] = -1;
 				empty_cell++;
@@ -690,11 +689,11 @@ namespace sober{
 		for (i = 0; i<B; i++){
 			if(i<consolidating_index){
 
-				//fwrite(String_compact[i].c_str() , 1 , item_size , fp_out);
+				
 				fwrite((encryptor->Encrypt((byte*)String_compact[i].c_str(), plain_item_size)).c_str() , 1 , cipher_item_size , fp_out );
 			}
 			else{
-				//fwrite(del , 1 , item_size , fp_out);
+
 				fwrite((encryptor->Encrypt((byte*)del, plain_item_size)).c_str() , 1 , cipher_item_size , fp_out );
 			}
 
@@ -719,14 +718,14 @@ namespace sober{
 		free(temp);
 
 		cout<<"DONE with CONSOLIDATION"<<endl;
-		//delete[] String_compact;
+		
 
 	}
 
 	
 	
 	void Goodrich::one_step_compact(FILE *src, FILE* dest, int level, long *distance_label, long *distance_label2, char *candidate){
-
+		fseek(src, 0, SEEK_SET);
 
 		long cur, until;
 		empty_cell = 0;
@@ -734,8 +733,7 @@ namespace sober{
 		char temp[item_size*B];
 		int d;
 		long dest_index;
-		//temp = (char *) malloc(item_size*B);
-		// that the last OCCUPIED cell is not full may cause a problem
+		
 		long remaining;
 
 		for (i=0; i<no_cells+1; i++){
@@ -764,33 +762,22 @@ namespace sober{
 				fseek(dest, cur, SEEK_SET);
 
 				while(ftell(dest)<until){
-					//fwrite(candidate, 1, item_size, dest);
+
 					fwrite((encryptor->Encrypt((byte*)candidate, plain_item_size)).c_str() , 1 , cipher_item_size , dest );
 				}
 
 				fseek(dest, dest_index, SEEK_SET);
 				int re_encrypt;
-				// if (remaining > B){
+				
 
-				// 	for(re_encrypt = 0; re_encrypt < B; re_encrypt++){
-				// 		//encryptor->ReEncrypt((byte*)temp, cipher_item_size);
-				// 	}
+				for(re_encrypt = 0; re_encrypt < B; re_encrypt++){
 
-				// 	fread(temp, 1, item_size*B, src);
+				}
 
-				// 	fwrite(temp, 1, item_size*B, dest);
+				fread(temp, 1, item_size*B, src);
+				fwrite(temp, 1, item_size*B, dest);
 
-				// }
-				// else{
-
-					for(re_encrypt = 0; re_encrypt < B; re_encrypt++){
-						//encryptor->ReEncrypt((byte*)temp, cipher_item_size);
-					}
-
-					fread(temp, 1, item_size*B, src);
-					fwrite(temp, 1, item_size*B, dest);
-
-				//}
+				
 
 				distance_label2[i-mod] = distance_label[i] - mod;
 
@@ -803,8 +790,11 @@ namespace sober{
 
 	void Goodrich::do_compaction(char *input, char *candidate){
 
-		consolidate(input, "r", candidate);
-		printf("finish with consolidation");
+		FILE **fp;
+		B = 4096;
+			// B here is not a size of block in mix-then-sort or M in Goodrich sorting
+			// it is just # items per each I/O unit
+
 		long input_size = count_element(input);
 		no_cells = 1 + input_size/B;
 
@@ -817,41 +807,40 @@ namespace sober{
 			depth = 1 + d_v;
 		}
 		//printf("%d", depth);
-
 		int i;
-		int dest = 0;
-		int src = 0;
-		FILE *f_src;
-		FILE * f_dest;
-		string Name[2];
-		Name[0] = "r";
-		Name[1] = "r1";
+		char **filename;
+		filename = static_cast<char**>(malloc (sizeof (char **) * (depth +1)));
+		fp = static_cast<FILE**>(malloc (sizeof (FILE *) * (depth +1)));
+		for (i = 0; i<depth + 1; i++){
+			filename[i] =static_cast<char*>(malloc (sizeof (char)*66));
+			sprintf(filename[i], "R%d", i);
+			fp[i] = fopen(filename[i], "w+");
 
+		}
+
+
+
+		consolidate(input, filename[0], candidate);
+		printf("finish with consolidation \n");
 
 		long **d_label;
-		d_label = static_cast<long **>(malloc (2*sizeof(long *)));
+		d_label = static_cast<long **>(malloc ((depth+1)*sizeof(long *)));
+
+
+		for(i = 0; i<depth+1; i++){
+			d_label[i]= static_cast<long*>(malloc (no_cells * sizeof(long )));
+		}
 		d_label[0] = distance_label;
-		d_label[1]= static_cast<long*>(malloc (no_cells * sizeof(long )));
 		//depth = 1;
 
 		for (i=0; i<depth; i++){
-			printf("at depth %d\n", i);
-			src = i % 2;
-			dest = (i+1) % 2;
 
-			f_src = fopen(Name[src].c_str(), "r+");
-			f_dest = fopen(Name[dest].c_str(), "w+");
-			one_step_compact(f_src, f_dest, i, d_label[src], d_label[dest], candidate);
-			printf("depth %d - done with one_step_compact\n", i);
-			fclose(f_src);
-			fclose(f_dest);
+			printf("%s - %s \n", filename[i], filename[i+1]);
 
-			printf("done with depth %d\n", i);
 
+			one_step_compact(fp[i], fp[i+1], i, d_label[i], d_label[i+1], candidate);
 
 		}
-		printf("result is put in file %s\n", Name[(depth+1)%2].c_str());
-		free(d_label);
 	}
 
 
