@@ -15,73 +15,59 @@
  * Hung: implement this.
  */
 
-namespace sober{
-class Goodrich{
-private:
-	int M, k, m;
+ namespace sober{
+ 	class Goodrich{
+ 	private:
+ 		int M, k, m;
 
 
-	int plain_item_size, cipher_item_size;
+ 		int plain_item_size, cipher_item_size;
 
-	long IOread ;
-	long IOwrite;
-
-
-
-	long ignore;
-	FILE ***fp;
-
-	FILE ***M_fp;
-
-
-	int max_depth;
-	char ***filename;
-	char ***merged_filename;
-	Encryptor* encryptor;
-
-
-	int file_size(char *filename);
-	long long count_element(char *filename);
-	int externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset);
-	int internalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
-	int internalMerge(FILE *source, long long **source_offset, long long problem_size, int merge_depth, int sort_depth,FILE *dest, long long *dest_offset);
-	int externalMerge(FILE *source, long long **source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
-	int slidingMerge(FILE *source, long long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
-	int create_Sorted_Subproblem(long long source_offset, long long problem_size, long long *list_source_offset, long long *list_problem_size);
-	int create_Merged_Subproblems(FILE *source, long long **source_offset, long long *Merge_subproblem_size, FILE *dest, long long ***subproblems_offset);
+ 		long IOread ;
+ 		long IOwrite;
 
 
 
-	void consolidate(char *input, char *output, char *del);
-	void read_block_in(FILE *in, char *del, long last_index);
-	void write_block_out(FILE *out,  char *del, int index);
-	void one_step_compact(FILE *src, FILE* dest, int level, long *distance_label, long *distance_label2, char *candidate);
+ 		long ignore;
+ 		FILE ***fp;
+
+ 		FILE ***M_fp;
+
+
+ 		int max_depth;
+ 		char ***filename;
+ 		char ***merged_filename;
+ 		Encryptor* encryptor;
+
+
+ 		int file_size(char *filename);
+ 		long long count_element(char *filename);
+ 		int externalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest,  int merge_depth, int sort_depth, long long *dest_offset);
+ 		int internalSort(FILE *source, long long source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
+ 		int internalMerge(FILE *source, long long **source_offset, long long problem_size, int merge_depth, int sort_depth,FILE *dest, long long *dest_offset);
+ 		int externalMerge(FILE *source, long long **source_offset, long long problem_size, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
+ 		int slidingMerge(FILE *source, long long **Merged_subproblems_offset, FILE *dest, int merge_depth, int sort_depth, long long *dest_offset);
+ 		int create_Sorted_Subproblem(long long source_offset, long long problem_size, long long *list_source_offset, long long *list_problem_size);
+ 		int create_Merged_Subproblems(FILE *source, long long **source_offset, long long *Merge_subproblem_size, FILE *dest, long long ***subproblems_offset);
 
 
 
-public:
-	Goodrich(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
+ 		void consolidate(char *input, char *output, char *del);
+ 		void read_block_in(FILE *in, char *del, long last_index);
+ 		void write_block_out(FILE *out,  char *del, int index);
+ 		void one_step_compact(FILE *src, FILE* dest, int level, long *distance_label, long *distance_label2, char *candidate);
 
 
-	void Sort(char *input, char *output);
+
+ 	public:
+ 		Goodrich(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size, int memory_capacity);
+
+
+ 		void Sort(char *input, char *output);
 
 //////////////////////////////////////////////////////////////////////////////////
-	void Gen_Sample_Data(char *input, char *output, long no_item, double ratio);
-	void gen_empty(char *s);
-	void do_compaction(char *input, char *candidate);
-
-
-
-
-
-	/**
-	 * Use the Encryptor object to decrypt the file.
-	 * See encrypt/Encryptor.h for details.
-	 *
-	 * encryptor.Decrypt(byte *input, int size);
-	 */
-	//void Sort(string input, string output, int num_records, int record_size, Encryptor encryptor);
-};
-}
+ 		
+ 	};
+ }
 
 #endif /* GOODRICH_H_ */

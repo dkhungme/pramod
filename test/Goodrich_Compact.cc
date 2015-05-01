@@ -8,14 +8,15 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 #include "encrypt/Encryptor.h"
-#include "sort/Goodrich.h"
+#include "sort/Goodrich_Compact.h"
 #include "utils/GlobalParams.h"
 #include "sort/Sorter.h"
 #include <iostream>
  using namespace std; 
  using namespace sober; 
  DEFINE_string(config_file,"config","Where to read the config");
- DEFINE_int32(msize,500000,"Size of M"); 
+ DEFINE_int32(choice,1,"Size of M"); 
+ DEFINE_int32(Bsize,2048,"Size of M"); 
 /**
  * Testing Goodrich's sorting algorithm.
  */
@@ -36,7 +37,7 @@
  	int ciphertext_size = params->record_size()+GCM_TAG_SIZE+IV_SIZE;
 
 
- 	LOG(INFO)<< "Sorting " << input_file; 
+ 	LOG(INFO)<< "Compacting ";
 	//Encryption
  	
 
@@ -45,24 +46,40 @@
 
  	Encryptor encryptor; 
 
+
  	double start = Now();
- 	
 
 
 
- 	Goodrich goodrich(&encryptor, ciphertext_size, params->record_size(),FLAGS_msize);
-
- 	goodrich.Sort(input_file, final_output);
-
+ 	Goodrich_Compact goodrich(&encryptor, ciphertext_size, params->record_size(), FLAGS_Bsize);
 
  	
- 	LOG(INFO)<< "Finish in .. " << (Now() - start);
- 	LOG(INFO) << "Number of encryptions = " << Encryptor::num_encrypts; 
- 	LOG(INFO) << "Number of decryptions = " << Encryptor::num_decrypts; 
 
-	//Validation
-	//Sorter sorter;
-	//LOG(INFO)<< "  Order? " << sorter.Validate(final_output);
+ 	if(FLAGS_choice == 0){
+ 		goodrich.Gen_Sample_Data(input_file, "data/sample_file", 134217728, 0.3);
+ 		cout<< "Finish in generate in " << (Now() - start);
+ 	}
+ 	else{
+ 		
+ 		char *candidate;
+ 		candidate =  (char *) malloc (params->record_size());
+ 		goodrich.gen_empty(candidate);
+
+
+ 		goodrich.do_compaction("data/sample_file", candidate);
+
+ 		printf("DONE with compacting and hello from test\n");
+
+
+
+
+
+
+ 		cout<< "Finish in compacting in .. " << (Now() - start) <<endl;
+ 		cout << "Number of encryptions = " << Encryptor::num_encrypts <<endl; 
+ 		cout << "Number of decryptions = " << Encryptor::num_decrypts <<endl; 
+ 	}
+
 
  	return 0;
  }
