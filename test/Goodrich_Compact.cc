@@ -40,7 +40,7 @@ DEFINE_string(config_file,"config","Where to read the config");
  	goodrich.gen_empty(candidate);
 
  	goodrich.do_compaction(input_file, candidate);
- 	printf("DONE with compacting and hello from test\n");
+ 	//printf("DONE with compacting and hello from test\n");
 
  	cout<< "Finish in compacting in .. " << (Now() - start) <<endl;
  	cout << "Number of encryptions = " << Encryptor::num_encrypts <<endl; 

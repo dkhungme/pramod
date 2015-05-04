@@ -29,6 +29,7 @@ namespace sober{
 	int consolidating_index = 0;
 	long *distance_label;
 	long no_cells;
+	long re_encryption = 0;
 	Goodrich_Compact::Goodrich_Compact(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size){
 		this->encryptor = encryptor_object;
 		
@@ -105,19 +106,24 @@ namespace sober{
 
 
 	void Goodrich_Compact::consolidate(char *input, char *output, char *del){
-		printf("in consolidation\n");
+		//printf("in consolidation\n");
 
 		int distance_label_index = 0;
 		FILE *fp_in, *fp_out;
 
 
 		fp_in = fopen(input, "r");
-		cout<< fp_in <<endl;
+		//cout<< fp_in <<endl;
 		fp_out = fopen(output, "w+");
-		cout<< fp_out <<endl;
+		//cout<< fp_out <<endl;
 		long input_size = count_element(input);
-		no_cells = 1 + input_size/B;
-		printf("no cells: %ld\n", no_cells);
+		no_cells = input_size/B;
+
+		if ((input_size%B)!= 0){
+			no_cells = no_cells + 1;
+		}
+
+		//printf("no cells: %ld\n", no_cells);
 
 
 
@@ -200,23 +206,23 @@ namespace sober{
 		distance_label[distance_label_index] = empty_cell;
 
 
-		printf("about to exit consolidation\n");
-		cout<< fp_in <<endl;
-		cout<< fp_out <<endl;
+		//printf("about to exit consolidation\n");
+		//cout<< fp_in <<endl;
+		//cout<< fp_out <<endl;
 
 		fclose(fp_in);
-		cout<<"closed fp_in"<<endl;
+		//cout<<"closed fp_in"<<endl;
 		if(fp_out == NULL){
-			cout<<"fp_out NULL"<<endl;
+		//	cout<<"fp_out NULL"<<endl;
 		}
 		else{
-			cout<<"fp_out NOT NULL"<<endl;
+		//	cout<<"fp_out NOT NULL"<<endl;
 		}
 		fclose(fp_out);
-		cout<<"closed fp_out"<<endl;
-		free(temp);
+		//cout<<"closed fp_out"<<endl;
+		//free(temp);
 
-		cout<<"DONE with CONSOLIDATION"<<endl;
+		//cout<<"DONE with CONSOLIDATION"<<endl;
 		
 
 	}
@@ -228,8 +234,9 @@ namespace sober{
 
 		long cur, until;
 		empty_cell = 0;
-		int i, j;
-		char temp[item_size*B];
+		int i, j, re;
+		//char temp[item_size*B];
+		char temp[item_size];
 		char dummy[item_size];
 		int d;
 		long dest_index;
@@ -269,32 +276,49 @@ namespace sober{
 				}
 
 				fseek(dest, dest_index, SEEK_SET);
-				int re_encrypt;
+				//int re_encrypt;
 				
+
+				
+				
+				// if (remaining > B){
+
+				// 	fread(temp, 1, item_size*B, src);
+				// 	fwrite(temp, 1, item_size*B, dest);
+
+				// }
+				// else{
+				for (re =0; re<B; re++){
+
+					fread(temp, 1, item_size, src);
+					fwrite((encryptor->ReEncrypt((byte*)temp, item_size)).c_str() , 1, item_size, dest);
+				}
+
+
+				re_encryption = re_encryption + B;
+
+				//}
 
 				
 				distance_label2[i-mod] = distance_label[i] - mod;
-				fread(temp, 1, item_size*B, src);
-				fwrite(temp, 1, item_size*B, dest);
+				//fread(dummy, 1, item_size, src);
 
-				fread(dummy, 1, item_size, src);
 
-				// for(re_encrypt = 0; re_encrypt < B; re_encrypt++){
-				// 	//encryptor->ReEncrypt((byte*)dummy, cipher_item_size);
-				// }
+				
 
 				
 			}
 		}
-		long count_empty = 0;
-		for (i=0; i<no_cells; i++){
-			if (distance_label2[i]==-1){
-				count_empty++;
-			}
-		}
+		// long count_empty = 0;
+		// for (i=0; i<no_cells; i++){
+		// 	if (distance_label2[i]==-1){
+		// 		count_empty++;
+		// 	}
+		// }
 
-		printf("emptycells: %ld\n", count_empty);
-		printf("exiting one_step_compact level %d\n", level);
+		//printf("emptycells: %ld\n", count_empty);
+		//printf("exiting one_step_compact level %d\n", level);
+
 
 	}
 
@@ -331,7 +355,7 @@ namespace sober{
 
 
 		consolidate(input, filename[0], candidate);
-		printf("finish with consolidation \n");
+		//printf("finish with consolidation \n");
 
 		long **d_label;
 		d_label = static_cast<long **>(malloc ((depth+1)*sizeof(long *)));
@@ -350,7 +374,7 @@ namespace sober{
 			}
 		}
 
-		printf("emptycells: %ld\n", count_empty);
+		//printf("emptycells: %ld\n", count_empty);
 
 		for (i=0; i<depth; i++){
 
@@ -367,9 +391,9 @@ namespace sober{
 
 		}
 		
-		printf("Compacted file is saved in %s\n", filename[depth]);
-		free(filename);
-		free (fp);
+		printf("%ld re-encryption needed.\nCompacted file is saved in %s\n", re_encryption, filename[depth]);
+		//free(filename);
+		//free (fp);
 	}
 
 }

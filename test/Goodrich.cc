@@ -1,9 +1,3 @@
-/*
- * Goodrich.c
- *
- *  Created on: Apr 6, 2015
- *      Author: dinhtta
- */
 
 #include <gflags/gflags.h>
 #include <glog/logging.h>
