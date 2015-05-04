@@ -1,5 +1,5 @@
 /*
- * DataGen.h
+ * DataGen.cc
  *
  *  Created on: Mar 26, 2015
  *      Author: dinhtta
@@ -18,17 +18,16 @@ using std::string;
  *
  *  Encryption key is store at the key_path
  */
+ namespace sober{
 
-namespace sober{
+ 	class DataGen{
+ 	public:
+ 		DataGen():file_(NULL){}
+ 		void Generate();
 
-class DataGen{
-public:
-	DataGen():file_(NULL){}
-	void Generate();
-
-private:
-	FILE* file_;
-};
-} // namespace sober
+ 	private:
+ 		FILE* file_;
+ 	};
+ } 
 
 #endif /* DATAGEN_H_ */

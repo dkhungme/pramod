@@ -29,6 +29,11 @@ SORT_OBJS = $(addprefix $(BUILD_DIR)/, $(SORT_SRCS:%.cc=%.o))
 TEST_GEN_SRC = $(wildcard test/DataGen.cc)
 TEST_GEN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_GEN_SRC:%.cc=%.o))
 
+TEST_GC_GEN_SRC = $(wildcard test/Goodrich_Compact_DataGen.cc)
+TEST_GC_GEN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_GC_GEN_SRC:%.cc=%.o))
+
+
+
 TEST_MIX_SRC = $(wildcard test/Mixnet.cc)
 TEST_MIX_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_MIX_SRC:%.cc=%.o))
 
@@ -43,6 +48,7 @@ TEST_GOODRICH_COMPACT_OBJ = build/test/Goodrich_Compact.o
 
 #datagen
 DATA_GEN_EXE = $(BUILD_DIR)/test/datagen
+GC_DATA_GEN_EXE = $(BUILD_DIR)/test/Goodrich_Compact_datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
 SORT_EXE = $(BUILD_DIR)/test/sorter
 GOODRICH_EXE = $(BUILD_DIR)/test/goodrich
@@ -56,11 +62,13 @@ PROTOFLAGS = --cpp_out
 
 ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ)
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ)
 
 .DEFAULT_GOAL = compile
 
 test_gen: $(DATA_GEN_EXE)
+
+test_gc_gen: $(GC_DATA_GEN_EXE)
 
 test_mix: $(MIXER_EXE)
 
@@ -86,6 +94,9 @@ $(PROTO_CC):%.pb.cc : %.proto
 	@cp $(@:%.cc=%.h) include/proto/
 
 $(DATA_GEN_EXE): $(ALLOBJS) $(TEST_GEN_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+$(GC_DATA_GEN_EXE): $(ALLOBJS) $(TEST_GC_GEN_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(MIXER_EXE): $(ALLOBJS) $(TEST_MIX_OBJ)

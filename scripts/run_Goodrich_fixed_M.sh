@@ -9,7 +9,7 @@ for (( i=0; i<5; i++ )); do
 	cd $DIR
 	echo Sorting ${NBLOCKS[i]}
 
-	let INPUTSIZE=131072*${NBLOCKS[i]}
+	let INPUTSIZE=524288*${NBLOCKS[i]}
 
         sed -e "s/num_records_per_block:.*/num_records_per_block:$INPUTSIZE/g" $CONFIG >tmp1
 	mv tmp1 $CONFIG
@@ -19,7 +19,7 @@ for (( i=0; i<5; i++ )); do
 	rm -rf data/*
 	build/test/datagen
 	sleep 10
-	COMMAND="build/test/goodrich --msize=131072> $LOG_DIR/goodrich_N${NBLOCKS[i]}_M131072 2>&1"
+	COMMAND="build/test/goodrich --msize=524288> $LOG_DIR/goodrich_N${NBLOCKS[i]}_M524288 2>&1"
 	eval $COMMAND
 
 	sleep 5

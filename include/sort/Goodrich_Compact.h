@@ -53,7 +53,7 @@
 
 
  	public:
- 		Goodrich_Compact(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size, int blocksize);
+ 		Goodrich_Compact(Encryptor *encryptor_object, int cipher_record_size, int plain_record_size);
 
 
  		void Sort(char *input, char *output);

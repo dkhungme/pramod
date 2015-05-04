@@ -9,7 +9,7 @@ for (( i=0; i<5; i++ )); do
 	cd $DIR
 	echo Sorting with ${NBLOCKS[i]} blocks and 2 rounds
 
-	let INPUTSIZE=262144*${NBLOCKS[i]}
+	let INPUTSIZE=524288*${NBLOCKS[i]}
 	
 	sed -e "s/num_records:.*/num_records:$INPUTSIZE/g" $CONFIG > tmp1
 	sed -e "s/merge_factor:.*/merge_factor:${NBLOCKS[i]}/g" tmp1 > tmp2
@@ -18,11 +18,11 @@ for (( i=0; i<5; i++ )); do
 
 	cd ../
 	rm -rf data/*
-	COMMAND="build/test/mixer > $LOG_DIR/mixed_262144_r2_b${NBLOCKS[i]} 2>&1"
+	COMMAND="build/test/mixer > $LOG_DIR/mixed_524288_r2_b${NBLOCKS[i]} 2>&1"
 	eval $COMMAND
 	
 	sleep 10
-	COMMAND="build/test/sorter >> $LOG_DIR/mixed_262144_r2_b${NBLOCKS[i]} 2>&1"
+	COMMAND="build/test/sorter >> $LOG_DIR/mixed_524288_r2_b${NBLOCKS[i]} 2>&1"
 	eval $COMMAND
 	sleep 5
 done
@@ -31,7 +31,7 @@ for (( i=0; i<5; i++ )); do
 	cd $DIR
 	echo Sorting with ${NBLOCKS[i]} blocks and 4 rounds
 
-	let INPUTSIZE=262144*${NBLOCKS[i]}
+	let INPUTSIZE=524288*${NBLOCKS[i]}
 	
 	sed -e "s/num_records:.*/num_records:$INPUTSIZE/g" $CONFIG > tmp1
 	sed -e "s/merge_factor:.*/merge_factor:${NBLOCKS[i]}/g" tmp1 > tmp2
@@ -40,11 +40,11 @@ for (( i=0; i<5; i++ )); do
 
 	cd ../
 	rm -rf data/*
-	COMMAND="build/test/mixer > $LOG_DIR/mixed_262144_r4_b${NBLOCKS[i]} 2>&1"
+	COMMAND="build/test/mixer > $LOG_DIR/mixed_524288_r4_b${NBLOCKS[i]} 2>&1"
 	eval $COMMAND
 	
 	sleep 10
-	COMMAND="build/test/sorter >> $LOG_DIR/mixed_262144_r4_b${NBLOCKS[i]} 2>&1"
+	COMMAND="build/test/sorter >> $LOG_DIR/mixed_524288_r4_b${NBLOCKS[i]} 2>&1"
 	eval $COMMAND
 	sleep 5
 done

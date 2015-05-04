@@ -23,13 +23,13 @@ namespace sober{
 
 	int empty_cell = 0;
 
-	int B = 511171;
+	int B = 65536; //64KB
 	int item_size = 132;
 	string* String_compact;
 	int consolidating_index = 0;
 	long *distance_label;
 	long no_cells;
-	Goodrich_Compact::Goodrich_Compact(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size, int blocksize){
+	Goodrich_Compact::Goodrich_Compact(Encryptor* encryptor_object, int cipher_record_size, int plain_record_size){
 		this->encryptor = encryptor_object;
 		
 		
@@ -284,8 +284,6 @@ namespace sober{
 				// }
 
 				
-
-
 			}
 		}
 		long count_empty = 0;
@@ -303,7 +301,7 @@ namespace sober{
 	void Goodrich_Compact::do_compaction(char *input, char *candidate){
 
 		FILE **fp;
-		B = 512;
+		B = 65536;
 			// B here is not a size of block in mix-then-sort or M in Goodrich sorting
 			// it is just # items per each I/O unit
 
@@ -343,7 +341,7 @@ namespace sober{
 			d_label[i]= static_cast<long*>(malloc (no_cells * sizeof(long )));
 		}
 		d_label[0] = distance_label;
-		//depth = 1;
+		
 
 		long count_empty = 0;
 		for (i=0; i<no_cells; i++){
