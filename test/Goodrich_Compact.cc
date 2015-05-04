@@ -34,6 +34,7 @@ DEFINE_string(config_file,"config","Where to read the config");
 
  	Encryptor encryptor; 
  	double start = Now();
+ 	double last = Now();
  	Goodrich_Compact goodrich(&encryptor, ciphertext_size, params->record_size());
  	char *candidate;
  	candidate =  (char *) malloc (params->record_size());
@@ -41,6 +42,8 @@ DEFINE_string(config_file,"config","Where to read the config");
 
  	goodrich.do_compaction(input_file, candidate);
  	//printf("DONE with compacting and hello from test\n");
+
+
 
  	cout<< "Finish in compacting in .. " << (Now() - start) <<endl;
  	cout << "Number of encryptions = " << Encryptor::num_encrypts <<endl; 

@@ -17,14 +17,12 @@ for (( i=0; i<5; i++ )); do
 	sed -e "s/num_records:.*/num_records:$INPUTSIZE/g" $CONFIG >tmp1
 	mv tmp1 $CONFIG
 	
-	#run Goodrich first
 	cd ../
 	rm -rf data/*
 	build/test/Goodrich_Compact_datagen
 	sleep 10
 	COMMAND="build/test/goodrich_compact> $LOG_DIR/goodrich_Compact_$INPUTSIZE 2>&1"
 	eval $COMMAND
-
 
 	sleep 5
 done
