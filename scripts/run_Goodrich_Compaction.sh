@@ -9,9 +9,11 @@ mkdir -p ../$LOG_DIR
 for (( i=0; i<4; i++ )); do
 	for (( j=0; j<5; j++ )); do
 		cd $DIR
-		echo Compating ${NBLOCKS[i]}
+		
 
 		let INPUTSIZE=${M[i]}*${NBLOCKS[j]}
+
+		echo Compating ${M[i]} x ${NBLOCKS[j]}
 
 		sed -e "s/num_records_per_block:.*/num_records_per_block:$INPUTSIZE/g" $CONFIG >tmp1
 		mv tmp1 $CONFIG
@@ -23,7 +25,7 @@ for (( i=0; i<4; i++ )); do
 		rm -rf data/*
 		build/test/Goodrich_Compact_datagen
 		sleep 10
-		COMMAND="build/test/goodrich_compact> $LOG_DIR/goodrich_Compact_N${M[i]}x${NBLOCKS[j]}_B1024 2>&1"
+		COMMAND="build/test/goodrich_compact> $LOG_DIR/goodrich_Compact_N${M[i]}x${NBLOCKS[j]}_B4096 2>&1"
 		eval $COMMAND
 
 		sleep 5

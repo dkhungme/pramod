@@ -1,0 +1,27 @@
+Compacting 
+FINISH CONSOLIDATION
+data/R0 - data/R1 
+AT LEVEL 0
+data/R1 - data/R2 
+AT LEVEL 1
+data/R2 - data/R3 
+AT LEVEL 2
+data/R3 - data/R4 
+AT LEVEL 3
+data/R4 - data/R5 
+AT LEVEL 4
+data/R5 - data/R6 
+AT LEVEL 5
+data/R6 - data/R7 
+AT LEVEL 6
+data/R7 - data/R8 
+AT LEVEL 7
+data/R8 - data/R9 
+AT LEVEL 8
+data/R9 - data/R10 
+AT LEVEL 9
+14008320 re-encryption needed.
+Compacted file is saved in data/R10
+Finish in compacting in .. 89.1237
+Number of encryptions = 20541450
+Number of decryptions = 17502921

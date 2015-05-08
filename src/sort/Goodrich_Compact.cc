@@ -23,7 +23,7 @@ namespace sober{
 
 	int empty_cell = 0;
 
-	int B = 512; 
+	int B = 4096; 
 		// B here is not a size of block in mix-then-sort or M in Goodrich sorting
 			// it is just # items per each I/O unit
 	int item_size = 132;
@@ -273,8 +273,8 @@ namespace sober{
 	void Goodrich_Compact::do_compaction(char *input, char *candidate){
 
 		FILE **fp;
-
-		B = 512; 
+		// when B increase 2X, depth decrease by X
+		B = 4096; 
 		
 		long input_size = count_element(input);
 		no_cells = 1 + input_size/B;
