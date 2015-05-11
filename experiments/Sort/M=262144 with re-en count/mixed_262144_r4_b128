@@ -1,0 +1,161 @@
+Time = 76.2332
+Data generated.
+I0426 20:27:04.272258 17846 MixThread.cc:72] IO time = 49.1195 mix time = 48.6636 over 32 mixers
+I0426 20:27:04.272652 17843 MixThread.cc:72] IO time = 49.6639 mix time = 48.8478 over 32 mixers
+I0426 20:27:06.906687 17844 MixThread.cc:72] IO time = 52.0787 mix time = 49.8064 over 32 mixers
+I0426 20:27:07.132283 17845 MixThread.cc:72] IO time = 53.661 mix time = 48.597 over 32 mixers
+I0426 20:27:07.132391 17707 Mixnet.cc:94] Mixing round 0 done in 102.814
+I0426 20:29:42.225875 17918 MixThread.cc:72] IO time = 108.536 mix time = 45.6706 over 32 mixers
+I0426 20:29:45.232759 17919 MixThread.cc:72] IO time = 111.065 mix time = 45.9689 over 32 mixers
+I0426 20:29:45.773524 17920 MixThread.cc:72] IO time = 112.465 mix time = 45.513 over 32 mixers
+I0426 20:29:48.015897 17921 MixThread.cc:72] IO time = 111.977 mix time = 47.6432 over 32 mixers
+I0426 20:29:49.976649 17707 Mixnet.cc:94] Mixing round 1 done in 162.844
+I0426 20:32:09.859645 17934 MixThread.cc:72] IO time = 92.9357 mix time = 45.434 over 32 mixers
+I0426 20:32:23.519444 17931 MixThread.cc:72] IO time = 105.109 mix time = 46.9518 over 32 mixers
+I0426 20:32:26.404026 17932 MixThread.cc:72] IO time = 110.404 mix time = 45.4766 over 32 mixers
+I0426 20:32:26.538419 17933 MixThread.cc:72] IO time = 109.427 mix time = 46.0117 over 32 mixers
+I0426 20:32:26.771915 17707 Mixnet.cc:94] Mixing round 2 done in 156.795
+I0426 20:34:50.773490 17946 MixThread.cc:72] IO time = 96.0173 mix time = 46.8549 over 32 mixers
+I0426 20:34:56.129703 17944 MixThread.cc:72] IO time = 103.033 mix time = 45.4295 over 32 mixers
+I0426 20:34:59.141047 17945 MixThread.cc:72] IO time = 105.977 mix time = 45.446 over 32 mixers
+I0426 20:34:59.302884 17947 MixThread.cc:72] IO time = 105.985 mix time = 45.6675 over 32 mixers
+I0426 20:35:00.512579 17707 Mixnet.cc:94] Mixing round 3 done in 153.741
+I0426 20:35:00.512614 17707 Mixnet.cc:100] Done mixing ...
+I0426 20:35:00.512617 17707 Mixnet.cc:101] Number of encryptions = 130380755
+I0426 20:35:00.512625 17707 Mixnet.cc:102] Number of decryptions = 129950883
+Mixing successful. 
+I0426 20:37:33.222798 17955 Sorter.cc:81] Finish block sorting ... in 142.041 nmixers = 128 nthreads = 4
+I0426 20:37:33.222913 17955 Sorter.cc:89] Launching thread, sorted file name size = 128
+I0426 20:37:33.222918 17955 Sorter.cc:97] Thread 0 nstreams = 128
+I0426 20:37:33.254748 17964 SortThread.cc:88] Merging file ... data/sorted_0 to data/intermediate_0_0
+I0426 20:37:33.259582 17964 SortThread.cc:88] Merging file ... data/sorted_1 to data/intermediate_0_0
+I0426 20:37:33.266443 17964 SortThread.cc:88] Merging file ... data/sorted_2 to data/intermediate_0_0
+I0426 20:37:33.272301 17964 SortThread.cc:88] Merging file ... data/sorted_3 to data/intermediate_0_0
+I0426 20:37:33.281700 17964 SortThread.cc:88] Merging file ... data/sorted_4 to data/intermediate_0_0
+I0426 20:37:33.287964 17964 SortThread.cc:88] Merging file ... data/sorted_5 to data/intermediate_0_0
+I0426 20:37:33.295398 17964 SortThread.cc:88] Merging file ... data/sorted_6 to data/intermediate_0_0
+I0426 20:37:33.301394 17964 SortThread.cc:88] Merging file ... data/sorted_7 to data/intermediate_0_0
+I0426 20:37:33.304450 17964 SortThread.cc:88] Merging file ... data/sorted_8 to data/intermediate_0_0
+I0426 20:37:33.309212 17964 SortThread.cc:88] Merging file ... data/sorted_9 to data/intermediate_0_0
+I0426 20:37:33.311242 17964 SortThread.cc:88] Merging file ... data/sorted_10 to data/intermediate_0_0
+I0426 20:37:33.320778 17964 SortThread.cc:88] Merging file ... data/sorted_11 to data/intermediate_0_0
+I0426 20:37:33.330833 17964 SortThread.cc:88] Merging file ... data/sorted_12 to data/intermediate_0_0
+I0426 20:37:33.333428 17964 SortThread.cc:88] Merging file ... data/sorted_13 to data/intermediate_0_0
+I0426 20:37:33.335804 17964 SortThread.cc:88] Merging file ... data/sorted_14 to data/intermediate_0_0
+I0426 20:37:33.338839 17964 SortThread.cc:88] Merging file ... data/sorted_15 to data/intermediate_0_0
+I0426 20:37:33.338902 17964 SortThread.cc:88] Merging file ... data/sorted_16 to data/intermediate_0_0
+I0426 20:37:33.338935 17964 SortThread.cc:88] Merging file ... data/sorted_17 to data/intermediate_0_0
+I0426 20:37:33.338955 17964 SortThread.cc:88] Merging file ... data/sorted_18 to data/intermediate_0_0
+I0426 20:37:33.338973 17964 SortThread.cc:88] Merging file ... data/sorted_19 to data/intermediate_0_0
+I0426 20:37:33.338990 17964 SortThread.cc:88] Merging file ... data/sorted_20 to data/intermediate_0_0
+I0426 20:37:33.339010 17964 SortThread.cc:88] Merging file ... data/sorted_21 to data/intermediate_0_0
+I0426 20:37:33.339027 17964 SortThread.cc:88] Merging file ... data/sorted_22 to data/intermediate_0_0
+I0426 20:37:33.339045 17964 SortThread.cc:88] Merging file ... data/sorted_23 to data/intermediate_0_0
+I0426 20:37:33.339061 17964 SortThread.cc:88] Merging file ... data/sorted_24 to data/intermediate_0_0
+I0426 20:37:33.339081 17964 SortThread.cc:88] Merging file ... data/sorted_25 to data/intermediate_0_0
+I0426 20:37:33.339097 17964 SortThread.cc:88] Merging file ... data/sorted_26 to data/intermediate_0_0
+I0426 20:37:33.339112 17964 SortThread.cc:88] Merging file ... data/sorted_27 to data/intermediate_0_0
+I0426 20:37:33.339129 17964 SortThread.cc:88] Merging file ... data/sorted_28 to data/intermediate_0_0
+I0426 20:37:33.339148 17964 SortThread.cc:88] Merging file ... data/sorted_29 to data/intermediate_0_0
+I0426 20:37:33.339165 17964 SortThread.cc:88] Merging file ... data/sorted_30 to data/intermediate_0_0
+I0426 20:37:33.339184 17964 SortThread.cc:88] Merging file ... data/sorted_31 to data/intermediate_0_0
+I0426 20:37:33.343368 17964 SortThread.cc:88] Merging file ... data/sorted_32 to data/intermediate_0_0
+I0426 20:37:33.348026 17964 SortThread.cc:88] Merging file ... data/sorted_33 to data/intermediate_0_0
+I0426 20:37:33.358031 17964 SortThread.cc:88] Merging file ... data/sorted_34 to data/intermediate_0_0
+I0426 20:37:33.360798 17964 SortThread.cc:88] Merging file ... data/sorted_35 to data/intermediate_0_0
+I0426 20:37:33.371101 17964 SortThread.cc:88] Merging file ... data/sorted_36 to data/intermediate_0_0
+I0426 20:37:33.373385 17964 SortThread.cc:88] Merging file ... data/sorted_37 to data/intermediate_0_0
+I0426 20:37:33.377990 17964 SortThread.cc:88] Merging file ... data/sorted_38 to data/intermediate_0_0
+I0426 20:37:33.385985 17964 SortThread.cc:88] Merging file ... data/sorted_39 to data/intermediate_0_0
+I0426 20:37:33.390820 17964 SortThread.cc:88] Merging file ... data/sorted_40 to data/intermediate_0_0
+I0426 20:37:33.397745 17964 SortThread.cc:88] Merging file ... data/sorted_41 to data/intermediate_0_0
+I0426 20:37:33.400987 17964 SortThread.cc:88] Merging file ... data/sorted_42 to data/intermediate_0_0
+I0426 20:37:33.410456 17964 SortThread.cc:88] Merging file ... data/sorted_43 to data/intermediate_0_0
+I0426 20:37:33.420699 17964 SortThread.cc:88] Merging file ... data/sorted_44 to data/intermediate_0_0
+I0426 20:37:33.423900 17964 SortThread.cc:88] Merging file ... data/sorted_45 to data/intermediate_0_0
+I0426 20:37:33.432446 17964 SortThread.cc:88] Merging file ... data/sorted_46 to data/intermediate_0_0
+I0426 20:37:33.437206 17964 SortThread.cc:88] Merging file ... data/sorted_47 to data/intermediate_0_0
+I0426 20:37:33.443531 17964 SortThread.cc:88] Merging file ... data/sorted_48 to data/intermediate_0_0
+I0426 20:37:33.452944 17964 SortThread.cc:88] Merging file ... data/sorted_49 to data/intermediate_0_0
+I0426 20:37:33.453001 17964 SortThread.cc:88] Merging file ... data/sorted_50 to data/intermediate_0_0
+I0426 20:37:33.453022 17964 SortThread.cc:88] Merging file ... data/sorted_51 to data/intermediate_0_0
+I0426 20:37:33.453040 17964 SortThread.cc:88] Merging file ... data/sorted_52 to data/intermediate_0_0
+I0426 20:37:33.453060 17964 SortThread.cc:88] Merging file ... data/sorted_53 to data/intermediate_0_0
+I0426 20:37:33.453078 17964 SortThread.cc:88] Merging file ... data/sorted_54 to data/intermediate_0_0
+I0426 20:37:33.453094 17964 SortThread.cc:88] Merging file ... data/sorted_55 to data/intermediate_0_0
+I0426 20:37:33.453111 17964 SortThread.cc:88] Merging file ... data/sorted_56 to data/intermediate_0_0
+I0426 20:37:33.453136 17964 SortThread.cc:88] Merging file ... data/sorted_57 to data/intermediate_0_0
+I0426 20:37:33.453155 17964 SortThread.cc:88] Merging file ... data/sorted_58 to data/intermediate_0_0
+I0426 20:37:33.453172 17964 SortThread.cc:88] Merging file ... data/sorted_59 to data/intermediate_0_0
+I0426 20:37:33.453189 17964 SortThread.cc:88] Merging file ... data/sorted_60 to data/intermediate_0_0
+I0426 20:37:33.453207 17964 SortThread.cc:88] Merging file ... data/sorted_61 to data/intermediate_0_0
+I0426 20:37:33.453222 17964 SortThread.cc:88] Merging file ... data/sorted_62 to data/intermediate_0_0
+I0426 20:37:33.453243 17964 SortThread.cc:88] Merging file ... data/sorted_63 to data/intermediate_0_0
+I0426 20:37:33.461247 17964 SortThread.cc:88] Merging file ... data/sorted_64 to data/intermediate_0_0
+I0426 20:37:33.470089 17964 SortThread.cc:88] Merging file ... data/sorted_65 to data/intermediate_0_0
+I0426 20:37:33.473048 17964 SortThread.cc:88] Merging file ... data/sorted_66 to data/intermediate_0_0
+I0426 20:37:33.484431 17964 SortThread.cc:88] Merging file ... data/sorted_67 to data/intermediate_0_0
+I0426 20:37:33.487592 17964 SortThread.cc:88] Merging file ... data/sorted_68 to data/intermediate_0_0
+I0426 20:37:33.497824 17964 SortThread.cc:88] Merging file ... data/sorted_69 to data/intermediate_0_0
+I0426 20:37:33.501068 17964 SortThread.cc:88] Merging file ... data/sorted_70 to data/intermediate_0_0
+I0426 20:37:33.505026 17964 SortThread.cc:88] Merging file ... data/sorted_71 to data/intermediate_0_0
+I0426 20:37:33.507539 17964 SortThread.cc:88] Merging file ... data/sorted_72 to data/intermediate_0_0
+I0426 20:37:33.509783 17964 SortThread.cc:88] Merging file ... data/sorted_73 to data/intermediate_0_0
+I0426 20:37:33.516113 17964 SortThread.cc:88] Merging file ... data/sorted_74 to data/intermediate_0_0
+I0426 20:37:33.519486 17964 SortThread.cc:88] Merging file ... data/sorted_75 to data/intermediate_0_0
+I0426 20:37:33.528928 17964 SortThread.cc:88] Merging file ... data/sorted_76 to data/intermediate_0_0
+I0426 20:37:33.531958 17964 SortThread.cc:88] Merging file ... data/sorted_77 to data/intermediate_0_0
+I0426 20:37:33.540109 17964 SortThread.cc:88] Merging file ... data/sorted_78 to data/intermediate_0_0
+I0426 20:37:33.550442 17964 SortThread.cc:88] Merging file ... data/sorted_79 to data/intermediate_0_0
+I0426 20:37:33.552696 17964 SortThread.cc:88] Merging file ... data/sorted_80 to data/intermediate_0_0
+I0426 20:37:33.555233 17964 SortThread.cc:88] Merging file ... data/sorted_81 to data/intermediate_0_0
+I0426 20:37:33.555285 17964 SortThread.cc:88] Merging file ... data/sorted_82 to data/intermediate_0_0
+I0426 20:37:33.555308 17964 SortThread.cc:88] Merging file ... data/sorted_83 to data/intermediate_0_0
+I0426 20:37:33.555325 17964 SortThread.cc:88] Merging file ... data/sorted_84 to data/intermediate_0_0
+I0426 20:37:33.555341 17964 SortThread.cc:88] Merging file ... data/sorted_85 to data/intermediate_0_0
+I0426 20:37:33.555358 17964 SortThread.cc:88] Merging file ... data/sorted_86 to data/intermediate_0_0
+I0426 20:37:33.555373 17964 SortThread.cc:88] Merging file ... data/sorted_87 to data/intermediate_0_0
+I0426 20:37:33.555389 17964 SortThread.cc:88] Merging file ... data/sorted_88 to data/intermediate_0_0
+I0426 20:37:33.555404 17964 SortThread.cc:88] Merging file ... data/sorted_89 to data/intermediate_0_0
+I0426 20:37:33.555419 17964 SortThread.cc:88] Merging file ... data/sorted_90 to data/intermediate_0_0
+I0426 20:37:33.555434 17964 SortThread.cc:88] Merging file ... data/sorted_91 to data/intermediate_0_0
+I0426 20:37:33.555449 17964 SortThread.cc:88] Merging file ... data/sorted_92 to data/intermediate_0_0
+I0426 20:37:33.555464 17964 SortThread.cc:88] Merging file ... data/sorted_93 to data/intermediate_0_0
+I0426 20:37:33.555480 17964 SortThread.cc:88] Merging file ... data/sorted_94 to data/intermediate_0_0
+I0426 20:37:33.555496 17964 SortThread.cc:88] Merging file ... data/sorted_95 to data/intermediate_0_0
+I0426 20:37:33.558816 17964 SortThread.cc:88] Merging file ... data/sorted_96 to data/intermediate_0_0
+I0426 20:37:33.566977 17964 SortThread.cc:88] Merging file ... data/sorted_97 to data/intermediate_0_0
+I0426 20:37:33.574208 17964 SortThread.cc:88] Merging file ... data/sorted_98 to data/intermediate_0_0
+I0426 20:37:33.579509 17964 SortThread.cc:88] Merging file ... data/sorted_99 to data/intermediate_0_0
+I0426 20:37:33.586076 17964 SortThread.cc:88] Merging file ... data/sorted_100 to data/intermediate_0_0
+I0426 20:37:33.589004 17964 SortThread.cc:88] Merging file ... data/sorted_101 to data/intermediate_0_0
+I0426 20:37:33.597415 17964 SortThread.cc:88] Merging file ... data/sorted_102 to data/intermediate_0_0
+I0426 20:37:33.602603 17964 SortThread.cc:88] Merging file ... data/sorted_103 to data/intermediate_0_0
+I0426 20:37:33.607892 17964 SortThread.cc:88] Merging file ... data/sorted_104 to data/intermediate_0_0
+I0426 20:37:33.617339 17964 SortThread.cc:88] Merging file ... data/sorted_105 to data/intermediate_0_0
+I0426 20:37:33.623955 17964 SortThread.cc:88] Merging file ... data/sorted_106 to data/intermediate_0_0
+I0426 20:37:33.629907 17964 SortThread.cc:88] Merging file ... data/sorted_107 to data/intermediate_0_0
+I0426 20:37:33.637346 17964 SortThread.cc:88] Merging file ... data/sorted_108 to data/intermediate_0_0
+I0426 20:37:33.639505 17964 SortThread.cc:88] Merging file ... data/sorted_109 to data/intermediate_0_0
+I0426 20:37:33.648887 17964 SortThread.cc:88] Merging file ... data/sorted_110 to data/intermediate_0_0
+I0426 20:37:33.658718 17964 SortThread.cc:88] Merging file ... data/sorted_111 to data/intermediate_0_0
+I0426 20:37:33.666854 17964 SortThread.cc:88] Merging file ... data/sorted_112 to data/intermediate_0_0
+I0426 20:37:33.670243 17964 SortThread.cc:88] Merging file ... data/sorted_113 to data/intermediate_0_0
+I0426 20:37:33.670297 17964 SortThread.cc:88] Merging file ... data/sorted_114 to data/intermediate_0_0
+I0426 20:37:33.670316 17964 SortThread.cc:88] Merging file ... data/sorted_115 to data/intermediate_0_0
+I0426 20:37:33.670333 17964 SortThread.cc:88] Merging file ... data/sorted_116 to data/intermediate_0_0
+I0426 20:37:33.670349 17964 SortThread.cc:88] Merging file ... data/sorted_117 to data/intermediate_0_0
+I0426 20:37:33.670366 17964 SortThread.cc:88] Merging file ... data/sorted_118 to data/intermediate_0_0
+I0426 20:37:33.670382 17964 SortThread.cc:88] Merging file ... data/sorted_119 to data/intermediate_0_0
+I0426 20:37:33.670397 17964 SortThread.cc:88] Merging file ... data/sorted_120 to data/intermediate_0_0
+I0426 20:37:33.670413 17964 SortThread.cc:88] Merging file ... data/sorted_121 to data/intermediate_0_0
+I0426 20:37:33.670436 17964 SortThread.cc:88] Merging file ... data/sorted_122 to data/intermediate_0_0
+I0426 20:37:33.670451 17964 SortThread.cc:88] Merging file ... data/sorted_123 to data/intermediate_0_0
+I0426 20:37:33.670466 17964 SortThread.cc:88] Merging file ... data/sorted_124 to data/intermediate_0_0
+I0426 20:37:33.670480 17964 SortThread.cc:88] Merging file ... data/sorted_125 to data/intermediate_0_0
+I0426 20:37:33.670495 17964 SortThread.cc:88] Merging file ... data/sorted_126 to data/intermediate_0_0
+I0426 20:37:33.670513 17964 SortThread.cc:88] Merging file ... data/sorted_127 to data/intermediate_0_0
+Finish merge-sort in .. 355.266
+I0426 20:41:06.447856 17955 Sorter.cc:34] Number of encryptions = 65974570
+I0426 20:41:06.447875 17955 Sorter.cc:35] Number of decryptions = 65985162
+  Order? 1

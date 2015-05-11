@@ -1,0 +1,49 @@
+Time = 4.47931
+Data generated.
+I0426 18:55:07.972733 16624 MixThread.cc:72] IO time = 0.0279313 mix time = 3.01773 over 4 mixers
+I0426 18:55:08.036717 16627 MixThread.cc:72] IO time = 0.0228914 mix time = 3.09368 over 4 mixers
+I0426 18:55:08.311940 16625 MixThread.cc:72] IO time = 0.0225862 mix time = 3.3642 over 4 mixers
+I0426 18:55:08.420164 16626 MixThread.cc:72] IO time = 0.0265813 mix time = 3.47439 over 4 mixers
+I0426 18:55:08.420255 16623 Mixnet.cc:94] Mixing round 0 done in 3.53419
+I0426 18:55:11.543781 16631 MixThread.cc:72] IO time = 0.0150475 mix time = 3.06639 over 4 mixers
+I0426 18:55:11.724324 16628 MixThread.cc:72] IO time = 0.0110761 mix time = 3.26206 over 4 mixers
+I0426 18:55:11.817752 16630 MixThread.cc:72] IO time = 0.0175054 mix time = 3.34433 over 4 mixers
+I0426 18:55:11.883802 16629 MixThread.cc:72] IO time = 0.0148275 mix time = 3.4081 over 4 mixers
+I0426 18:55:12.266135 16623 Mixnet.cc:94] Mixing round 1 done in 3.84584
+I0426 18:55:15.487303 16636 MixThread.cc:72] IO time = 0.0163284 mix time = 3.1679 over 4 mixers
+I0426 18:55:15.572788 16632 MixThread.cc:72] IO time = 0.0127461 mix time = 3.25556 over 4 mixers
+I0426 18:55:15.576848 16642 MixThread.cc:72] IO time = 0.0183285 mix time = 3.25012 over 4 mixers
+I0426 18:55:15.959740 16638 MixThread.cc:72] IO time = 0.0243534 mix time = 3.62849 over 4 mixers
+I0426 18:55:16.026384 16623 Mixnet.cc:94] Mixing round 2 done in 3.7602
+I0426 18:55:19.107034 16648 MixThread.cc:72] IO time = 0.0191247 mix time = 3.02143 over 4 mixers
+I0426 18:55:19.398777 16647 MixThread.cc:72] IO time = 0.0154734 mix time = 3.32534 over 4 mixers
+I0426 18:55:19.434438 16649 MixThread.cc:72] IO time = 0.0158947 mix time = 3.35535 over 4 mixers
+I0426 18:55:19.452522 16650 MixThread.cc:72] IO time = 0.0179409 mix time = 3.37588 over 4 mixers
+I0426 18:55:20.291865 16623 Mixnet.cc:94] Mixing round 3 done in 4.26543
+I0426 18:55:20.291899 16623 Mixnet.cc:100] Done mixing ...
+I0426 18:55:20.291904 16623 Mixnet.cc:101] Number of encryptions = 8139372
+I0426 18:55:20.291910 16623 Mixnet.cc:102] Number of decryptions = 8098744
+Mixing successful. 
+I0426 18:55:34.347242 16652 Sorter.cc:81] Finish block sorting ... in 3.88309 nmixers = 16 nthreads = 4
+I0426 18:55:34.347378 16652 Sorter.cc:89] Launching thread, sorted file name size = 16
+I0426 18:55:34.347386 16652 Sorter.cc:97] Thread 0 nstreams = 16
+I0426 18:55:34.347539 16658 SortThread.cc:88] Merging file ... data/sorted_0 to data/intermediate_0_0
+I0426 18:55:34.347565 16658 SortThread.cc:88] Merging file ... data/sorted_1 to data/intermediate_0_0
+I0426 18:55:34.347585 16658 SortThread.cc:88] Merging file ... data/sorted_2 to data/intermediate_0_0
+I0426 18:55:34.347602 16658 SortThread.cc:88] Merging file ... data/sorted_3 to data/intermediate_0_0
+I0426 18:55:34.347620 16658 SortThread.cc:88] Merging file ... data/sorted_4 to data/intermediate_0_0
+I0426 18:55:34.347635 16658 SortThread.cc:88] Merging file ... data/sorted_5 to data/intermediate_0_0
+I0426 18:55:34.347652 16658 SortThread.cc:88] Merging file ... data/sorted_6 to data/intermediate_0_0
+I0426 18:55:34.347668 16658 SortThread.cc:88] Merging file ... data/sorted_7 to data/intermediate_0_0
+I0426 18:55:34.347684 16658 SortThread.cc:88] Merging file ... data/sorted_8 to data/intermediate_0_0
+I0426 18:55:34.347699 16658 SortThread.cc:88] Merging file ... data/sorted_9 to data/intermediate_0_0
+I0426 18:55:34.347715 16658 SortThread.cc:88] Merging file ... data/sorted_10 to data/intermediate_0_0
+I0426 18:55:34.347730 16658 SortThread.cc:88] Merging file ... data/sorted_11 to data/intermediate_0_0
+I0426 18:55:34.347745 16658 SortThread.cc:88] Merging file ... data/sorted_12 to data/intermediate_0_0
+I0426 18:55:34.347762 16658 SortThread.cc:88] Merging file ... data/sorted_13 to data/intermediate_0_0
+I0426 18:55:34.347777 16658 SortThread.cc:88] Merging file ... data/sorted_14 to data/intermediate_0_0
+I0426 18:55:34.347793 16658 SortThread.cc:88] Merging file ... data/sorted_15 to data/intermediate_0_0
+Finish merge-sort in .. 14.904
+I0426 18:55:45.368144 16652 Sorter.cc:34] Number of encryptions = 4032598
+I0426 18:55:45.368175 16652 Sorter.cc:35] Number of decryptions = 4077652
+  Order? 1

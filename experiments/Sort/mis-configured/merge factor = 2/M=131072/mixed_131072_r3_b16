@@ -1,0 +1,72 @@
+Time = 4.79425
+Data generated.
+I0426 10:30:37.436170 11613 MixThread.cc:72] IO time = 0.0247239 mix time = 3.14684 over 4 mixers
+I0426 10:30:37.601152 11614 MixThread.cc:72] IO time = 0.023343 mix time = 3.32785 over 4 mixers
+I0426 10:30:37.731644 11611 MixThread.cc:72] IO time = 0.0276673 mix time = 3.46497 over 4 mixers
+I0426 10:30:37.734875 11612 MixThread.cc:72] IO time = 0.0294788 mix time = 3.45582 over 4 mixers
+I0426 10:30:37.734989 11604 Mixnet.cc:94] Mixing round 0 done in 3.52995
+I0426 10:30:41.198407 11621 MixThread.cc:72] IO time = 0.0160469 mix time = 3.40422 over 4 mixers
+I0426 10:30:41.357427 11620 MixThread.cc:72] IO time = 0.0161227 mix time = 3.55904 over 4 mixers
+I0426 10:30:41.415645 11618 MixThread.cc:72] IO time = 0.0215048 mix time = 3.60587 over 4 mixers
+I0426 10:30:41.450775 11619 MixThread.cc:72] IO time = 0.0164866 mix time = 3.66573 over 4 mixers
+I0426 10:30:41.485292 11604 Mixnet.cc:94] Mixing round 1 done in 3.75028
+I0426 10:30:44.831403 11626 MixThread.cc:72] IO time = 0.0147187 mix time = 3.29636 over 4 mixers
+I0426 10:30:44.960446 11624 MixThread.cc:72] IO time = 0.021318 mix time = 3.41529 over 4 mixers
+I0426 10:30:45.629001 11623 MixThread.cc:72] IO time = 0.0280885 mix time = 3.42279 over 4 mixers
+I0426 10:30:45.629665 11625 MixThread.cc:72] IO time = 0.0176615 mix time = 3.69342 over 4 mixers
+I0426 10:30:45.801218 11604 Mixnet.cc:94] Mixing round 2 done in 4.31588
+I0426 10:30:45.801259 11604 Mixnet.cc:100] Done mixing ...
+Mixing successful. 
+I0426 10:31:00.035001 11629 Sorter.cc:81] Finish block sorting ... in 3.96773 nmixers = 16 nthreads = 4
+I0426 10:31:00.451450 11629 Sorter.cc:89] Launching thread, sorted file name size = 16
+I0426 10:31:00.451472 11629 Sorter.cc:97] Thread 0 nstreams = 2
+I0426 10:31:00.451508 11629 Sorter.cc:97] Thread 1 nstreams = 2
+I0426 10:31:00.451524 11629 Sorter.cc:97] Thread 2 nstreams = 2
+I0426 10:31:00.451653 11629 Sorter.cc:97] Thread 3 nstreams = 2
+I0426 10:31:00.451728 11635 SortThread.cc:88] Merging file ... data/sorted_2 to data/intermediate_0_1
+I0426 10:31:00.451869 11637 SortThread.cc:88] Merging file ... data/sorted_6 to data/intermediate_0_3
+I0426 10:31:00.451876 11635 SortThread.cc:88] Merging file ... data/sorted_3 to data/intermediate_0_1
+I0426 10:31:00.451897 11637 SortThread.cc:88] Merging file ... data/sorted_7 to data/intermediate_0_3
+I0426 10:31:00.452728 11636 SortThread.cc:88] Merging file ... data/sorted_4 to data/intermediate_0_2
+I0426 10:31:00.452757 11636 SortThread.cc:88] Merging file ... data/sorted_5 to data/intermediate_0_2
+I0426 10:31:00.452931 11634 SortThread.cc:88] Merging file ... data/sorted_0 to data/intermediate_0_0
+I0426 10:31:00.452967 11634 SortThread.cc:88] Merging file ... data/sorted_1 to data/intermediate_0_0
+I0426 10:31:02.174567 11629 Sorter.cc:89] Launching thread, sorted file name size = 12
+I0426 10:31:02.174592 11629 Sorter.cc:97] Thread 0 nstreams = 2
+I0426 10:31:02.174619 11629 Sorter.cc:97] Thread 1 nstreams = 2
+I0426 10:31:02.174645 11629 Sorter.cc:97] Thread 2 nstreams = 2
+I0426 10:31:02.174787 11629 Sorter.cc:97] Thread 3 nstreams = 2
+I0426 10:31:02.174891 11639 SortThread.cc:88] Merging file ... data/sorted_10 to data/intermediate_1_1
+I0426 10:31:02.174896 11638 SortThread.cc:88] Merging file ... data/sorted_8 to data/intermediate_1_0
+I0426 10:31:02.175192 11638 SortThread.cc:88] Merging file ... data/sorted_9 to data/intermediate_1_0
+I0426 10:31:02.175199 11640 SortThread.cc:88] Merging file ... data/sorted_12 to data/intermediate_1_2
+I0426 10:31:02.175205 11641 SortThread.cc:88] Merging file ... data/sorted_14 to data/intermediate_1_3
+I0426 10:31:02.175207 11639 SortThread.cc:88] Merging file ... data/sorted_11 to data/intermediate_1_1
+I0426 10:31:02.175230 11640 SortThread.cc:88] Merging file ... data/sorted_13 to data/intermediate_1_2
+I0426 10:31:02.175242 11641 SortThread.cc:88] Merging file ... data/sorted_15 to data/intermediate_1_3
+I0426 10:31:03.890568 11629 Sorter.cc:89] Launching thread, sorted file name size = 8
+I0426 10:31:03.890593 11629 Sorter.cc:97] Thread 0 nstreams = 2
+I0426 10:31:03.890625 11629 Sorter.cc:97] Thread 1 nstreams = 2
+I0426 10:31:03.890645 11629 Sorter.cc:97] Thread 2 nstreams = 2
+I0426 10:31:03.890815 11629 Sorter.cc:97] Thread 3 nstreams = 2
+I0426 10:31:03.891010 11644 SortThread.cc:88] Merging file ... data/intermediate_0_2 to data/intermediate_2_1
+I0426 10:31:03.891042 11645 SortThread.cc:88] Merging file ... data/intermediate_1_0 to data/intermediate_2_2
+I0426 10:31:03.891064 11643 SortThread.cc:88] Merging file ... data/intermediate_0_0 to data/intermediate_2_0
+I0426 10:31:03.891088 11645 SortThread.cc:88] Merging file ... data/intermediate_1_1 to data/intermediate_2_2
+I0426 10:31:03.891096 11644 SortThread.cc:88] Merging file ... data/intermediate_0_3 to data/intermediate_2_1
+I0426 10:31:03.891131 11643 SortThread.cc:88] Merging file ... data/intermediate_0_1 to data/intermediate_2_0
+I0426 10:31:03.904172 11646 SortThread.cc:88] Merging file ... data/intermediate_1_2 to data/intermediate_2_3
+I0426 10:31:03.904211 11646 SortThread.cc:88] Merging file ... data/intermediate_1_3 to data/intermediate_2_3
+I0426 10:31:07.227630 11629 Sorter.cc:89] Launching thread, sorted file name size = 4
+I0426 10:31:07.227655 11629 Sorter.cc:97] Thread 0 nstreams = 2
+I0426 10:31:07.227695 11629 Sorter.cc:97] Thread 1 nstreams = 2
+I0426 10:31:07.227792 11656 SortThread.cc:88] Merging file ... data/intermediate_2_0 to data/intermediate_3_0
+I0426 10:31:07.227826 11656 SortThread.cc:88] Merging file ... data/intermediate_2_1 to data/intermediate_3_0
+I0426 10:31:07.227828 11657 SortThread.cc:88] Merging file ... data/intermediate_2_2 to data/intermediate_3_1
+I0426 10:31:07.227854 11657 SortThread.cc:88] Merging file ... data/intermediate_2_3 to data/intermediate_3_1
+I0426 10:31:12.994002 11629 Sorter.cc:89] Launching thread, sorted file name size = 2
+I0426 10:31:12.994027 11629 Sorter.cc:97] Thread 0 nstreams = 2
+I0426 10:31:12.994163 11659 SortThread.cc:88] Merging file ... data/intermediate_3_0 to data/intermediate_4_0
+I0426 10:31:12.994187 11659 SortThread.cc:88] Merging file ... data/intermediate_3_1 to data/intermediate_4_0
+Finish merge-sort in .. 29.5342
+  Order? 1

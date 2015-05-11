@@ -1,0 +1,11 @@
+I0425 21:05:37.047930  7712 Goodrich.cc:39] Sorting data/data_0
+I0425 21:16:53.268192  7712 Goodrich.cc:73] Finish in .. 676.22
+3
+HEY, IT'S DONE
+sorted to R with 12582912 items
+-internal Sort invoked 85 times
+-internal Merge invoked 305 times
+-sliding Merge invoked 71 times
+-file opened 287 times
+#encryption: 125829120 
+#decryption: 125829120 
