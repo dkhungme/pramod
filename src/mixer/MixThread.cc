@@ -52,13 +52,19 @@ void MixThread::StartMixing(Mixnet *mixnet, int round){
 		io_end = Now();
 		io_total += (io_end-io_start);
 		mix_start = Now();
-		byte *mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
-				ciphertext_block_size_);
+		int mixed_output_size;
+		byte *mixed_data;
+		if (round < params_->num_rounds()-1)
+				mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
+				ciphertext_block_size_, &mixed_output_size);
+		else
+			mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
+							ciphertext_block_size_, mixnet->GetFunction(), &mixed_output_size);
 		assert(mixed_data); 
 		mix_end = Now();
 		mix_total += (mix_end-mix_start);
 		//write to file
-		fwrite(mixed_data, 1, ciphertext_block_size_, output_descriptors[i-start_idx_]);
+		fwrite(mixed_data, 1, mixed_output_size, output_descriptors[i-start_idx_]);
 		free(mixed_data); //clean memory
 	}
 

@@ -19,14 +19,16 @@ using std::string;
  *  Encryption key is store at the key_path
  */
  namespace sober{
+ class AutoSeededRandomPool;
 
  	class DataGen{
  	public:
  		DataGen():file_(NULL){}
  		void Generate();
-
+ 		virtual void DataGen(char *buffer, int size);
  	private:
  		FILE* file_;
+ 		AutoSeededRandomPool rng_;
  	};
  } 
 

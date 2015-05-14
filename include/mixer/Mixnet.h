@@ -36,11 +36,13 @@ namespace sober{
 class Mixnet{
 
 public:
-	Mixnet();
+	Mixnet(application_fn_t func);
 	void StartMixing();
+	application_fn_t GetFunction(){ return func_;}
 	char *input_file_name(int i);
 	char *output_file_name(int i);
 private:
+	application_fn_t func_;
 	vector<Mixer*> mixers_;
 	GlobalParams *params_;
 	int ciphertext_block_size_;

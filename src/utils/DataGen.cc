@@ -32,10 +32,9 @@ namespace sober{
 void DataGen::Generate() {
 	GlobalParams *params = GlobalParams::Get();
 
-	AutoSeededRandomPool rng;
 	//generate encryption key
 	byte enckey[AES_BLOCK_SIZE];
-	rng.GenerateBlock(enckey, AES_BLOCK_SIZE);
+	rng_.GenerateBlock(enckey, AES_BLOCK_SIZE);
 	StringSource(enckey, AES_BLOCK_SIZE, true,
 			new FileSink(params->key_path().c_str()));
 
@@ -57,10 +56,10 @@ void DataGen::Generate() {
 			string iv_print, cipher;
 
 			//generate record
-			rng.GenerateBlock(val, vs);
-
+			//rng_.GenerateBlock(val, vs);
+			this->DataGen((char*)val, vs);
 			//init encryption
-			rng.GenerateBlock(iv, IV_SIZE);
+			rng_.GenerateBlock(iv, IV_SIZE);
 
 
 			string gcm_cipher;
@@ -87,6 +86,10 @@ void DataGen::Generate() {
 
 	FileSource(params->key_path().c_str(), true, new StringSink(keystring));
 
+}
+
+DataGen::DataGen(char *buffer, int size){
+	rng_.GenerateBlock((byte*)buffer, size);
 }
 }
 
