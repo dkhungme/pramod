@@ -27,6 +27,9 @@ using std::vector;
  * 3. A block is created from the read input, to be fed into Mixer::Mix() function.
  *
  * 4. Output from Mixer::Mix() is written to file tmp_i_m, into nblocks partitions.
+ * 
+ * 5. At the final round, apply the user-given function before encrypted. Default = NULL, 
+ * means just doing encryption.  
  *
  * Partition index and size can be worked out from nblocks, record_size and block_size
  *
@@ -36,11 +39,13 @@ namespace sober{
 class Mixnet{
 
 public:
-	Mixnet();
+	Mixnet(application_fn_t func=NULL);
 	void StartMixing();
+	application_fn_t GetFunction(){ return func_;}
 	char *input_file_name(int i);
 	char *output_file_name(int i);
 private:
+	application_fn_t func_;
 	vector<Mixer*> mixers_;
 	GlobalParams *params_;
 	int ciphertext_block_size_;

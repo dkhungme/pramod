@@ -11,19 +11,24 @@
 #include <glog/logging.h>
 namespace sober{
 
-Node::Node(string input_file, Encryptor *encryptor){
+Node::Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, int mode){
 	file_ = fopen(input_file.c_str(), "r");
 	current_pos_ = 0;
-	record_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
-	plaintext_size_ = GlobalParams::Get()->record_size(); 
+	//record_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
+	record_size_ = record_size;
+	plaintext_size_ = plaintext_size; 
+	mode_ = mode; 
+	//plaintext_size_ = GlobalParams::Get()->record_size(); 
 
 	current_record_ = (char*)malloc(record_size_*sizeof(char));
 	current_plaintext_ = (char*)malloc(plaintext_size_*sizeof(char)); 
 	encryptor_ = encryptor; 
 
 	fread(current_record_, 1, record_size_,file_);
-	string pt = encryptor_->Decrypt((byte*)current_record_, record_size_); 
-	memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
+	if (mode==ENCRYPT){
+		string pt = encryptor_->Decrypt((byte*)current_record_, record_size_)
+		memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
+	}
 }
 
 bool Node::IsEmpty(){
@@ -32,12 +37,14 @@ bool Node::IsEmpty(){
 
 void Node::Next(){
 	fread(current_record_, 1, record_size_,file_);
-	string pt = encryptor_->Decrypt((byte*)current_record_, record_size_); 
-	memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
+	if (mode_==ENCRYPT){
+		string pt = encryptor_->Decrypt((byte*)current_record_, record_size_); 
+		memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
+	}
 }
 
 char *Node::GetRecord(){
-	return current_plaintext_;
+	return mode==ENCRYPT ? current_plaintext_: current_record_;
 }
 
 
@@ -61,20 +68,20 @@ Node::~Node(){
 	fclose(file_);
 }
 
-PriorityQueue::PriorityQueue(int size){
+PriorityQueue::PriorityQueue(int size, int record_size, int plaintext_size){
 	max_size_ = size+1;
 	current_size_ = 0;
-	ciphertext_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
 	nodes_.push_back(NULL);
-	record_size_ = GlobalParams::Get()->record_size(); 
 
+	record_size_ = record_size; 
+	plaintext_size_ = plaintext_size; 
 }
 bool PriorityQueue::lessThan(Node *a, Node *b){
 	char *data_a = a->GetRecord();
 	char *data_b = b->GetRecord();
 	//string pt_a = encryptor_.Decrypt((byte*)data_a, ciphertext_size_);
 	//string pt_b = encryptor_.Decrypt((byte*)data_b, ciphertext_size_);
-	return strncmp(data_a, data_b, record_size_)<0;
+	return strncmp(data_a, data_b, plaintext_size_)<0;
 }
 
 void PriorityQueue::upHeap(){

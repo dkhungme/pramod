@@ -32,13 +32,14 @@ TEST_GEN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_GEN_SRC:%.cc=%.o))
 TEST_GC_GEN_SRC = $(wildcard test/Goodrich_Compact_DataGen.cc)
 TEST_GC_GEN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_GC_GEN_SRC:%.cc=%.o))
 
-
-
 TEST_MIX_SRC = $(wildcard test/Mixnet.cc)
 TEST_MIX_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_MIX_SRC:%.cc=%.o))
 
 TEST_SORT_SRC = test/Sorter.cc
 TEST_SORT_OBJ = build/test/Sorter.o
+
+TEST_COMPACT_SRC = test/Compact.cc
+TEST_COMPACT_OBJ = build/test/Compact.o
 
 TEST_GOODRICH_SRC = test/Goodrich.cc
 TEST_GOODRICH_OBJ = build/test/Goodrich.o
@@ -51,18 +52,19 @@ DATA_GEN_EXE = $(BUILD_DIR)/test/datagen
 GC_DATA_GEN_EXE = $(BUILD_DIR)/test/Goodrich_Compact_datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
 SORT_EXE = $(BUILD_DIR)/test/sorter
+COMPACT_EXE = $(BUILD_DIR)/test/compact
 GOODRICH_EXE = $(BUILD_DIR)/test/goodrich
 GOODRICH_COMPACT_EXE = $(BUILD_DIR)/test/goodrich_compact
 
 CXX = g++
 CPPFLAGS =  -O3 -Wall -pthread -fPIC -std=c++11 -MMD $(INCLUDE_DIRS)
-LDFLAGS = -lprotobuf -lglog -lgflags -lcrypto++
+LDFLAGS = -lprotobuf -lglog -lgflags -lcrypto++ -lrt
 PROTOC = protoc
 PROTOFLAGS = --cpp_out
 
 ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ)
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ)
 
 .DEFAULT_GOAL = compile
 
@@ -73,6 +75,8 @@ test_gc_gen: $(GC_DATA_GEN_EXE)
 test_mix: $(MIXER_EXE)
 
 test_sort: $(SORT_EXE)
+
+test_compact: $(COMPACT_EXE)
 
 test_goodrich: $(GOODRICH_EXE)
 
@@ -103,6 +107,9 @@ $(MIXER_EXE): $(ALLOBJS) $(TEST_MIX_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+$(COMPACT_EXE): $(ALLOBJS) $(TEST_COMPACT_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(GOODRICH_EXE): $(ALLOBJS) $(TEST_GOODRICH_OBJ)

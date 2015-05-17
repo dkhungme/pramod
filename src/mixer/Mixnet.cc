@@ -26,7 +26,8 @@ using std::vector;
 
 namespace sober{
 
-Mixnet::Mixnet(){
+Mixnet::Mixnet(application_fn_t func){
+	this->func_ = func;
 	this->params_ = GlobalParams::Get();
 	ciphertext_block_size_ = (params_->record_size()+GCM_TAG_SIZE+IV_SIZE)*params_->num_records_per_block();
 	for (int i=0; i<params_->num_mixer_nodes(); i++)

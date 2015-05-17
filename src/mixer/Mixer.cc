@@ -26,7 +26,7 @@ Mixer::Mixer(int id){
 	ciphertext_record_size_ = param->record_size()+GCM_TAG_SIZE+IV_SIZE;
 }
 
-byte* Mixer::Mix(byte** input, int size){
+byte* Mixer::Mix(byte** input, int size, application_fn_t app_func, int *output_size){
 	int nrecords = size/ciphertext_record_size_;
 
 	//mix the index
@@ -45,15 +45,41 @@ byte* Mixer::Mix(byte** input, int size){
 		index[j]=tmp;
 	}
 
+	byte *output;
+
+	if (app_func!=NULL){//work_out the size
+		string pt = encryptor_.Decrypt((*input)+index[0]*ciphertext_record_size_, ciphertext_record_size_);
+		byte *new_pt;
+		int output_size, new_pt_size;
+		app_func((byte*)pt.c_str(), pt.length(), &new_pt, &output_size, &new_pt_size);
+
+		int new_size = output_size + IV_SIZE + GCM_TAG_SIZE;
+		VLOG(3) << "new size = " << new_size;
+		output = (byte*)malloc(new_size*sizeof(byte));
+		*ouput_size = new_size*sizeof(byte);
+	}
 	
 	//create new array
-	byte *output = (byte*)malloc(size*sizeof(byte));
+	output = (byte*)malloc(size*sizeof(byte));
+	*output_size = size*sizeof(byte);
 	assert(output);
 	
 	string newcipher;
 	for (int i=0; i<nrecords; i++){
-		newcipher = encryptor_.ReEncrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
-		memcpy(output+i*ciphertext_record_size_, newcipher.c_str(), ciphertext_record_size_);
+		if (app_func==NULL){
+			newcipher = encryptor_.ReEncrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
+			memcpy(output+i*ciphertext_record_size_, newcipher.c_str(), ciphertext_record_size_);
+		}
+		else{
+			string pt = encryptor_.Decrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
+			byte *new_pt;
+			int output_size, new_pt_size;
+			app_func((byte*)pt.c_str(), pt.length(), &new_pt, &output_size, &new_pt_size);
+			string ct = encryptor_.Encrypt(new_pt+new_pt_size, output_size-new_pt_size);
+
+			memcpy(output+i*new_size, new_pt, new_pt_size);
+			memcpy(output+i*new_size+new_pt_size, ct.c_str(), ct.length());
+		}
 	}
 
 	//delete original input at the end
