@@ -21,6 +21,8 @@ namespace sober{
 
 double Now();
 
+enum data_mode_t {ENCRYPT, NO_ENCRYPT};  
+
 class GlobalParams{
 public:
 	static GlobalParams* Get();

@@ -35,7 +35,9 @@ struct comp{
 
 class SortThread{
 public:
-	SortThread();
+	SortThread(int num_records, int record_size, int plaintext_size, int mode):
+		num_records_(num_records), recrod_size_(record_size), 
+		plaintext_size_(plaintext_size), mode_(mode){}
 
 	/**
 	 * Internal sort of n blocks, each given in a file.
@@ -51,9 +53,8 @@ public:
 
 
 private:
-	GlobalParams *params_;
 	Encryptor encryptor_;
-	int encrypted_record_size_;
+	int record_size_, num_records_, plaintext_size_, mode_;
 };
 
 }

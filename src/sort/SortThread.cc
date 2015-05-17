@@ -24,12 +24,6 @@ using std::deque;
 
 namespace sober{
 
-SortThread::SortThread(){
-	this->params_= GlobalParams::Get();
-	this->encrypted_record_size_ = this->params_->record_size() + GCM_TAG_SIZE
-			+ IV_SIZE;
-}
-
 /**
  * For each file:
  * Read from the given file to one block.
@@ -38,7 +32,7 @@ SortThread::SortThread(){
  * Write to output
  */
 void SortThread::BlockSort(string *input_path, string *output_path, int n){
-	int size = this->encrypted_record_size_*params_->num_records_per_block();
+	int size = num_records_*record_size_;
 	byte *input = (byte*) malloc(size * sizeof(byte));
 
 	for (int k = 0; k < n; k++) {
@@ -50,19 +44,20 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
 		fread(input, 1, size, file);
 
 		vector < string > sort_vector;
-		for (int i = 0; i < params_->num_records_per_block(); i++)
+		for (int i = 0; i < num_records_; i++)
 			sort_vector.push_back(
-					encryptor_.Decrypt(input + i * this->encrypted_record_size_,
-							this->encrypted_record_size_));
+					mode_==ENCRYPT ? encryptor_.Decrypt(input + i * record_size_,
+							record_size_)
+					: string(input+i*record_size_, record_size_));
 
-		struct comp test(params_->key_size());
+		struct comp test(plaintext_size_);
 		sort(sort_vector.begin(), sort_vector.end(), test);
 		fclose(file);
-		for (int i = 0; i < params_->num_records_per_block(); i++) {
-			string cipher = encryptor_.Encrypt((byte*) sort_vector[i].c_str(),
-					params_->record_size());
-			memcpy(input + i * this->encrypted_record_size_, cipher.c_str(),
-					this->encrypted_record_size_);
+		for (int i = 0; i < num_records_; i++) {
+			string cipher = mode_==ENCRYPT ? encryptor_.Encrypt((byte*) sort_vector[i].c_str(),
+					params_->record_size())
+					: sort_vector[i];
+			memcpy(input + i * record_size_, cipher.c_str(), record_size_);
 		}
 		file = fopen(output_path[k].c_str(), "w");
 		assert(file);
@@ -82,9 +77,9 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
  * At the end (queue.size = 1), dump to file
  */
 void SortThread::Merge(string *input_files, int nstreams, string output_file){
-	PriorityQueue merge_heap(params_->merge_factor());
+	PriorityQueue merge_heap(GlobalParams::Get()->merge_factor(), record_size_, plaintext_size_);
 	for (int i=0; i<nstreams; i++){
-		merge_heap.Insert(new Node(input_files[i].c_str(), &encryptor_));
+		merge_heap.Insert(new Node(input_files[i].c_str(), &encryptor_, record_size_, plaintext_size_, mode_));
 		LOG(INFO) << "Merging file ... "<<input_files[i] << " to " << output_file;
 	}
 
@@ -93,10 +88,10 @@ void SortThread::Merge(string *input_files, int nstreams, string output_file){
 
 	while (merge_heap.GetCurrentSize()>1){
 		char *data = merge_heap.Next();
-		string cipher = encryptor_.Encrypt((byte*)data,
-					params_->record_size());
+		string cipher = mode==ENCRYPT ? encryptor_.Encrypt((byte*)data, plaintext_size_)
+				: string(data, record_size_);
 
-		fwrite(cipher.c_str(), 1, this->encrypted_record_size_, file);
+		fwrite(cipher.c_str(), 1, cipher.length(), file);
 		merge_heap.AdjustQueue();
 	}
 	//copy the rest to the file

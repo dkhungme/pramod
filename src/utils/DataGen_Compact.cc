@@ -37,9 +37,10 @@ DataGen_Compact::DataGen_Compact(): DataGen(){
 }
 DataGen_Compact::DataGen(char *buffer, int size){
 	static int starting_ctr=1;
-	memset(buffer,0,size);
+	rng_.GenerateBlock(buffer, size); 
+	memset(buffer,0,sizeof(int));
 	if ((double)rand()%((double)RAND_MAX) >= FLAGS_drop_rate)
-		memcpy(size-sizeof(int),&starting_ctr, sizeof(int));
+		memcpy(buffer,&starting_ctr, sizeof(int));
 	starting_ctr++;
 }
 }

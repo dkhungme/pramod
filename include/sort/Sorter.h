@@ -16,13 +16,16 @@
 using std::string;
 
 /**
- * Carry out external sorting by using multiple SortThread
+ * Carry out external sorting by using multiple SortThread. 
+ * @param record_size: size of elements after the mixer phase 
+ * @param plaintex_size: plaintext portion of each element
+ * @param mode: ENCRYPT or NO_ENCRYPT
  */
 
 namespace sober{
 class Sorter{
 public:
-	Sorter();
+	Sorter(int record_size, int plaintext_size, int mode);
 
 	/**
 	 * Merge-sort all files resulted from the mixing. This assumes that
@@ -36,7 +39,7 @@ public:
 	bool Validate(char *input);
 
 private:
-	int nthreads_;
+	int nthreads_, record_size_, plaintext_size_, mode_;
 	GlobalParams *params_;
 	Encryptor encryptor_;
 	int encrypted_record_size_;

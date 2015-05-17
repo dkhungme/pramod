@@ -26,10 +26,11 @@ namespace sober{
 
 /**
  * A node is defined by the FILE handle to a file on disk.
+ * The mode flag specify if data need to be decrypted.  
  */
 class Node{
 public:
-	Node(string input_file, Encryptor *encryptor);
+	Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, int mode);
 	~Node();
 
 	/**
@@ -56,6 +57,7 @@ public:
 	void DumpToFile(FILE *file);
 
 private:
+	int mode_; //decrypt or not
 	FILE *file_;
 	char *current_record_;
 	char *current_plaintext_;
@@ -65,7 +67,7 @@ private:
 
 class PriorityQueue{
 public:
-	PriorityQueue(int size);
+	PriorityQueue(int size, int record_size, int plaintext_size);
 
 	/**
 	 * push a new node in the queue. Return true if successful.
@@ -95,7 +97,7 @@ public:
 private:
 	int max_size_;
 	int current_size_;
-	int ciphertext_size_;
+	int plaintext_size_;
 	int record_size_; 
 
 	vector<Node*> nodes_; /**< content only start from 1 */
