@@ -23,7 +23,7 @@ namespace sober{
 
 	int empty_cell = 0;
 
-	int B = 4096; 
+	int B = 1024; 
 		// B here is not a size of block in mix-then-sort or M in Goodrich sorting
 			// it is just # items per each I/O unit
 	int item_size = 132;
@@ -274,7 +274,7 @@ namespace sober{
 
 		FILE **fp;
 		// when B increase 2X, depth decrease by X
-		B = 4096; 
+		B = 1024; 
 		
 		long input_size = count_element(input);
 		no_cells = 1 + input_size/B;
