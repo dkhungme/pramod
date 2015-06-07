@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <time.h>
-#include <crypto++/osrng.h>
+//#include <crypto++/osrng.h>
 #include <crypto++/files.h>
 #include <crypto++/gcm.h>
 #include <crypto++/hex.h>
@@ -57,7 +57,7 @@ void DataGen::Generate() {
 
 			//generate record
 			//rng_.GenerateBlock(val, vs);
-			this->DataGen((char*)val, vs);
+			this->GenerateBuffer((char*)val, vs);
 			//init encryption
 			rng_.GenerateBlock(iv, IV_SIZE);
 
@@ -88,7 +88,7 @@ void DataGen::Generate() {
 
 }
 
-DataGen::DataGen(char *buffer, int size){
+void DataGen::GenerateBuffer(char *buffer, int size){
 	rng_.GenerateBlock((byte*)buffer, size);
 }
 }

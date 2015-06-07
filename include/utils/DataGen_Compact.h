@@ -5,8 +5,8 @@
  *      Author: dinhtta
  */
 
-#ifndef DATAGEN_H_
-#define DATAGEN_H_
+#ifndef DATAGEN_COMPACT_H_
+#define DATAGEN_COMPACT_H_
 
 #include <string.h>
 #include "utils/DataGen.h"
@@ -23,7 +23,7 @@ using std::string;
  	class DataGen_Compact: public DataGen{
  	public:
  		DataGen_Compact();
- 		void DataGen(char *buffer, int size);
+ 		void GenerateBuffer(char *buffer, int size);
  	};
  } 
 

@@ -29,19 +29,22 @@ using namespace CryptoPP;
 using namespace std;
 
 DECLARE_string(config_file);
-DEFINE_double(drop_rate, 0.001, "rate of data element marked as deleted");
+DEFINE_double(drop_rate, 0.01, "rate of data element marked as deleted");
 namespace sober{
 
 DataGen_Compact::DataGen_Compact(): DataGen(){
 	srand(time(NULL));
 }
-DataGen_Compact::DataGen(char *buffer, int size){
+void DataGen_Compact::GenerateBuffer(char *buffer, int size){
 	static int starting_ctr=1;
-	rng_.GenerateBlock(buffer, size); 
+	rng_.GenerateBlock((byte*) buffer, size); 
 	memset(buffer,0,sizeof(int));
-	if ((double)rand()%((double)RAND_MAX) >= FLAGS_drop_rate)
+	if ((double)rand()/((double)RAND_MAX) >= FLAGS_drop_rate)
 		memcpy(buffer,&starting_ctr, sizeof(int));
 	starting_ctr++;
+
+	int val; 
+	memcpy(&val, buffer, sizeof(int)); 
 }
 }
 

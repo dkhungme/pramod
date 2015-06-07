@@ -11,33 +11,26 @@
 #include "utils/GlobalParams.h"
 #include "encrypt/Encryptor.h"
 #include <string.h>
-
+#include <iostream>
 /**
  * One thread that does sorting.It provides two main function:
  * (1) sort encrypted block via quick sort
  * (2) k-way merge sort. k is specified as merge-factor in GlobalParams
  *
  */
-
 namespace sober{
 
 /**
  * Comparator function for std::sort() function
  */
-struct comp{
-	int size;
-	comp(int x): size(x){}
 
-	bool operator()(string a, string b){
-		return strncmp(a.c_str(), b.c_str(),size)<0;
-	}
-};
+typedef bool (*comp)(string a, string b); 
 
 class SortThread{
 public:
-	SortThread(int num_records, int record_size, int plaintext_size, int mode):
-		num_records_(num_records), recrod_size_(record_size), 
-		plaintext_size_(plaintext_size), mode_(mode){}
+	SortThread(int num_records, int record_size, int plaintext_size, data_mode_t mode, comp comparator):
+		num_records_(num_records), record_size_(record_size), 
+		plaintext_size_(plaintext_size), mode_(mode), comparator_(comparator){}
 
 	/**
 	 * Internal sort of n blocks, each given in a file.
@@ -54,7 +47,9 @@ public:
 
 private:
 	Encryptor encryptor_;
-	int record_size_, num_records_, plaintext_size_, mode_;
+	int record_size_, num_records_, plaintext_size_;
+	data_mode_t mode_;
+	comp comparator_; 
 };
 
 }

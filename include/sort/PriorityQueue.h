@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <encrypt/Encryptor.h>
 #include <vector>
+#include "utils/GlobalParams.h"
+#include "sort/SortThread.h"
 using std::vector;
 
 /**
@@ -30,7 +32,7 @@ namespace sober{
  */
 class Node{
 public:
-	Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, int mode);
+	Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, data_mode_t mode);
 	~Node();
 
 	/**
@@ -57,7 +59,7 @@ public:
 	void DumpToFile(FILE *file);
 
 private:
-	int mode_; //decrypt or not
+	data_mode_t mode_; //decrypt or not
 	FILE *file_;
 	char *current_record_;
 	char *current_plaintext_;
@@ -67,7 +69,7 @@ private:
 
 class PriorityQueue{
 public:
-	PriorityQueue(int size, int record_size, int plaintext_size);
+	PriorityQueue(int size, int record_size, int plaintext_size, comp comparator);
 
 	/**
 	 * push a new node in the queue. Return true if successful.
@@ -99,6 +101,8 @@ private:
 	int current_size_;
 	int plaintext_size_;
 	int record_size_; 
+
+	comp comparator_; 
 
 	vector<Node*> nodes_; /**< content only start from 1 */
 	Encryptor encryptor_;

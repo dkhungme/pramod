@@ -35,6 +35,8 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
 	int size = num_records_*record_size_;
 	byte *input = (byte*) malloc(size * sizeof(byte));
 
+	GlobalParams *params_ = GlobalParams::Get(); 
+
 	for (int k = 0; k < n; k++) {
 		FILE *file = fopen(input_path[k].c_str(), "r");
 		assert(file);
@@ -44,14 +46,17 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
 		fread(input, 1, size, file);
 
 		vector < string > sort_vector;
-		for (int i = 0; i < num_records_; i++)
+		for (int i = 0; i < num_records_; i++){
+
 			sort_vector.push_back(
 					mode_==ENCRYPT ? encryptor_.Decrypt(input + i * record_size_,
 							record_size_)
-					: string(input+i*record_size_, record_size_));
+					: string((char*)(input+i*record_size_), record_size_));
+			
+		}
 
-		struct comp test(plaintext_size_);
-		sort(sort_vector.begin(), sort_vector.end(), test);
+		//struct comp test(plaintext_size_);
+		sort(sort_vector.begin(), sort_vector.end(), comparator_);
 		fclose(file);
 		for (int i = 0; i < num_records_; i++) {
 			string cipher = mode_==ENCRYPT ? encryptor_.Encrypt((byte*) sort_vector[i].c_str(),
@@ -77,7 +82,7 @@ void SortThread::BlockSort(string *input_path, string *output_path, int n){
  * At the end (queue.size = 1), dump to file
  */
 void SortThread::Merge(string *input_files, int nstreams, string output_file){
-	PriorityQueue merge_heap(GlobalParams::Get()->merge_factor(), record_size_, plaintext_size_);
+	PriorityQueue merge_heap(GlobalParams::Get()->merge_factor(), record_size_, plaintext_size_, comparator_);
 	for (int i=0; i<nstreams; i++){
 		merge_heap.Insert(new Node(input_files[i].c_str(), &encryptor_, record_size_, plaintext_size_, mode_));
 		LOG(INFO) << "Merging file ... "<<input_files[i] << " to " << output_file;
@@ -88,7 +93,7 @@ void SortThread::Merge(string *input_files, int nstreams, string output_file){
 
 	while (merge_heap.GetCurrentSize()>1){
 		char *data = merge_heap.Next();
-		string cipher = mode==ENCRYPT ? encryptor_.Encrypt((byte*)data, plaintext_size_)
+		string cipher = mode_==ENCRYPT ? encryptor_.Encrypt((byte*)data, plaintext_size_)
 				: string(data, record_size_);
 
 		fwrite(cipher.c_str(), 1, cipher.length(), file);

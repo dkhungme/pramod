@@ -1,10 +1,10 @@
 data_path: "/data/sober/data"
 tmp_data_path: "/data/sober"
 key_path: "/data/sober/key"
-num_records: 8388608
+num_records: 524288 
 record_size: 100
 mixnet_rounds: 2
-num_records_per_block:65536
+num_records_per_block:131072
 nthreads: 4
 key_size: 10
 merge_factor: 128
