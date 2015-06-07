@@ -16,9 +16,7 @@
  */
 
 namespace sober{
-class Mixer{
-public:
-	/**
+/**
 	 * application function, to execute at the last mixer round.
 	 * Input is a byte array.
 	 *
@@ -26,9 +24,12 @@ public:
 	 *  [0..plaintext_size): plaintext
 	 *  [plaintext_size, output_size): to be encrypted
 	 */
-	typedef application_fn_t void (*func)(byte * data, int inputsize,
+	typedef void (*application_fn_t)(byte * data, int inputsize,
 							byte **output, int *ouput_size, int *plaintext_size);
 
+
+class Mixer{
+public:
 	Mixer(int id);
 
 	/**
@@ -46,7 +47,7 @@ public:
 	 * Default application function is NULL. If not NULL, then apply the function
 	 * before re-encrypt
 	 */
-	byte* Mix(byte** input, int size, application_fn_t app_func=NULL, int *output_size);
+	byte* Mix(byte** input, int size, application_fn_t app_func=NULL, int *output_size=NULL);
 private:
 	Encryptor encryptor_;
 	int id_; /**< the ID determines which sub-block to pull from input files */

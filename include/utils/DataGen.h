@@ -9,7 +9,10 @@
 #define DATAGEN_H_
 
 #include <string.h>
+#include <crypto++/osrng.h>
+
 using std::string;
+using namespace CryptoPP;
 
 /** Generating random data for sorting
  *  Read settings from GlobalParameters
@@ -19,16 +22,15 @@ using std::string;
  *  Encryption key is store at the key_path
  */
  namespace sober{
- class AutoSeededRandomPool;
 
  	class DataGen{
  	public:
  		DataGen():file_(NULL){}
  		void Generate();
- 		virtual void DataGen(char *buffer, int size);
+ 		virtual void GenerateBuffer(char *buffer, int size);
+ 		AutoSeededRandomPool rng_;
  	private:
  		FILE* file_;
- 		AutoSeededRandomPool rng_;
  	};
  } 
 

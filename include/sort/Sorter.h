@@ -25,7 +25,7 @@ using std::string;
 namespace sober{
 class Sorter{
 public:
-	Sorter(int record_size, int plaintext_size, int mode);
+	Sorter(int record_size, int plaintext_size, data_mode_t mode, comp comparator);
 
 	/**
 	 * Merge-sort all files resulted from the mixing. This assumes that
@@ -36,13 +36,15 @@ public:
 	/**
 	 * Check if the encrypted input file is in sorted order.
 	 */
-	bool Validate(char *input);
+	bool Validate(char *input, comp comparator);
 
 private:
-	int nthreads_, record_size_, plaintext_size_, mode_;
+	int nthreads_, record_size_, plaintext_size_;
+	data_mode_t mode_;
 	GlobalParams *params_;
 	Encryptor encryptor_;
 	int encrypted_record_size_;
+	comp comparator_; 
 };
 }
 #endif /* SORTER_H_ */

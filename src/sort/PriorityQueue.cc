@@ -7,11 +7,10 @@
 
 
 #include <sort/PriorityQueue.h>
-#include <utils/GlobalParams.h>
 #include <glog/logging.h>
 namespace sober{
 
-Node::Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, int mode){
+Node::Node(string input_file, Encryptor *encryptor, int record_size, int plaintext_size, data_mode_t mode){
 	file_ = fopen(input_file.c_str(), "r");
 	current_pos_ = 0;
 	//record_size_ = GlobalParams::Get()->record_size()+GCM_TAG_SIZE+IV_SIZE;
@@ -26,7 +25,7 @@ Node::Node(string input_file, Encryptor *encryptor, int record_size, int plainte
 
 	fread(current_record_, 1, record_size_,file_);
 	if (mode==ENCRYPT){
-		string pt = encryptor_->Decrypt((byte*)current_record_, record_size_)
+		string pt = encryptor_->Decrypt((byte*)current_record_, record_size_);
 		memcpy(current_plaintext_,pt.c_str(),plaintext_size_); 
 	}
 }
@@ -44,7 +43,7 @@ void Node::Next(){
 }
 
 char *Node::GetRecord(){
-	return mode==ENCRYPT ? current_plaintext_: current_record_;
+	return mode_==ENCRYPT ? current_plaintext_: current_record_;
 }
 
 
@@ -68,20 +67,23 @@ Node::~Node(){
 	fclose(file_);
 }
 
-PriorityQueue::PriorityQueue(int size, int record_size, int plaintext_size){
+PriorityQueue::PriorityQueue(int size, int record_size, int plaintext_size, comp comparator){
 	max_size_ = size+1;
 	current_size_ = 0;
 	nodes_.push_back(NULL);
 
 	record_size_ = record_size; 
 	plaintext_size_ = plaintext_size; 
+	comparator_ = comparator; 
 }
+
 bool PriorityQueue::lessThan(Node *a, Node *b){
 	char *data_a = a->GetRecord();
 	char *data_b = b->GetRecord();
 	//string pt_a = encryptor_.Decrypt((byte*)data_a, ciphertext_size_);
 	//string pt_b = encryptor_.Decrypt((byte*)data_b, ciphertext_size_);
-	return strncmp(data_a, data_b, plaintext_size_)<0;
+	//return strncmp(data_a, data_b, plaintext_size_)<0;
+	return comparator_(string(data_a,plaintext_size_), string(data_b, plaintext_size_)); 
 }
 
 void PriorityQueue::upHeap(){

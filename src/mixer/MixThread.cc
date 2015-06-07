@@ -56,7 +56,7 @@ void MixThread::StartMixing(Mixnet *mixnet, int round){
 		byte *mixed_data;
 		if (round < params_->num_rounds()-1)
 				mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
-				ciphertext_block_size_, &mixed_output_size);
+				ciphertext_block_size_, NULL, &mixed_output_size);
 		else
 			mixed_data = mixers_[i-start_idx_]->Mix(&pulled_data,
 							ciphertext_block_size_, mixnet->GetFunction(), &mixed_output_size);

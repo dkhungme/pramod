@@ -19,12 +19,12 @@ using std::deque;
 
 namespace sober{
 
-Sorter::Sorter(int record_size, int plaintext_size, int mode): 
+Sorter::Sorter(int record_size, int plaintext_size, data_mode_t mode, comp comparator): 
 		record_size_(record_size), plaintext_size_(plaintext_size),
-		mode_(mode)
+		mode_(mode), comparator_(comparator)
 {
 	this->params_ = GlobalParams::Get(); 
-	this->nthreads_ = this->params_->threads();
+	this->nthreads_ = this->params_->nthreads();
 }
 
 /**
@@ -67,7 +67,7 @@ void Sorter::MergeSort(){
 	// launch thread doing block sorting
 	for (int i = 0; i < nthreads_ && i<nmixers; i++) {
 		thread_objs.push_back(new SortThread(this->params_->num_records_per_block(), 
-						record_size_, plaintext_size_, mode_));
+						record_size_, plaintext_size_, mode_, comparator_));
 		sort_threads.push_back(
 				thread(&SortThread::BlockSort, thread_objs[i],
 						&inputs[i * nfiles_per_thread],
@@ -147,7 +147,7 @@ void Sorter::MergeSort(){
 	}
 }
 
-bool Sorter::Validate(char *input_path) {
+bool Sorter::Validate(char *input_path, comp comparator) {
 	FILE *file = fopen(input_path, "r");
 	assert(file);
 	int size = this->record_size_ * params_->num_records_per_block();
@@ -157,18 +157,25 @@ bool Sorter::Validate(char *input_path) {
 	fread(input, 1, size, file);
 
 	vector < string > sort_vector;
-	for (int i = 0; i < params_->num_records_per_block(); i++)
+	for (int i = 0; i < params_->num_records_per_block(); i++){
 		sort_vector.push_back( mode_==ENCRYPT ? 
 				encryptor_.Decrypt(input + i * this->record_size_,
 						this->record_size_)
-				: string(input + i*this->record_size_, this->plaintext_size_));
+				: string((char*)(input + i*this->record_size_), this->plaintext_size_));
+		
+	}
 	free(input);
 	for (int i=0; i<params_->num_records_per_block()-1; i++)
-		if (strncmp(sort_vector[i].c_str(), sort_vector[i+1].c_str(), this->plaintext_size_)>0){
+		if (comparator(sort_vector[i], sort_vector[i+1])){
+			fclose(file); 
+			return false; 
+		}
+		
+		/*if (strncmp(sort_vector[i].c_str(), sort_vector[i+1].c_str(), this->plaintext_size_)>0){
 			fclose(file);
 			return false;
-		}
-	fclose(file);
-	return true;
+		}*/
+		fclose(file);
+		return true;
 }
 }
