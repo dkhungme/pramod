@@ -20,12 +20,6 @@
  */
 namespace sober{
 
-/**
- * Comparator function for std::sort() function
- */
-
-typedef bool (*comp)(string a, string b); 
-
 class SortThread{
 public:
 	SortThread(int num_records, int record_size, int plaintext_size, data_mode_t mode, comp comparator):

@@ -21,7 +21,16 @@
 #include <time.h>
 
 /**
- * Implementation of DataGen
+ * Implementation of DataGen for Compact function. 
+ * Each plaintext record is generated as follows:
+ *      + First 4 bytes is an incrementing integer value. 
+ *      + Remaining (record_size-4) bytes are randoms. 
+ *
+ * A total number drop_rate*num_records records will have the first 4 bytes with value 0, 
+ * representing this record to be dropped/removed. 
+ *
+ * Then the entire record is encrypted, as with Sorting application. But after the final mixing round, 
+ * the 4-byte values will be revealed. 
  */
 
 
