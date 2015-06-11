@@ -1,0 +1,24 @@
+[libprotobuf ERROR google/protobuf/text_format.cc:274] Error parsing text-format sober.Config: 11:1: Expected integer.
+Time = 618.203
+I0610 15:00:58.688186  7312 Compact.cc:62] Data generated for Compaction.
+I0610 15:01:00.688381  7312 Compact.cc:65] Start mixing 
+I0610 15:23:59.845325  7335 MixThread.cc:78] IO time = 932.923 mix time = 371.557 over 32 mixers
+I0610 15:24:03.950839  7336 MixThread.cc:78] IO time = 937.364 mix time = 368.12 over 32 mixers
+I0610 15:24:06.760779  7334 MixThread.cc:78] IO time = 927.359 mix time = 371.435 over 32 mixers
+I0610 15:24:08.687577  7337 MixThread.cc:78] IO time = 934.425 mix time = 369.795 over 32 mixers
+I0610 15:24:08.687671  7312 Mixnet.cc:95] Mixing round 0 done in 1387.98
+I0610 15:46:55.807399  7432 MixThread.cc:78] IO time = 937.098 mix time = 346.185 over 32 mixers
+I0610 15:48:07.036537  7433 MixThread.cc:78] IO time = 1024.19 mix time = 346.876 over 32 mixers
+I0610 15:48:08.907790  7435 MixThread.cc:78] IO time = 1011.66 mix time = 347.442 over 32 mixers
+I0610 15:48:22.004155  7434 MixThread.cc:78] IO time = 1028.81 mix time = 346.557 over 32 mixers
+I0610 15:48:22.951795  7312 Mixnet.cc:95] Mixing round 1 done in 1454.26
+I0610 15:48:22.951828  7312 Mixnet.cc:101] Done mixing ...
+I0610 15:48:22.951833  7312 Mixnet.cc:102] Number of encryptions = 519187815
+I0610 15:48:22.951838  7312 Mixnet.cc:103] Number of decryptions = 517442530
+I0610 15:48:22.951843  7312 Compact.cc:69] Mixing successful. 
+I0610 16:03:25.256808  7312 Sorter.cc:83] Finish block sorting ... in 900.298 nmixers = 128 nthreads = 4
+I0610 16:03:25.256856  7312 Sorter.cc:91] Launching thread, sorted file name size = 128
+I0610 16:03:25.256863  7312 Sorter.cc:99] Thread 0 nstreams = 0
+I0610 16:03:25.256886  7312 Sorter.cc:99] Thread 1 nstreams = 0
+I0610 16:03:25.256904  7312 Sorter.cc:99] Thread 2 nstreams = 0
+I0610 16:03:25.256927  7312 Sorter.cc:99] Thread 3 nstreams = 0
