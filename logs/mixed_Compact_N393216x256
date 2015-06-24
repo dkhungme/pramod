@@ -1,7 +1,0 @@
-Time = 236.776
-I0608 09:28:04.777920 28345 Compact.cc:62] Data generated for Compaction.
-I0608 09:28:06.778134 28345 Compact.cc:65] Start mixing 
-compact: src/mixer/MixThread.cc:42: void sober::MixThread::StartMixing(sober::Mixnet*, int): Assertion `output_descriptors[i-start_idx_]' failed.
-compact: src/mixer/MixThread.cc:37: void sober::MixThread::StartMixing(sober::Mixnet*, int): Assertion `input_descriptors[i]' failed.
-compact: src/mixer/MixThread.cc:37: void sober::MixThread::StartMixing(sober::Mixnet*, int): Assertion `input_descriptors[i]' failed.
-compact: src/mixer/MixThread.cc:37: void sober::MixThread::StartMixing(sober::Mixnet*, int): Assertion `input_descriptors[i]' failed.

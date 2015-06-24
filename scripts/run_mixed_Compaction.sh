@@ -15,18 +15,21 @@ for (( i=0; i<4; i++ )); do
 
 		echo Compacting ${M[i]} x ${NBLOCKS[j]}
 
-		sed -e "s/num_records_per_block:.*/num_records_per_block:$INPUTSIZE/g" $CONFIG >tmp1
+		sed -e "s/num_records_per_block:.*/num_records_per_block:${M[i]}/g" $CONFIG >tmp1
 		mv tmp1 $CONFIG
 
 		sed -e "s/num_records:.*/num_records:$INPUTSIZE/g" $CONFIG >tmp1
 		mv tmp1 $CONFIG
+
+		sed -e "s/merge_factor:.*/merge_factor:${NBLOCKS[j]}/g" $CONFIG >tmp1
+		mv tmp1 $CONFIG
 	
 		cd ../
 		rm -rf data/*
-		#COMMAND="build/test/compact> $LOG_DIR/mixed_Compact_N${M[i]}x${NBLOCKS[j]}_B4096 2>&1"
-		#eval $COMMAND
+		COMMAND="build/test/compact> $LOG_DIR/mixed_Compact_N${M[i]}x${NBLOCKS[j]} 2>&1"
+		eval $COMMAND
 
-		sleep 5
+		sleep 5 
 	done
 done
 rm -rf tmp1
