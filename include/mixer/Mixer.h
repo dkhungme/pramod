@@ -10,23 +10,13 @@
 
 #include <stdio.h>
 #include "encrypt/Encryptor.h"
+#include "utils/GlobalParams.h"
 
 /**
  * Mixing functionality, take as input M records to mix.
  */
 
 namespace sober{
-/**
-	 * application function, to execute at the last mixer round.
-	 * Input is a byte array.
-	 *
-	 * Output is another byte array, with output_size elements, in which:
-	 *  [0..plaintext_size): plaintext
-	 *  [plaintext_size, output_size): to be encrypted
-	 */
-	typedef void (*application_fn_t)(byte * data, int inputsize,
-							byte **output, int *ouput_size, int *plaintext_size);
-
 
 class Mixer{
 public:

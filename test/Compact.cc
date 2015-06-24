@@ -20,7 +20,6 @@ DEFINE_string(config_file,"config","Where to read the config");
 
 using namespace std;
 using namespace sober;
-int key_size; 
 
 bool int_comp(string a, string b){
 		int val_a, val_b; 
@@ -28,10 +27,6 @@ bool int_comp(string a, string b){
 		memcpy(&val_b, b.c_str(), sizeof(int)); 
 		return val_a<val_b; 
 	}
-
-bool str_comp(string a, string b){
-	return strncmp(a.c_str(), b.c_str(),key_size); 
-}
 
 bool gt_comp(string a, string b){
 		int val_a, val_b; 
@@ -56,7 +51,6 @@ int main(int argc, char **argv) {
 	
 	//work out the prefix to block that have been mixed.
 	GlobalParams *params = GlobalParams::Get();
-	key_size = params->key_size(); 
 	DataGen_Compact gen;
 	gen.Generate();
 	LOG(INFO) << "Data generated for Compaction." << endl;
