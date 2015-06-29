@@ -39,7 +39,7 @@ public:
 		string Encrypt(byte *input, int size);
 
 		/**
-		 * Decrypt <IV><ciphertext> from plaintext
+		 * Decrypt <IV><ciphertext> from ciphertext
 		 */
 		string Decrypt(byte *input, int size);
 
@@ -47,6 +47,11 @@ public:
 		 * Decrypt, then Encrypt
 		 */
 		string ReEncrypt(byte *input, int size);
+
+		/**
+		 * Hash
+		 */
+		string Hash(byte *input, int size);
 
 		static long num_encrypts, num_decrypts; 
 private:

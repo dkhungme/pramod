@@ -41,6 +41,9 @@ TEST_SORT_OBJ = build/test/Sorter.o
 TEST_COMPACT_SRC = test/Compact.cc
 TEST_COMPACT_OBJ = build/test/Compact.o
 
+TEST_GROUP_SRC = test/Group.cc
+TEST_GROUP_OBJ = build/test/Group.o
+
 TEST_GOODRICH_SRC = test/Goodrich.cc
 TEST_GOODRICH_OBJ = build/test/Goodrich.o
 
@@ -53,6 +56,7 @@ GC_DATA_GEN_EXE = $(BUILD_DIR)/test/Goodrich_Compact_datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
 SORT_EXE = $(BUILD_DIR)/test/sorter
 COMPACT_EXE = $(BUILD_DIR)/test/compact
+GROUP_EXE = $(BUILD_DIR)/test/group
 GOODRICH_EXE = $(BUILD_DIR)/test/goodrich
 GOODRICH_COMPACT_EXE = $(BUILD_DIR)/test/goodrich_compact
 
@@ -64,7 +68,7 @@ PROTOFLAGS = --cpp_out
 
 ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ)
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ)
 
 .DEFAULT_GOAL = compile
 
@@ -77,6 +81,8 @@ test_mix: $(MIXER_EXE)
 test_sort: $(SORT_EXE)
 
 test_compact: $(COMPACT_EXE)
+
+test_group: $(GROUP_EXE)
 
 test_goodrich: $(GOODRICH_EXE)
 
@@ -111,6 +117,10 @@ $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)
 
 $(COMPACT_EXE): $(ALLOBJS) $(TEST_COMPACT_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+$(GROUP_EXE): $(ALLOBJS) $(TEST_GROUP_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)	
+
 
 $(GOODRICH_EXE): $(ALLOBJS) $(TEST_GOODRICH_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)

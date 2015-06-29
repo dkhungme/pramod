@@ -55,6 +55,8 @@ byte* Mixer::Mix(byte** input, int size, application_fn_t app_func, int *output_
 		app_func((byte*)pt.c_str(), pt.length(), &new_pt, &out_size, &new_pt_size);
 
 		new_size = out_size + IV_SIZE + GCM_TAG_SIZE;
+		//outsize is size of the actual value (not counting the tage/key)
+		//new_size is the size of a new ciphertext (e.g in compacting; new_size is size of encrypted value without the tag)
 		free(new_pt); 
 	}
 		//create new array
@@ -67,17 +69,32 @@ byte* Mixer::Mix(byte** input, int size, application_fn_t app_func, int *output_
 		if (app_func==NULL){
 			newcipher = encryptor_.ReEncrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
 			memcpy(output+i*ciphertext_record_size_, newcipher.c_str(), ciphertext_record_size_);
+			// if there is no user defined function, re-encrypt the whole thing
 		}
 		else{
 			string pt = encryptor_.Decrypt((*input)+index[i]*ciphertext_record_size_, ciphertext_record_size_);
+			//pt is plaintext
 			byte *new_pt;
+			// new_pt is the "key" part of the record left in plaintext
 			int output_size, new_pt_size;
 			app_func((byte*)pt.c_str(), pt.length(), &new_pt, &output_size, &new_pt_size);
+			/*
+			copy the entire plain record (key+value) to new_pt
+			outputsize's value is the length of new_pt
+			new_pt_size is a length of "key"
+			"output_size-new_pt_size" is length of "value"
+			*/
 			string ct = encryptor_.Encrypt(new_pt+new_pt_size, output_size-new_pt_size);
+			/*
+			only encrypt the "value" part of the record, which is starting from "new_pt+new_pt_size".
+			*/
 			
 			memcpy(output+i*new_size, new_pt, new_pt_size);
+			//write the first "new_pt_size" bytes of new_pt. these bytes are "key" part of the records
 			memcpy(output+i*new_size+new_pt_size, ct.c_str(), ct.length());
+			// append encrypted "value", which is ct
 			free(new_pt); 
+			
 			
 		}
 	}

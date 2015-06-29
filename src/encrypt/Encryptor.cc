@@ -15,65 +15,82 @@
 #include <iostream>
 #include <stdlib.h>
 
-namespace sober{
+ namespace sober{
 
-Encryptor::Encryptor(){
-	GlobalParams *params = GlobalParams::Get();
-	FileSource(params->key_path().c_str(), true, new StringSink(enc_key_));
+ 	Encryptor::Encryptor(){
+ 		GlobalParams *params = GlobalParams::Get();
+ 		FileSource(params->key_path().c_str(), true, new StringSink(enc_key_));
 
-}
+ 	}
 
-long Encryptor::num_encrypts = 0; 
-long Encryptor::num_decrypts = 0; 
-string Encryptor::Encrypt(byte *input, int size){
+ 	long Encryptor::num_encrypts = 0; 
+ 	long Encryptor::num_decrypts = 0; 
+ 	string Encryptor::Encrypt(byte *input, int size){
 	//init IV
-	byte iv[IV_SIZE];
-	rng_.GenerateBlock(iv, IV_SIZE);
-	string iv_string((char*)iv, IV_SIZE);
+ 		byte iv[IV_SIZE];
+ 		rng_.GenerateBlock(iv, IV_SIZE);
+ 		string iv_string((char*)iv, IV_SIZE);
 
-	string cipher;
+ 		string cipher;
 	//set key + value
-	encryption_.SetKeyWithIV((byte*)enc_key_.c_str(), AES_BLOCK_SIZE, iv, IV_SIZE);
+ 		encryption_.SetKeyWithIV((byte*)enc_key_.c_str(), AES_BLOCK_SIZE, iv, IV_SIZE);
 	//init AuthenticatedEncryption
-	AuthenticatedEncryptionFilter authen_enc(encryption_, new StringSink(cipher));
-	authen_enc.ChannelPut(DEFAULT_CHANNEL, input, size);
-	authen_enc.ChannelMessageEnd(DEFAULT_CHANNEL);
-	iv_string+=cipher;
+ 		AuthenticatedEncryptionFilter authen_enc(encryption_, new StringSink(cipher));
+ 		authen_enc.ChannelPut(DEFAULT_CHANNEL, input, size);
+ 		authen_enc.ChannelMessageEnd(DEFAULT_CHANNEL);
+ 		iv_string+=cipher;
 
-	Encryptor::num_encrypts++; 
+ 		Encryptor::num_encrypts++; 
 
-	return iv_string;
-}
+ 		return iv_string;
+ 	}
 
-string Encryptor::Decrypt(byte *input, int size) {
+ 	string Encryptor::Decrypt(byte *input, int size) {
 	//extract IV
-	string decrypt;
-	try {
-		decryption_.SetKeyWithIV((byte*) enc_key_.c_str(), AES_BLOCK_SIZE,
-				input, IV_SIZE);
-		AuthenticatedDecryptionFilter authen_dec(decryption_,
-				new StringSink(decrypt));
+ 		string decrypt;
+ 		try {
+ 			decryption_.SetKeyWithIV((byte*) enc_key_.c_str(), AES_BLOCK_SIZE,
+ 				input, IV_SIZE);
+ 			AuthenticatedDecryptionFilter authen_dec(decryption_,
+ 				new StringSink(decrypt));
 
-		authen_dec.ChannelPut(DEFAULT_CHANNEL, input + IV_SIZE,
-				size - (IV_SIZE));
-		authen_dec.ChannelMessageEnd(DEFAULT_CHANNEL);
+ 			authen_dec.ChannelPut(DEFAULT_CHANNEL, input + IV_SIZE,
+ 				size - (IV_SIZE));
+ 			authen_dec.ChannelMessageEnd(DEFAULT_CHANNEL);
 
-	} catch (Exception e) {
-		LOG(ERROR) << "Error ... size = " << size << e.what();
-		exit(1);
-	}
+ 		} catch (Exception e) {
+ 			LOG(ERROR) << "Error ... size = " << size << e.what();
+ 			exit(1);
+ 		}
 
-	Encryptor::num_decrypts++; 
+ 		Encryptor::num_decrypts++; 
 
-	return decrypt;
-}
+ 		return decrypt;
+ 	}
 
-string Encryptor::ReEncrypt(byte *input, int size){
-	string pt = this->Decrypt(input, size);
-	string ree =  this->Encrypt((byte*)pt.c_str(), pt.length());
-	return ree;
-}
-}
+ 	string Encryptor::ReEncrypt(byte *input, int size){
+ 		string pt = this->Decrypt(input, size);
+ 		string ree =  this->Encrypt((byte*)pt.c_str(), pt.length());
+ 		return ree;
+ 	}
+
+
+
+ 	string Encryptor::Hash(byte *input, int size){
+ 		CryptoPP::SHA256 hash;
+ 		byte digest[ CryptoPP::SHA256::DIGESTSIZE ];
+ 		hash.CalculateDigest( digest, input, size);
+
+ 		CryptoPP::HexEncoder encoder;
+ 		string output;
+ 		encoder.Attach( new CryptoPP::StringSink( output ) );
+ 		encoder.Put( digest, sizeof(digest) );
+ 		encoder.MessageEnd();
+
+ 		return output;
+
+ 	}
+ }
 
 
 

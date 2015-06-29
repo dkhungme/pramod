@@ -38,7 +38,7 @@ using namespace CryptoPP;
 using namespace std;
 
 DECLARE_string(config_file);
-DEFINE_double(drop_rate, 0.01, "rate of data element marked as deleted");
+DEFINE_double(drop_rate, 0.1, "rate of data element marked as deleted");
 namespace sober{
 
 DataGen_Compact::DataGen_Compact(): DataGen(){
