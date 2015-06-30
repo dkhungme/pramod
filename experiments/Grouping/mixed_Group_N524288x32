@@ -1,0 +1,18 @@
+Time = 37.0209
+I0629 18:37:38.883599 19673 Group.cc:92] Data generated for Grouping.
+I0629 18:37:40.883806 19673 Group.cc:95] Start mixing 
+I0629 18:38:15.710906 19679 MixThread.cc:78] IO time = 9.38297 mix time = 23.9579 over 8 mixers
+I0629 18:38:15.821182 19678 MixThread.cc:78] IO time = 10.7586 mix time = 23.8743 over 8 mixers
+I0629 18:38:16.349720 19677 MixThread.cc:78] IO time = 10.9666 mix time = 23.9424 over 8 mixers
+I0629 18:38:16.544121 19676 MixThread.cc:78] IO time = 10.4858 mix time = 24.0232 over 8 mixers
+I0629 18:38:16.544230 19673 Mixnet.cc:95] Mixing round 0 done in 35.6588
+I0629 18:40:18.444381 19687 MixThread.cc:78] IO time = 24.7027 mix time = 96.9276 over 8 mixers
+I0629 18:40:33.346395 19689 MixThread.cc:78] IO time = 38.8992 mix time = 97.2469 over 8 mixers
+I0629 18:40:33.960369 19688 MixThread.cc:78] IO time = 38.7071 mix time = 98.1012 over 8 mixers
+I0629 18:40:34.835314 19690 MixThread.cc:78] IO time = 39.9762 mix time = 97.4572 over 8 mixers
+I0629 18:40:35.107290 19673 Mixnet.cc:95] Mixing round 1 done in 138.563
+I0629 18:40:35.107322 19673 Mixnet.cc:101] Done mixing ...
+I0629 18:40:35.107327 19673 Mixnet.cc:102] Number of encryptions = 32188464
+I0629 18:40:35.107333 19673 Mixnet.cc:103] Number of decryptions = 32202372
+I0629 18:40:35.107338 19673 Group.cc:99] Finish mixing in .. 174.224
+I0629 18:41:12.845118 19673 Group.cc:129] Finish linear scan in .. 35.7376

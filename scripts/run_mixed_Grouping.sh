@@ -13,7 +13,7 @@ for (( i=0; i<4; i++ )); do
 
 		let INPUTSIZE=${M[i]}*${NBLOCKS[j]}
 
-		echo Compacting ${M[i]} x ${NBLOCKS[j]}
+		echo Grouping ${M[i]} x ${NBLOCKS[j]}
 
 		sed -e "s/num_records_per_block:.*/num_records_per_block:${M[i]}/g" $CONFIG >tmp1
 		mv tmp1 $CONFIG

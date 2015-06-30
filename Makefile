@@ -44,6 +44,9 @@ TEST_COMPACT_OBJ = build/test/Compact.o
 TEST_GROUP_SRC = test/Group.cc
 TEST_GROUP_OBJ = build/test/Group.o
 
+TEST_ENCRYPT_TIME_SRC = test/encrypt_time.cc
+TEST_ENCRYPT_TIME_OBJ = build/test/encrypt_time.o
+
 TEST_GOODRICH_SRC = test/Goodrich.cc
 TEST_GOODRICH_OBJ = build/test/Goodrich.o
 
@@ -57,6 +60,7 @@ MIXER_EXE = $(BUILD_DIR)/test/mixer
 SORT_EXE = $(BUILD_DIR)/test/sorter
 COMPACT_EXE = $(BUILD_DIR)/test/compact
 GROUP_EXE = $(BUILD_DIR)/test/group
+ENCRYPT_TIME_EXE = $(BUILD_DIR)/test/encrypt_time
 GOODRICH_EXE = $(BUILD_DIR)/test/goodrich
 GOODRICH_COMPACT_EXE = $(BUILD_DIR)/test/goodrich_compact
 
@@ -68,7 +72,7 @@ PROTOFLAGS = --cpp_out
 
 ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ)
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ) $(TEST_ENCRYPT_TIME_OBJ) 
 
 .DEFAULT_GOAL = compile
 
@@ -83,6 +87,8 @@ test_sort: $(SORT_EXE)
 test_compact: $(COMPACT_EXE)
 
 test_group: $(GROUP_EXE)
+
+test_encrypt_time: $(ENCRYPT_TIME_EXE)
 
 test_goodrich: $(GOODRICH_EXE)
 
@@ -119,6 +125,9 @@ $(COMPACT_EXE): $(ALLOBJS) $(TEST_COMPACT_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(GROUP_EXE): $(ALLOBJS) $(TEST_GROUP_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+$(ENCRYPT_TIME_EXE): $(ALLOBJS) $(TEST_ENCRYPT_TIME_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 
