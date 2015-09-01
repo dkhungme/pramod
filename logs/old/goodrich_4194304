@@ -1,0 +1,11 @@
+I0416 11:11:10.221940 18918 Goodrich.cc:40] Sorting /data/sober/data_0
+I0416 11:12:39.252017 18918 Goodrich.cc:49] Finish Goodrich sort in .. 89.03
+I0416 11:12:39.252084 18918 Goodrich.cc:50] #encrypts: 16777216  #decrypts: 16777216
+I0416 11:12:50.026753 18918 Goodrich.cc:54]   Order? 1
+2
+HEY, IT'S DONE
+sorted to R with 4194304 items
+-internal Sort invoked 73 times
+-internal Merge invoked 17 times
+-sliding Merge invoked 1 times
+-file opened 39 times

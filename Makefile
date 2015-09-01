@@ -22,6 +22,10 @@ MIX_SRCS = $(wildcard src/mixer/*.cc)
 MIX_OBJS = $(addprefix $(BUILD_DIR)/, $(MIX_SRCS:%.cc=%.o))
 -include $(MIX_OBJS:%o=%.d)
 
+SCRAMBLER_SRCS = $(wildcard src/scrambler/*.cc)
+SCRAMBLER_OBJS = $(addprefix $(BUILD_DIR)/, $(SCRAMBLER_SRCS:%.cc=%.o))
+-include $(MIX_OBJS:%o=%.d)
+
 SORT_SRCS = $(wildcard src/sort/*.cc)
 SORT_OBJS = $(addprefix $(BUILD_DIR)/, $(SORT_SRCS:%.cc=%.o))
 -include $(SORT_OBJS:%.o=%.d)
@@ -34,6 +38,9 @@ TEST_GC_GEN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_GC_GEN_SRC:%.cc=%.o))
 
 TEST_MIX_SRC = $(wildcard test/Mixnet.cc)
 TEST_MIX_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_MIX_SRC:%.cc=%.o))
+
+TEST_SCRAMBLER_SRC = $(wildcard test/Melbourne.cc)
+TEST_SCRAMBLER_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_SCRAMBLER_SRC:%.cc=%.o))
 
 TEST_SORT_SRC = test/Sorter.cc
 TEST_SORT_OBJ = build/test/Sorter.o
@@ -57,6 +64,7 @@ TEST_GOODRICH_COMPACT_OBJ = build/test/Goodrich_Compact.o
 DATA_GEN_EXE = $(BUILD_DIR)/test/datagen
 GC_DATA_GEN_EXE = $(BUILD_DIR)/test/Goodrich_Compact_datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
+SCRAMBLER_EXE = $(BUILD_DIR)/test/melbourne
 SORT_EXE = $(BUILD_DIR)/test/sorter
 COMPACT_EXE = $(BUILD_DIR)/test/compact
 GROUP_EXE = $(BUILD_DIR)/test/group
@@ -70,9 +78,9 @@ LDFLAGS = -lprotobuf -lglog -lgflags -lcrypto++ -lrt
 PROTOC = protoc
 PROTOFLAGS = --cpp_out
 
-ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS)
+ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS) $(SCRAMBLER_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ) $(TEST_ENCRYPT_TIME_OBJ) 
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SCRAMBLER_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ) $(TEST_ENCRYPT_TIME_OBJ) 
 
 .DEFAULT_GOAL = compile
 
@@ -81,6 +89,8 @@ test_gen: $(DATA_GEN_EXE)
 test_gc_gen: $(GC_DATA_GEN_EXE)
 
 test_mix: $(MIXER_EXE)
+
+test_scrambler: $(SCRAMBLER_EXE)
 
 test_sort: $(SORT_EXE)
 
@@ -116,6 +126,10 @@ $(GC_DATA_GEN_EXE): $(ALLOBJS) $(TEST_GC_GEN_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(MIXER_EXE): $(ALLOBJS) $(TEST_MIX_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)	
+
+
+$(SCRAMBLER_EXE): $(ALLOBJS) $(TEST_SCRAMBLER_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
 $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)

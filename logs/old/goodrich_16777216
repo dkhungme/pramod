@@ -1,0 +1,11 @@
+I0416 11:21:25.399905 19098 Goodrich.cc:40] Sorting /data/sober/data_0
+I0416 11:28:56.215374 19098 Goodrich.cc:49] Finish Goodrich sort in .. 450.815
+I0416 11:28:56.215445 19098 Goodrich.cc:50] #encrypts: 83886080  #decrypts: 83886080
+E0416 11:28:56.215706 19098 Encryptor.cc:62] Error ... size = 132AES/GCM: ProcessData was called before setting key and IV
+2
+HEY, IT'S DONE
+sorted to R with 16777216 items
+-internal Sort invoked 1057 times
+-internal Merge invoked 113 times
+-sliding Merge invoked 10 times
+-file opened 114 times

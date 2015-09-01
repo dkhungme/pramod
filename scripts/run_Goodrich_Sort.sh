@@ -7,18 +7,18 @@ mkdir -p ../$LOG_DIR
 
 for (( i=4; i>-1; i-- )); do
 	cd $DIR
-	echo Compacting ${ITEMS[i]}
+	echo Sorting ${ITEMS[i]}
 
 	sed -e "s/num_records:.*/num_records:${ITEMS[i]}/g" $CONFIG > tmp1
-	sed -e "s/num_records_per_block:.*/num_records_per_block:${ITEMS[i]}/g" tmp1 >tmp2
+        sed -e "s/num_records_per_block:.*/num_records_per_block:${ITEMS[i]}/g" tmp1 >tmp2
 	
-        mv tmp2 $CONFIG	
+        mv tmp2 $CONFIG
 	
 	cd ../
 	rm -rf data/*
-	build/test/Goodrich_Compact_datagen
+	build/test/datagen
 	sleep 10
-	COMMAND="build/test/goodrich_compact> $LOG_DIR/goodrich_Compact_${ITEMS[i]} 2>&1"
+	COMMAND="build/test/goodrich --msize=524288> $LOG_DIR/goodrich_Compact_${ITEMS[i]} 2>&1"
 	eval $COMMAND
 
 	sleep 5
