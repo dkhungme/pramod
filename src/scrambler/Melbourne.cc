@@ -17,6 +17,10 @@ using namespace std;
 
 namespace sober{
 
+	double reencrypt = 0;
+	double reencrypt1 = 0;
+	double reencrypt2 = 0;
+
 
 
 	Melbourne::Melbourne (Encryptor *encryptor_object, int cipher_record_size, int plain_record_size){
@@ -129,6 +133,7 @@ namespace sober{
 				c = myvector[i*buckets+j]/chunk_size;
 				fread(temp,1,cipher_item_size, fpi);
 				segments[c].append(encryptor->ReEncrypt((byte *)temp, cipher_item_size));
+				reencrypt++;
 				
 
 			}
@@ -142,9 +147,10 @@ namespace sober{
 					return 0;
 				}
 				no_dummy1 = max1 - real_element;
-			
+
 				for (k=0; k<no_dummy1; k++){
 					segments[j].append(encryptor->Encrypt((byte *)dummy, plain_item_size));
+					reencrypt++;
 				}
 
 				fwrite(segments[j].c_str(), 1, segments[j].size(), fpt1);
@@ -153,8 +159,8 @@ namespace sober{
 			}
 		}
 
-
-		cout << "done with 1st distribution" << "\n";
+		reencrypt1 = reencrypt;
+		cout << "\t" << reencrypt1 << "  reencryptions in 1st distribution" << "\n";
 
 		
 		fseek(fpt1, 0, SEEK_SET);	
@@ -162,78 +168,94 @@ namespace sober{
 		char temp_memory [max1*cipher_item_size];
 
 		string s_plaintext;
-		
+		int d1 = 0;
+		int d2 = 0;
 
 		char *memory2;
 		memory2 = (char *) malloc(cipher_item_size*p1*element_per_bucket);
 		//myvector = random_permutation(inputsize); 
 		for (i=0; i<chunks; i++){
 			for (j=0; j<buckets_per_chunk; j++){
-				for (k=0; k<chunks; k++){
-					fseek(fpt1, (j*buckets_per_chunk + k*chunks + i*max1)*cipher_item_size  ,SEEK_SET);
-					for (o=0; o<max1; o++){
-						c = myvector[i*buckets+k]/chunk_size;
-						fread(temp, 1, cipher_item_size, fpt1);
-						s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
+				for (k=0; k<p1*element_per_bucket; k++){
+					//fseek(fpt1, (j*buckets_per_chunk + k*chunks + i*max1)*cipher_item_size  ,SEEK_SET);
+					//for (o=0; o<max1; o++){
+					c = myvector[i*buckets+k]/chunk_size;
+					fread(temp, 1, cipher_item_size, fpt1);
+					s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
 
-						if (s_plaintext.compare(string(dummy))!=0){
-							segments[c].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
+					if (strcmp(dummy, s_plaintext.c_str())!=0){
+						segments[c].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
+						reencrypt++;
 
-						}
 					}
-
-					for (k=0; k<chunks; k++){
-						real_element = segments[k].size()/cipher_item_size;
-
-						if (real_element>max2){
-							printf("%s\n", "FAIL2");
-							cout << real_element << ">" << max2 << "\n";
-							return 0;
-						}
-						no_dummy2 = max2 - real_element;
-
-
-						for (o=0; o<no_dummy2; o++){
-							segments[k].append(encryptor->Encrypt((byte *)dummy, plain_item_size ));	
-						}
-
-						fwrite(segments[k].c_str(), 1, segments[k].size(), fpt2);
-						segments[k] = "";
-					}
+					
 				}
+
+				for (k=0; k<chunks; k++){
+					real_element = segments[k].size()/cipher_item_size;
+
+					if (real_element>max2){
+						printf("%s\n", "FAIL2");
+						cout << real_element << ">" << max2 << "\n";
+						return 0;
+					}
+					no_dummy2 = max2 - real_element;
+
+
+					for (o=0; o<no_dummy2; o++){
+						segments[k].append(encryptor->Encrypt((byte *)dummy, plain_item_size ));	
+						reencrypt++;
+					}
+
+					fwrite(segments[k].c_str(), 1, segments[k].size(), fpt2);
+					segments[k] = "";
+				}
+				
 			}
 		}
-
-		cout << "done with 2nd distribution" << "\n";
+		reencrypt2 = reencrypt - reencrypt1;
+		cout << "\t" << reencrypt2 << "  reencryptions in 2st distribution" << "\n";
+		
 
 		
 		myvector = random_permutation(inputsize); 
+		fseek(fpt1, 0, SEEK_SET);	
 		fseek(fpt2, 0, SEEK_SET);	
 		fseek(fpo, 0, SEEK_SET);	
 
 		for (i = 0; i<buckets; i++){
-			for (j=0; j<buckets_per_chunk; j++){
-				fseek(fpt2, (j*buckets_per_chunk + i*max2)*cipher_item_size , SEEK_SET);
-				for (o=0; o<max2; o++){
-					fread(temp, 1, cipher_item_size, fpt1);
-					s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
-					c = myvector[i*buckets+k]/chunk_size;
+			//fseek(fpt2, i*p2*element_per_bucket*cipher_item_size , SEEK_SET);
+			for (o=0; o<p2*element_per_bucket; o++){
+				fread(temp, 1, cipher_item_size, fpt2);
+				s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
+				c = myvector[i*buckets+k]/chunk_size;
 
-					if (s_plaintext.compare(string(dummy))!=0){
-						segments[0].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
-					}
+				if (strcmp(dummy, s_plaintext.c_str())!=0){
+					segments[0].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
+					reencrypt++;
 				}
+				
 			}
-
-
 			fwrite(segments[0].c_str(), 1, segments[0].size(), fpo);
 			segments[0] ="";
 		}
+
+		cout << "\t"  <<reencrypt - reencrypt1 - reencrypt2 << "  reencryptions in cleaning up" << "\n";
+
+
+		
+
+
+
+
+
+
 		fclose(fpt1);
 		fclose(fpt2);
 		fclose(fpo);
 		fclose(fpi);
-
+		cout << reencrypt << "  re-encryptions \n";
+		
 
 	}
 }
