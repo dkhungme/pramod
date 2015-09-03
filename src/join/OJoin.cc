@@ -75,7 +75,7 @@ namespace sober{
 				curr = curr - weights[i];
 			}
 			else{
-				counter[string(record)] = weights[i];
+				counter[plaintext] = weights[i];
 			}
 			
 			while(curr > 0){
