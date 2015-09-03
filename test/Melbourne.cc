@@ -44,7 +44,7 @@ int main(int argc, char **argv){
 	Encryptor encryptor; 
 	Melbourne Melbourne(&encryptor,ciphertext_size,params->record_size());
 	
-	Melbourne.Scramble(input_file,T1, T2, O, 3,4);
+	Melbourne.Scramble(input_file,T1, T2, O, 2,3);
 	
 	cout << "Scramble in  (s)" << (Now()-start) <<endl;
 	unlink(T1);

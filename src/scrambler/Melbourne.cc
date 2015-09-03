@@ -108,6 +108,7 @@ namespace sober{
 
 
 		std::vector<int> myvector = random_permutation(inputsize);
+		std::vector<int> myvector2 = random_permutation(inputsize);
 
 		char *memory;
 		memory = (char *) malloc(cipher_item_size*element_per_bucket);
@@ -126,11 +127,14 @@ namespace sober{
 
 		fseek (fpi , 0 , SEEK_SET );
 		fseek(fpt1, 0, SEEK_SET);	
+		int z = 0;
 		for (i = 0; i<buckets; i++){
 			fseek (fpi , i*cipher_item_size*element_per_bucket , SEEK_SET );
 			
 			for (j=0; j<element_per_bucket; j++){
 				c = myvector[i*buckets+j]/chunk_size;
+				myvector2[z] = myvector[i];
+				z++;
 				fread(temp,1,cipher_item_size, fpi);
 				segments[c].append(encryptor->ReEncrypt((byte *)temp, cipher_item_size));
 				reencrypt++;
@@ -177,16 +181,18 @@ namespace sober{
 		for (i=0; i<chunks; i++){
 			for (j=0; j<buckets_per_chunk; j++){
 				for (k=0; k<p1*element_per_bucket; k++){
-					//fseek(fpt1, (j*buckets_per_chunk + k*chunks + i*max1)*cipher_item_size  ,SEEK_SET);
-					//for (o=0; o<max1; o++){
-					c = myvector[i*buckets+k]/chunk_size;
-					fread(temp, 1, cipher_item_size, fpt1);
-					s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
+				//for (k=0; k<p1*chunks; k++){
+				//	fseek(fpt1, (j*buckets_per_chunk + k*chunks + i)*cipher_item_size  ,SEEK_SET);
+				//	for (o=0; o<max1; o++){
+						c = myvector[i*buckets+k]/chunk_size;
+						fread(temp, 1, cipher_item_size, fpt1);
+						s_plaintext = encryptor->Decrypt((byte *)temp, cipher_item_size);
 
-					if (strcmp(dummy, s_plaintext.c_str())!=0){
-						segments[c].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
-						reencrypt++;
+						if (strcmp(dummy, s_plaintext.c_str())!=0){
+							segments[c].append(encryptor->Encrypt((byte *)s_plaintext.c_str(), plain_item_size));
+							reencrypt++;
 
+				//		}
 					}
 					
 				}
