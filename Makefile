@@ -30,6 +30,11 @@ JOIN_SRCS = $(wildcard src/join/*.cc)
 JOIN_OBJS = $(addprefix $(BUILD_DIR)/, $(JOIN_SRCS:%.cc=%.o))
 -include $(MIX_OBJS:%o=%.d)
 
+AGGREGATE_SRCS = $(wildcard src/aggregate/*.cc)
+AGGREGATE_OBJS = $(addprefix $(BUILD_DIR)/, $(AGGREGATE_SRCS:%.cc=%.o))
+-include $(MIX_OBJS:%o=%.d)
+
+
 SORT_SRCS = $(wildcard src/sort/*.cc)
 SORT_OBJS = $(addprefix $(BUILD_DIR)/, $(SORT_SRCS:%.cc=%.o))
 -include $(SORT_OBJS:%.o=%.d)
@@ -49,6 +54,8 @@ TEST_SCRAMBLER_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_SCRAMBLER_SRC:%.cc=%.o))
 TEST_JOIN_SRC = $(wildcard test/Ojoin.cc)
 TEST_JOIN_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_JOIN_SRC:%.cc=%.o))
 
+TEST_AGGREGATE_SRC = $(wildcard test/Aggregate.cc)
+TEST_AGGREGATE_OBJ = $(addprefix $(BUILD_DIR)/, $(TEST_AGGREGATE_SRC:%.cc=%.o))
 
 TEST_SORT_SRC = test/Sorter.cc
 TEST_SORT_OBJ = build/test/Sorter.o
@@ -74,6 +81,7 @@ GC_DATA_GEN_EXE = $(BUILD_DIR)/test/Goodrich_Compact_datagen
 MIXER_EXE = $(BUILD_DIR)/test/mixer
 SCRAMBLER_EXE = $(BUILD_DIR)/test/melbourne
 JOIN_EXE = $(BUILD_DIR)/test/join
+AGGREGATE_EXE = $(BUILD_DIR)/test/aggregate
 SORT_EXE = $(BUILD_DIR)/test/sorter
 COMPACT_EXE = $(BUILD_DIR)/test/compact
 GROUP_EXE = $(BUILD_DIR)/test/group
@@ -87,9 +95,9 @@ LDFLAGS = -lprotobuf -lglog -lgflags -lcrypto++ -lrt
 PROTOC = protoc
 PROTOFLAGS = --cpp_out
 
-ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS) $(SCRAMBLER_OBJS) $(JOIN_OBJS)
+ALLOBJS = $(PROTO_OBJS) $(UTILS_OBJS) $(ENC_OBJS) $(MIX_OBJS) $(SORT_OBJS) $(SCRAMBLER_OBJS) $(JOIN_OBJS) $(AGGREGATE_OBJS)
 
-TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SCRAMBLER_OBJ) $(TEST_JOIN_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ) $(TEST_ENCRYPT_TIME_OBJ) 
+TESTOBJS = $(TEST_GEN_OBJ) $(TEST_MIX_OBJ) $(TEST_SCRAMBLER_OBJ) $(TEST_JOIN_OBJ) $(TEST_SORT_OBJ) $(TEST_GOODRICH_OBJ) $(TEST_GOODRICH_COMPACT_OBJ) $(TEST_GC_GEN_OBJ) $(TEST_COMPACT_OBJ) $(TEST_GROUP_OBJ) $(TEST_ENCRYPT_TIME_OBJ) $(TEST_AGGREGATE_OBJ)
 
 .DEFAULT_GOAL = compile
 
@@ -102,6 +110,8 @@ test_mix: $(MIXER_EXE)
 test_scrambler: $(SCRAMBLER_EXE)
 
 test_join: $(JOIN_EXE)
+
+test_aggregate: $(AGGREGATE_EXE)
 
 test_sort: $(SORT_EXE)
 
@@ -145,7 +155,11 @@ $(SCRAMBLER_EXE): $(ALLOBJS) $(TEST_SCRAMBLER_OBJ)
 
 
 $(JOIN_EXE): $(ALLOBJS) $(TEST_JOIN_OBJ)
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+$(AGGREGATE_EXE): $(ALLOBJS) $(TEST_AGGREGATE_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
+	
 
 
 $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)
