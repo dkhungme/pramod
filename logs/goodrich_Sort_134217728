@@ -1,0 +1,13 @@
+I0904 18:17:06.121490  3498 Goodrich.cc:33] Sorting data/data_0
+I0904 22:04:33.399000  3498 Goodrich.cc:53] Finish in .. 13647.3
+I0904 22:04:33.571172  3498 Goodrich.cc:54] Number of encryptions = 2013265920
+I0904 22:04:33.571203  3498 Goodrich.cc:55] Number of decryptions = 2013265920
+4
+HEY, IT'S DONE
+sorted to R with 134217728 items
+-internal Sort invoked 341 times
+-internal Merge invoked 1845 times
+-sliding Merge invoked 440 times
+-file opened 1562 times
+#encryption: 2013265920 
+#decryption: 2013265920 
