@@ -25,11 +25,7 @@ int main(int argc, char **argv){
 	sprintf(O, "%s_output", params->data_path().c_str());
 
 
-	sober::DataGen gen;
-	gen.Generate();
-	cout << "Data generated." << endl;
-	sleep(2);
-
+	
 	double start = Now();
 
 	Encryptor encryptor; 
@@ -45,11 +41,11 @@ int main(int argc, char **argv){
 	// double num_r = atof(num_records);
 	for (int i = num_r; i>0; i--){
 		if (i>(2*num_r/3))
-			weights.push_back(4);
-		else if (i>(num_r/3))
 			weights.push_back(3);
-		else 
+		else if (i>(num_r/3))
 			weights.push_back(2);
+		else 
+			weights.push_back(1);
 
 	}
 

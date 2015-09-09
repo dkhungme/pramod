@@ -17,9 +17,6 @@ using namespace std;
 
 namespace sober{
 
-	double reencrypt = 0;
-	double reencrypt1 = 0;
-	double reencrypt2 = 0;
 
 
 

@@ -28,10 +28,10 @@ int main(int argc, char **argv){
  	char O[256];
  	sprintf(O, "%s_output", params->data_path().c_str());
 
-	sober::DataGen gen;
-	gen.Generate();
-	cout << "Data generated." << endl;
-	sleep(2);
+	//sober::DataGen gen;
+	//gen.Generate();
+	//cout << "Data generated." << endl;
+	//sleep(2);
 
 	double start = Now();
 
