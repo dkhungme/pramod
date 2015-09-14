@@ -18,6 +18,12 @@ int main(int argc, char **argv){
 	GlobalParams * params = GlobalParams::Get();
 	int ciphertext_size = params->record_size()+GCM_TAG_SIZE+IV_SIZE;
 
+	sober::DataGen gen;
+	gen.Generate();
+	cout << "Data generated." << endl;
+	sleep(2);
+
+
 	char input_file[256];
 	sprintf(input_file, "%s_0", params->data_path().c_str());
 
@@ -31,23 +37,21 @@ int main(int argc, char **argv){
 	Encryptor encryptor; 
 	OJoin OJoin(&encryptor,ciphertext_size,params->record_size());
 
+
 	FILE *input, *output;
 	input = fopen(input_file, "r+");
 	output = fopen(O, "w+");
 
 	vector <int> weights;
 
+
+
 	int num_r = params->num_records();
 	// double num_r = atof(num_records);
 	for (int i = num_r; i>0; i--){
-		if (i>(2*num_r/3))
-			weights.push_back(3);
-		else if (i>(num_r/3))
-			weights.push_back(2);
-		else 
-			weights.push_back(1);
-
+		weights.push_back(2);
 	}
+	cout << "done with weight" << "\n";
 
 	OJoin.ob_Expand(input, output, weights);
 

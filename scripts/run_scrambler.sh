@@ -1,10 +1,10 @@
-ITEMS=(536870912 268435456 134217728 67108864 8388608)
+ITEMS=(268435456 268435456 268435456)
 DIR=`pwd`
 CONFIG=../config
 LOG_DIR=logs
 mkdir -p ../$LOG_DIR
 
-for (( i=4; i>-1; i-- )); do
+for (( i=0; i<3; i++ )); do
 	cd $DIR
 	echo scrambling ${ITEMS[i]}
 
@@ -17,7 +17,7 @@ for (( i=4; i>-1; i-- )); do
 	rm -rf data/*
 	build/test/datagen
 	sleep 10
-	COMMAND="build/test/melbourne > $LOG_DIR/Scramble_${ITEMS[i]} 2>&1"
+	COMMAND="build/test/melbourne > $LOG_DIR/Scramble_${i} 2>&1"
 	eval $COMMAND
 
 	sleep 5
