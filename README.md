@@ -15,7 +15,7 @@ Configuration file: config
 
 ----------------------------
 Encrypted file format:
-	[<iv><GCM AES ciphertext>]
+	(iv||GCM_AES_ciphertext)
 
 Each encrypted record is of size:
 	record_size + GCM_TAG_SIZE (16) + IV_SIZE (16)
