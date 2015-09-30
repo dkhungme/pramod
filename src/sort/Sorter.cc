@@ -54,7 +54,7 @@ void Sorter::MergeSort(){
 
 	double start = Now();
 	for (int i = 0; i < nmixers; i++) {
-		sprintf(input_files[i], "%s/tmp_%d_%d",
+		sprintf(input_files[i], "%s/data_%d",
 				params_->tmp_data_path().c_str(), (params_->num_rounds() - 1),
 				i);
 		sprintf(output_files[i], "%s/sorted_%d",

@@ -46,8 +46,8 @@
 	//work out the prefix to block that have been mixed.
  	GlobalParams *params = GlobalParams::Get();
  	DataGen_Compact gen;
- 	gen.Generate();
- 	LOG(INFO) << "Data generated for testing encryptor performance." << endl;
+ 	//gen.Generate();
+ 	//LOG(INFO) << "Data generated for testing encryptor performance." << endl;
  	sleep(2);
 
 
@@ -63,21 +63,21 @@
  	Encryptor encryptor; 
  	int i;
  	double start = Now();
- 	for (i=0; i<1000000; i++){
+ 	for (i=0; i<10000000; i++){
  		encryptor.ReEncrypt((byte*)cipher, 132);
  	}
- 	LOG(INFO)  << "reencrypt 10^6 items in .. "<< (Now()-start) << endl;
+ 	LOG(INFO)  << "reencrypt 10^7 items in .. "<< (Now()-start) << endl;
 
  	
- 	string pt = encryptor.Decrypt((byte*)cipher, 132);
+ 	//string pt = encryptor.Decrypt((byte*)cipher, 132);
 
- 	start = Now();
- 	LOG(INFO)  << "reset NOW in .. "<< (Now()-start) << endl;
+ 	//start = Now();
+ 	//LOG(INFO)  << "reset NOW in .. "<< (Now()-start) << endl;
 
- 	for (i=0; i<1000000; i++){
- 		encryptor.Hash((byte*)pt.c_str(), 132);
- 	}
- 	LOG(INFO)  << "hash 10^6 items in .. "<< (Now()-start) << endl;
+ 	//for (i=0; i<1000000; i++){
+ 	//	encryptor.Hash((byte*)pt.c_str(), 132);
+ 	//}
+ 	//LOG(INFO)  << "hash 10^6 items in .. "<< (Now()-start) << endl;
 
 
  	return 0;
