@@ -1,10 +1,3 @@
-/*
- * GlobalParams.h
- *
- *  Created on: Mar 25, 2015
- *      Author: dinhtta
- */
-
 #ifndef GLOBALPARAMS_H_
 #define GLOBALPARAMS_H_
 #include <crypto++/osrng.h>

@@ -1,10 +1,3 @@
-/*
- * DataGen.cc
- *
- *  Created on: Mar 26, 2015
- *      Author: dinhtta
- */
-
 #ifndef DATAGEN_COMPACT_H_
 #define DATAGEN_COMPACT_H_
 

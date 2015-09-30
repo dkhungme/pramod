@@ -161,7 +161,6 @@ $(AGGREGATE_EXE): $(ALLOBJS) $(TEST_AGGREGATE_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 	
 
-
 $(SORT_EXE): $(ALLOBJS) $(TEST_SORT_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)	
 
